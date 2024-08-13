@@ -1,0 +1,50 @@
+document.querySelector('.bx-menu').addEventListener('click', function() {
+    // Slide the sidebar in
+    gsap.to(".sidebar", {
+        x: 0,
+        duration: 0.5,
+        ease: "power2.inOut",
+    });
+
+    // Animate the sidebar elements
+    gsap.from(".sideEle", {
+        x: -50,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.inOut",
+        stagger: 0.1,
+        delay: 0.2,
+    });
+});
+
+document.querySelector('.bx-close').addEventListener('click', function() {
+    // Slide the sidebar out
+    gsap.to(".sidebar", {
+        x: -208, // -52 * 4 (width of sidebar in px)
+        duration: 0.5,
+        ease: "power2.inOut",
+    });
+});
+
+
+document.querySelector('.bx-close').addEventListener('click', function() {
+    document.querySelector('.sidebar').classList.toggle('open');
+});
+// document.querySelector('.toggle').addEventListener('click',()=>{
+//     document.querySelector('.sidebar').classList.remove('open')
+// })
+function submitForm(page) {
+    document.getElementById('page-input').value = page;
+    document.getElementById('nav-form').submit();
+}
+const user = document.querySelector('.bxs-user')
+const submenu = document.querySelector('.sub-menu')
+user.addEventListener('click', () => {
+    console.log("hello world");
+    
+
+    // const ul = button.nextElementSibling;
+    submenu.classList.toggle('max-h-0');
+    submenu.classList.toggle('max-h-96');
+  });
+  
