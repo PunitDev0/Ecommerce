@@ -47,4 +47,19 @@ user.addEventListener('click', () => {
     submenu.classList.toggle('max-h-0');
     submenu.classList.toggle('max-h-96');
   });
-  
+
+
+document.querySelector('.bx-cart').addEventListener('click', ()=>{
+    document.querySelector('.cart').classList.remove('translate-x-[300px]')
+})
+document.querySelector('#bx-x').addEventListener('click', ()=>{
+    document.querySelector('.cart').classList.add('translate-x-[300px]')
+})
+document.querySelector('.bx-heart').addEventListener('click', ()=>{
+    document.querySelector('.wishlist').classList.remove('translate-x-[300px]')
+})
+document.querySelector('#bx-wish').addEventListener('click', ()=>{
+    console.log('hello');
+    
+    document.querySelector('.wishlist').classList.add('translate-x-[300px]')
+})

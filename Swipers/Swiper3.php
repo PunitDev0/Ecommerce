@@ -11,7 +11,7 @@
   <!-- Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <!-- Custom CSS -->
-  <style>
+  <!-- <style>
     .mySwiper3 .swiper-slide {
       display: flex;
       justify-content: center;
@@ -31,7 +31,6 @@
 
     .mySwiper3 .product-image {
       width: 100%;
-      /* padding: 10px; */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -39,7 +38,7 @@
     }
 
     
-  </style>
+  </style> -->
 </head>
 
 <body class="bg-gray-100">

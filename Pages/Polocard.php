@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Responsive Products Grid</title>
   <link rel="stylesheet" href="../CSS/Card.css">
+  <style>
+    
+  </style>
 </head>
 <body>
   <div class="container ">
@@ -23,7 +26,12 @@
           <div class="product-info">
             <p class="product-name"><?php echo $items['product_name']; ?></p>
             <p class="product-price">$<?php echo $items['product_price']; ?></p>
-            <a href="Details.php?id=<?php echo $items['product_id']; ?>"><button class="add-to-cart bg-black text-white py-2 px-4 mt-4 rounded transition duration-300 hover:bg-gray-700">Add to Cart</button></a>
+            <form action="details.php" method="GET">
+                  <input type="hidden" name="id" value="<?php echo $items['id'];?>">
+                  <button type="submit" class="add-to-cart bg-black text-white py-2 px-4 mt-4 rounded transition duration-300 hover:bg-gray-700">
+                      Add to Cart
+                  </button>
+              </form>
           </div>
         </div>
       <?php

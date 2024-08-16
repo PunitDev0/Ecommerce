@@ -88,7 +88,10 @@ $item = mysqli_query($conn, $query);
 
           </div>
         </div>
-      <?php } ?>
+        
+      <?php
+          } 
+      ?>
     </div>
   </div>
   <script>

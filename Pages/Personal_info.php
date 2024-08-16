@@ -9,26 +9,28 @@
         /* Custom animations */
         @media (max-width: 768px) {
             .animate-width-change {
-                transition: all 0.3s ease-in-out;
+                transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
                 transform: scale(1.05);
+                background-color: #f7fafc;
             }
         }
         @media (min-width: 769px) {
             .animate-width-change {
-                transition: all 0.3s ease-in-out;
+                transition: transform 0.5s ease-in-out, background-color 0.5s ease-in-out;
                 transform: scale(1);
+                background-color: #ffffff;
             }
         }
     </style>
 </head>
-<div class="Navbar sticky   ">
-    <?php include './Navbar.php' ?>
-  </div>
+<div class="Navbar">
+      <?php include './Navbar.php' ?>
+    </div>
 <body class="bg-gray-50 font-sans">
     <div class="container mx-auto px-4 py-8">
-        <div class="max-w-xl mx-auto bg-white p-8 shadow-lg rounded-lg animate-width-change">
+        <div class="max-w-xl mx-auto bg-white p-8 shadow-lg rounded-lg animate-width-change hover:shadow-xl hover:bg-blue-50">
             <h2 class="text-3xl font-bold mb-6 text-center text-gray-800">Personal Information</h2>
-            <form>
+            <form class="space-y-6">
                 <div class="mb-6">
                     <label class="block text-gray-700 font-medium mb-2">Social Title</label>
                     <div class="flex items-center space-x-4">
@@ -61,13 +63,13 @@
                 <div class="mb-6 relative">
                     <label for="password" class="block text-gray-700 font-medium mb-2">Password</label>
                     <input type="password" id="password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Password" required>
-                    <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 px-3 py-1 rounded cursor-pointer text-sm font-medium" onclick="togglePassword('password')">SHOW</button>
+                    <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 px-3 py-1 rounded cursor-pointer text-sm font-medium transition-all duration-300" onclick="togglePassword('password')">SHOW</button>
                 </div>
 
                 <div class="mb-6 relative">
                     <label for="new-password" class="block text-gray-700 font-medium mb-2">New Password (Optional)</label>
                     <input type="password" id="new-password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="New Password">
-                    <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 px-3 py-1 rounded cursor-pointer text-sm font-medium" onclick="togglePassword('new-password')">SHOW</button>
+                    <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-gray-300 hover:bg-gray-400 px-3 py-1 rounded cursor-pointer text-sm font-medium transition-all duration-300" onclick="togglePassword('new-password')">SHOW</button>
                 </div>
 
                 <div class="mb-6">
@@ -88,8 +90,8 @@
                         <span class="ml-2 text-gray-600">Customer data privacy</span>
                     </label>
                     <p class="text-sm text-gray-500 mt-2">
-                        The personal data you provide is used to answer queries, process orders or allow access to specific information. 
-                        You have the right to modify and delete all the personal information found in the "My Account" page.
+                        The personal data you provide is used to answer queries, process orders, or allow access to specific information. 
+                        You have the right to modify and delete all the personal information found on the "My Account" page.
                     </p>
                 </div>
 
@@ -111,7 +113,7 @@
             </form>
         </div>
     </div>
-    <div class="">
+    <div class="mt-8">
         <?php include './Footer.php'; ?>
     </div>
     <script>

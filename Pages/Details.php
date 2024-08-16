@@ -109,11 +109,11 @@ $product = mysqli_fetch_assoc($product_query);
                     </div>
                     <div id="Description" class="tabcontent">
                     <h3 class="text-xl font-bold mb-6">About this item</h3>
-                            <ul>
+                            <ul class="px-10">
                                 <?php
                                 $bullet_points = explode('<br />', $product['product_details']);
                                 foreach ($bullet_points as $point) {
-                                    echo '<li class="mb-4">' . htmlspecialchars($point) .'</li>';
+                                    echo '<li class="mb-4 list-disc">' . htmlspecialchars($point) .'</li>';
                                 }
                                 ?>
                             </ul>

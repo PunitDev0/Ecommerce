@@ -22,7 +22,7 @@
 
 <body>
   <div class="MainHome">
-    <div class="Navbar sticky   ">
+    <div class="Navbar">
       <?php include './Navbar.php' ?>
     </div>
     <div class="SwiperAdd relative">
