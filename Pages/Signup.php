@@ -1,6 +1,8 @@
 <?php
     session_start();
     $conn = mysqli_connect('localhost', 'root', '', 'user');
+    $wishlistConn = mysqli_connect('localhost', 'root', '', 'user_wishlist');
+    $CartConn = mysqli_connect('localhost', 'root', '', 'user_cart');
 
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
@@ -38,8 +40,31 @@
             echo "Email already exists!";
         } else {
             $query = "INSERT INTO user_info (name, email, password, user_img) VALUES ('$username', '$email', '$password', '$image')";
+            if(mysqli_query($conn, $query)){
+                
+                $user_id = mysqli_insert_id($conn);
+                $wishlist_table = "CREATE TABLE IF NOT EXISTS wishlist_$user_id (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    user_id INT NOT NULL,
+                    product_id INT NOT NULL
+                )";
+                if (!mysqli_query($wishlistConn, $wishlist_table)) {
+                    die("Error creating wishlist table: " . mysqli_error($wishlist_table));
+                };
+                $cart_table = "CREATE TABLE IF NOT EXISTS cart_$user_id (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    user_id INT NOT NULL,
+                    product_id INT NOT NULL
+                )";
+                if (!mysqli_query($CartConn, $cart_table)) {
+                    die("Error creating wishlist table: " . mysqli_error($cart_table));
+                };
 
-            mysqli_query($conn, $query);
+
+            }
+
+
+            
             header("Location: Login.php");
 
         }

@@ -10,7 +10,7 @@
   </style>
 </head>
 <body>
-  <div class="container ">
+  <div class="containers ">
     <?php
         $conn = mysqli_connect('localhost', 'root', '', 'userinfo');
         $item = mysqli_query($conn, "SELECT * FROM polo_item");
