@@ -71,9 +71,28 @@ $item = mysqli_query($conn, $query);
         <div class="bg-white rounded-lg overflow-hidden flex flex-col items-center relative ">
           <div class="relative w-full bg-gray-100 p-2 border border-gray-200 flex items-center justify-center overflow-hidden">
             <img class="object-contain h-64 w-full" src="../Images/Product_images/<?php echo $items['product_image']; ?>" alt="<?php echo $items['product_name']; ?>">
-            <a href="javascript:void(0);" class="heart-icon" data-product-id="<?php echo $items['product_id']; ?>">
+            <?php 
+              $wishlist = mysqli_connect('localhost','root','','user_wishlist');
+              if($_SERVER['REQUEST_METHOD'] == 'POST'){
+              $product_id = $items['product_id'];
+              $action = $_POST['action'];
+              $user_id = $_SESSION['user_id'];
+
+              if($action == 'add'){
+                $query = `INSERT INTO wishlist_$user_id (product_id,user_id) VALUES ('$product_id','$user_id')`;
+
+              };
+              };
+            ?>
+
+
+            <form action="" metod = "POST">
+                <input type="hidden" name="product_id" id="product_id" value="">
+                <input type="hidden" name="action" id="action" value="">
+            <a href="" class="heart-icon" data-product-id="<?php echo $items['product_id']; ?>">
               <i class="far fa-heart text-xl"></i>
             </a>
+            </form>
             <div class = "h-8 w-full bg-red-900 absolute bottom-0 translate-y-10 "></div>
           </div>
           <div class="p-4 text-center">
@@ -94,55 +113,34 @@ $item = mysqli_query($conn, $query);
       ?>
     </div>
   </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const heartIcons = document.querySelectorAll('.heart-icon');
+ <script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.heart-icon').forEach(icon => {
+        const productId = icon.dataset.productId;
+        const heartIcon = icon.querySelector('i');
 
-        heartIcons.forEach(icon => {
-            const productId = icon.getAttribute('data-product-id');
-            const liked = localStorage.getItem('liked_' + productId);
+        const isLiked = heartIcon.classList.contains('fas');
 
-            if (liked === 'true') {
-                const heartIcon = icon.querySelector('i');
-                heartIcon.classList.remove('far');
-                heartIcon.classList.add('fas', 'text-red-500');
-            }
+        if (localStorage.getItem('liked_' + productId) === 'true') {
+            heartIcon.classList.replace('far', 'fas');
+            heartIcon.classList.add('text-red-500');
+        }
 
-            icon.addEventListener('click', function(event) {
-                event.preventDefault();
-                const heartIcon = this.querySelector('i');
-                const productId = this.getAttribute('data-product-id');
-
-                const action = heartIcon.classList.contains('far') ? 'add' : 'remove';
-
-                fetch('wishlist_handler.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ action: action, product_id: productId }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        if (heartIcon.classList.contains('far')) {
-                            heartIcon.classList.remove('far');
-                            heartIcon.classList.add('fas', 'text-red-500');
-                            localStorage.setItem('liked_' + productId, 'true');
-                        } else {
-                            heartIcon.classList.remove('fas', 'text-red-500');
-                            heartIcon.classList.add('far');
-                            localStorage.setItem('liked_' + productId, 'false');
-                        }
-                    } else {
-                        alert('Error updating wishlist.');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            });
+        icon.addEventListener('click', event => {
+            event.preventDefault();
+            const isLiked = heartIcon.classList.contains('fas');
+            
+            localStorage.setItem('liked_' + productId, !isLiked);
+            heartIcon.classList.toggle('far', isLiked);
+            heartIcon.classList.toggle('fas', !isLiked);
+            heartIcon.classList.toggle('text-red-500', !isLiked);
+            document.getElementById('action').value = isLiked ? 'remove' : 'add';
         });
     });
-  </script>
+});
+
+
+ </script>
 </body>
 </html>
 
