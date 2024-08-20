@@ -1,3 +1,7 @@
+if (window.history.replaceState) {
+  window.history.replaceState(null, null, window.location.href);
+}
+
 document.querySelector('.bx-menu').addEventListener('click', function() {
     // Slide the sidebar in
     gsap.to(".sidebar", {

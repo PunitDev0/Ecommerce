@@ -149,9 +149,11 @@
                     <span class="text-gray-700">Taxes</span>
                     <span class="text-gray-700">$0.00</span>
                     </div>
-                    <button class="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800">
-                    PROCEED TO CHECKOUT
-                    </button>
+                    <a href="./Cart.php">
+                        <button class="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800">
+                        Go to Cart
+                        </button>
+                    </a>
                 </div>
     </div>
     <div class="wishlist overflow-auto h-[100vh] fixed backdrop-blur-2xl w-[300px] translate-x-[300px] bg-gray-100 z-50 top-0 right-0 transition-transform duration-300 ease-in-out" id="wishlist">
@@ -159,20 +161,32 @@
                     <h1 class="text-black text-xl font-bold">Wishlist</h1>
                     <i class='bx bx-x text-2xl text-black cursor-pointer' id="bx-wish"></i>
                 </div>
-                
+                <?php
+                    include './config.php';
+                    $user_id = $_SESSION['user_id'];
+                    $id = $_SESSION['product_id'];
+                    if($id){
+                        $query = "SELECT * FROM user_wishlist.wishlist_$user_id AS w LEFT JOIN product_info.product_item AS pr ON w.product_id = pr.product_id WHERE w.product_id = $id";
+                        $result = mysqli_query($wishlist, $query);
+                    }
+                    while($item = mysqli_fetch_array($result)){
+                    
+                ?>
                 <!-- Cart Items -->
                 <div class="p-4">
                     <div class="flex items-center gap-4 mb-4">
-                    <img src="../images/product_1.jpg" alt="Product Image" class="w-12 h-12 object-cover rounded-full" />
+                    <img src="../images/Product_images/<?php echo $item['product_image']?>" alt="Product Image" class="w-12 h-12 object-cover rounded-full" />
                     <div class="flex-1">
-                        <h2 class="text-black text-sm">Product Name</h2>
+                        <h2 class="text-black text-sm"><?php echo $item['product_name']?></h2>
                         <p class="text-black text-xs">$99.99</p>
                     </div>
                     <input type="number" value="1" min="1" max="10" class="w-12 text-sm text-black rounded-md" />
                     </div>
                     <!-- Repeat this block for each item in the cart -->
                 </div>
-
+                  <?php
+                    }
+                  ?>
                 <!-- Cart Summary -->
                 <div class="bg-white rounded-lg shadow-lg p-4 mx-4 mb-4">
                     <div class="flex justify-between mb-4">
@@ -191,10 +205,13 @@
                     <span class="text-gray-700">Taxes</span>
                     <span class="text-gray-700">$0.00</span>
                     </div>
-                    <button class="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800">
-                    PROCEED TO CHECKOUT
-                    </button>
+                    <a href="./Wishlist.php">
+                        <button class="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800">
+                        Go to Wishlist
+                        </button>
+                    </a>
                 </div>
+               
     </div>
 
     <script src="../JS/Navbar.js"></script>

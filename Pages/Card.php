@@ -1,7 +1,7 @@
 <?php
-$conn = mysqli_connect('localhost', 'root', '', 'product_info');
+include './config.php';
 
-if (!$conn) {
+if (!$product_info) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
@@ -26,7 +26,7 @@ $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
 $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
 
 $query = "SELECT * FROM product_item WHERE product_catg=$category_id AND product_price BETWEEN $min_price AND $max_price ";
-$item = mysqli_query($conn, $query);
+$item = mysqli_query($product_info, $query);
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +57,7 @@ $item = mysqli_query($conn, $query);
         if(isset($_GET['product_name'])){
           $product_id = $_GET['product_name'];
           $query = "Select * from product where product_name = $product_id";
-          $qury_m=mysqli_query($conn, $query);
+          $qury_m=mysqli_query($product_info, $query);
          if($qury_m){
           $_SESSION['product_m']=$qury_m['product_name'];
          }else{
@@ -71,27 +71,25 @@ $item = mysqli_query($conn, $query);
         <div class="bg-white rounded-lg overflow-hidden flex flex-col items-center relative ">
           <div class="relative w-full bg-gray-100 p-2 border border-gray-200 flex items-center justify-center overflow-hidden">
             <img class="object-contain h-64 w-full" src="../Images/Product_images/<?php echo $items['product_image']; ?>" alt="<?php echo $items['product_name']; ?>">
-            <?php 
-              $wishlist = mysqli_connect('localhost','root','','user_wishlist');
-              if($_SERVER['REQUEST_METHOD'] == 'POST'){
-              $product_id = $items['product_id'];
-              $action = $_POST['action'];
+            <?php
+            $wishlist = mysqli_connect('localhost', 'root', '', 'user_wishlist');
+
+              // Assume $product_info is your MySQL connection
               $user_id = $_SESSION['user_id'];
+              $product_id = $items['product_id'];
 
-              if($action == 'add'){
-                $query = `INSERT INTO wishlist_$user_id (product_id,user_id) VALUES ('$product_id','$user_id')`;
+              // Check if the product is already in the wishlist
+              $query = "SELECT * FROM wishlist_$user_id WHERE product_id = $product_id";
+              $result = mysqli_query($wishlist, $query);
+              $isInWishlist = mysqli_num_rows($result) > 0;
+              ?>
 
-              };
-              };
-            ?>
-
-
-            <form action="" metod = "POST">
-                <input type="hidden" name="product_id" id="product_id" value="">
-                <input type="hidden" name="action" id="action" value="">
-            <a href="" class="heart-icon" data-product-id="<?php echo $items['product_id']; ?>">
-              <i class="far fa-heart text-xl"></i>
-            </a>
+            <form action="./Wishlist.php" method="POST">
+                <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+                <input type="hidden" name="action" value="<?php echo $isInWishlist ? 'remove' : 'add'; ?>">
+                <button type="submit" class="heart-icon">
+                    <i class="<?php echo $isInWishlist ? 'fas fa-heart text-red-500' : 'far fa-heart text-xl'; ?>"></i>
+                </button>
             </form>
             <div class = "h-8 w-full bg-red-900 absolute bottom-0 translate-y-10 "></div>
           </div>
@@ -101,6 +99,7 @@ $item = mysqli_query($conn, $query);
             <form action="details.php" method="GET">
                   <input type="hidden" name="id" value="<?php echo $items['product_id']; ?>">
                   <button type="submit" class="add-to-cart bg-black text-white py-2 px-4 mt-4 rounded transition duration-300 hover:bg-gray-700">
+                  <?php echo $items['product_id']; ?>
                       Add to Cart
                   </button>
               </form>
@@ -113,34 +112,7 @@ $item = mysqli_query($conn, $query);
       ?>
     </div>
   </div>
- <script>
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.heart-icon').forEach(icon => {
-        const productId = icon.dataset.productId;
-        const heartIcon = icon.querySelector('i');
 
-        const isLiked = heartIcon.classList.contains('fas');
-
-        if (localStorage.getItem('liked_' + productId) === 'true') {
-            heartIcon.classList.replace('far', 'fas');
-            heartIcon.classList.add('text-red-500');
-        }
-
-        icon.addEventListener('click', event => {
-            event.preventDefault();
-            const isLiked = heartIcon.classList.contains('fas');
-            
-            localStorage.setItem('liked_' + productId, !isLiked);
-            heartIcon.classList.toggle('far', isLiked);
-            heartIcon.classList.toggle('fas', !isLiked);
-            heartIcon.classList.toggle('text-red-500', !isLiked);
-            document.getElementById('action').value = isLiked ? 'remove' : 'add';
-        });
-    });
-});
-
-
- </script>
 </body>
 </html>
 

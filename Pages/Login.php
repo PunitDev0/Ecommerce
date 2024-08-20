@@ -1,7 +1,6 @@
 <?php
 session_start();
-$conn = mysqli_connect('localhost', 'root', '', 'user');
-
+include './config.php';
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }

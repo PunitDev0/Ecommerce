@@ -1,72 +1,35 @@
 <?php
+// Include your database connection file
+$wishlist = mysqli_connect('localhost', 'root', '', 'user_wishlist');
+
+
+// Start session if not already started
 session_start();
-$conn = mysqli_connect('localhost', 'root', '', 'userinfo');
 
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-// Initialize cart session if not already set
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
-
-// Function to add product to cart
-function addToCart($product_id, $quantity) {
-    global $conn;
-    
-    // Assuming $table is available in session or you need to set a default table
-    $table = isset($_SESSION['page']) ? $_SESSION['page'] : 'polo_item'; // Default table if not set
-    
-    // Use backticks to properly format the table name
-    $product_query = mysqli_query($conn, "SELECT * FROM `$table` WHERE id = $product_id");
-    
-    if (!$product_query) {
-        die("Query failed: " . mysqli_error($conn));
-    }
-
-    $product = mysqli_fetch_assoc($product_query);
-
-    if ($product) {
-        $cart_item = [
-            'id' => $product['id'],
-            'name' => $product['product_name'],
-            'price' => $product['product_price'],
-            'image' => $product['product_image'],
-            'quantity' => $quantity,
-        ];
-
-        // Add or update cart item
-        $_SESSION['cart'][$product_id] = $cart_item;
-    }
-}
-
-// Function to remove product from cart
-function removeFromCart($product_id) {
-    if (isset($_SESSION['cart'][$product_id])) {
-        unset($_SESSION['cart'][$product_id]);
-    }
-}
-
-// Handle add to cart request
-if (isset($_POST['add_to_cart'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get data from POST request
+    $action = $_POST['action'];
     $product_id = $_POST['product_id'];
-    $quantity = $_POST['quantity'];
-    addToCart($product_id, $quantity);
-}
+    $user_id = $_SESSION['user_id'];
+    if ($action === 'add') {
+        // Add to wishlist
+        $query = "INSERT INTO wishlist_$user_id (user_id, product_id) VALUES ($user_id, $product_id)";
+    } else if ($action === 'remove') {
+        // Remove from wishlist
+        $query = "DELETE FROM wishlist_$user_id WHERE user_id = $user_id AND product_id = $product_id";
+    }
 
-// Handle remove from cart request
-if (isset($_POST['remove_from_cart'])) {
-    $product_id = $_POST['product_id'];
-    removeFromCart($product_id);
-}
-
-// Calculate total
-$total = 0;
-foreach ($_SESSION['cart'] as $item) {
-    $total += $item['price'] * $item['quantity'];
+    // Execute the query and check for success
+    if (mysqli_query($wishlist, $query)) {
+        echo json_encode(['success' => true]);
+    } else {
+        echo json_encode(['success' => false, 'error' => mysqli_error($conn)]);
+    }
+    
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -95,31 +58,29 @@ foreach ($_SESSION['cart'] as $item) {
                         <h1 class="text-2xl font-bold mb-4 opacity-60">Shopping Cart</h1>
                         <div class="cart-items">
                         <?php
-                                  $wish = mysqli_connect('localhost','root','','user_wishlist');
-                                  $product = mysqli_connect('localhost','root','','product_info');
-                                  $user_id = $_SESSION['user_id'];
-                                  $id = $_POST['product_id'];
-
-                                  if($id){
-                                    $query = "SELECT * FROM user_wishlist.wishlist_$user_id AS w LEFT JOIN product_in     product_item AS pr ON w.product_id = $id";
+                                $wish = mysqli_connect('localhost','root','','user_wishlist');
+                                $product = mysqli_connect('localhost','root','','product_info');
+                                $user_id = $_SESSION['user_id'];
+                                $id = $_SESSION['product_id'];
+                                if($id){
+                                    $query = "SELECT * FROM user_wishlist.wishlist_$user_id AS w LEFT JOIN product_info.product_item AS pr ON w.product_id = pr.product_id WHERE w.product_id = $id";
                                     $result = mysqli_query($wish, $query);
-
-                                    while($item = mysqli_fetch_array($result)){
-                                  }
-                                    
+                                }
+                                while($item = mysqli_fetch_array($result)){
+                                
                             ?>
                                 <div class="cart-item flex flex-col md:flex-row items-center mb-2 border-2 p-2">
                                     <div class="w-full md:w-2/12 bg-gray-200">
-                                        <img src="../Admin/<?php echo $item['image']; ?>" alt="Product Image" class="w-full object-contain rounded h-full">
+                                        <img src="../images/Product_images/<?php echo $item['product_image']; ?>" alt="Product Image" class="w-full object-contain rounded h-full">
                                     </div>
                                     <div class="w-full md:w-2/4 pl-4 mt-2 md:mt-0">
-                                        <h2 class="text-md font-bold"><?php echo $item['name']; ?></h2>
-                                        <p class="text-lg text-red-600">$<?php echo $item['price']; ?></p>
+                                        <h2 class="text-md font-bold"><?php echo $item['product_name']; ?></h2>
+                                        <p class="text-lg text-red-600">$<?php echo $item['product_price']; ?></p>
                                     </div>
                                     <div class="w-full md:w-1/4 flex items-center mt-2 md:mt-0">
-                                        <input type="number" value="<?php echo $item['quantity']; ?>" min="1" max="10" class="border p-2 rounded w-20 mr-4">
+                                        <input type="number" value="" min="1" max="10" class="border p-2 rounded w-20 mr-4">
                                         <form method="POST" action="">
-                                            <input type="hidden" name="product_id" value="<?php echo $item['id']; ?>">
+                                            <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
                                             <button type="submit" name="remove_from_cart" class="remove-item bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition-all duration-300">Remove</button>
                                         </form>
                                     </div>

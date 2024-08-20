@@ -1,8 +1,9 @@
 <?php
 session_start();
-$conn = mysqli_connect('localhost', 'root', '', 'product_info');
+include './config.php';
 
-if (!$conn) {
+
+if (!$product_info) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
@@ -12,8 +13,7 @@ if (!$conn) {
 //     $table = 'polo_item'; // Default table
 // }
 $product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-// echo $product_id;
-$product_query = mysqli_query($conn, "SELECT * FROM product_item WHERE product_id = $product_id");
+$product_query = mysqli_query($product_info, "SELECT * FROM product_item WHERE product_id = $product_id");
 $product = mysqli_fetch_assoc($product_query);
 
 // print_r($product);
@@ -44,17 +44,17 @@ $product = mysqli_fetch_assoc($product_query);
                     <div class="w-full md:w-1/2 p-2">
                         <div class="product-images">
                             <div class="main-image mb-4">
-                                <img src="../Images/Product_images/<?php echo $product['product_image']; ?>" alt="Product Image" class="w-full h-auto object-contain rounded">
+                                <img src="../Images/Product_images/<?php echo $product['product_image']; ?>" alt="Product Image" class="mainImage w-full h-auto object-contain rounded transition-all ease-in-out">
                             </div>
                             <div class="swiper mySwiper4">
                                 <div class="swiper-wrapper flex justify-center gap-10">
                                     <?php
-                                        $related_items = mysqli_query($conn, "SELECT * FROM product_images where pr_id = $product_id");
+                                        $related_items = mysqli_query($product_info, "SELECT * FROM product_images where pr_id = $product_id");
                                         while ($related_item = mysqli_fetch_array($related_items)) {
                                     ?>
                                         <div class="swiper-slide flex justify-center items-center">
                                             <div class="image w-24 h-24 md:w-32 md:h-32">
-                                                <img src="../Images/Product_images/RF_images/<?php echo $related_item['pr_img'];?>" class="w-full h-full object-contain rounded" alt="" />
+                                                <img src="../Images/Product_images/RF_images/<?php echo $related_item['pr_img'];?>" class="w-full h-full object-contain rounded" alt="" id="relatedImage" />
                                             </div>
                                         </div>
                                     <?php
@@ -135,41 +135,9 @@ $product = mysqli_fetch_assoc($product_query);
             </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-
-            // Hide all tab contents
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-
-            // Remove the active class from all tablinks
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-
-            // Show the current tab and add an active class to the button that opened the tab
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-
-        var swiper = new Swiper(".mySwiper4", {
-            slidesPerView: 4,
-            spaceBetween: 30,
-            grabCursor: true,
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-        });
-
-        // Default open the first tab
-        document.getElementsByClassName('tablinks')[0].click();
-    </script>
+ 
 </body>
 <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js" ></script>
+<script src="../JS/Details.js"></script>
 <script src="../JS/loco.js"></script>
 </html>
