@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $wish = mysqli_connect('localhost','root','','user_wishlist');
                                 $product = mysqli_connect('localhost','root','','product_info');
                                 $user_id = $_SESSION['user_id'];
-                                $id = $_SESSION['product_id'];
+                                $id = $_GET['product_id'];
                                 if($id){
                                     $query = "SELECT * FROM user_wishlist.wishlist_$user_id AS w LEFT JOIN product_info.product_item AS pr ON w.product_id = pr.product_id WHERE w.product_id = $id";
                                     $result = mysqli_query($wish, $query);

@@ -84,7 +84,7 @@ $item = mysqli_query($product_info, $query);
               $isInWishlist = mysqli_num_rows($result) > 0;
               ?>
 
-            <form action="./Wishlist.php" method="POST">
+            <form action="./Wishlist.php" method="GET">
                 <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
                 <input type="hidden" name="action" value="<?php echo $isInWishlist ? 'remove' : 'add'; ?>">
                 <button type="submit" class="heart-icon">
