@@ -631,6 +631,13 @@
                   class="flex h-10 w-full rounded-md border border-input  px-3 py-2 text-sm text-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
                   name="product_img" accept="image/png, image/jpeg">
               </div>
+              <div class=" mt-4 grid w-full max-w-xs items-center gap-1.5">
+                <label
+                  class="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Description_Picture (1-5)</label>
+                <input id="picture" type="file"
+                  class="flex h-10 w-full rounded-md border border-input  px-3 py-2 text-sm text-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
+                  name="Description_img[]" accept="image/png, image/jpeg" multiple require>
+              </div>
               <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Product Description</span>
                 <textarea
@@ -646,55 +653,84 @@
           </form>
           <!-- Related -->
           <?php
-  if (isset($_POST['sub'])) {
-    $pname = $_POST['productName'];
-    $gender = $_POST['gender'];
-    $price = $_POST['price'];
-    $catg = $_POST['catg'];
-    $product_details = nl2br($_POST['product_description']);
+if (isset($_POST['sub'])) {
+    include '../Pages/config.php';
+
+    // Escaping special characters in the inputs
+    $pname = mysqli_real_escape_string($product_info, $_POST['productName']);
+    $gender = mysqli_real_escape_string($product_info, $_POST['gender']);
+    $price = (float)$_POST['price']; // Assuming price is a number, casting to float for safety
+    $catg = mysqli_real_escape_string($product_info, $_POST['catg']);
+    $product_details = mysqli_real_escape_string($product_info, nl2br($_POST['product_description']));
 
     $sizes_and_quantity = [];
 
-    if(isset($_POST['size']) && $_POST['quantity']){
-      foreach($_POST['size'] as $size){
-
-        $quantity = isset($_POST['quantity'][$size]) ? $_POST['quantity'][$size] : 0;
-        
-        $sizes_and_quantity[$size] = $quantity;
-
-      }
+    if (isset($_POST['size']) && isset($_POST['quantity'])) {
+        foreach ($_POST['size'] as $size) {
+            $quantity = isset($_POST['quantity'][$size]) ? $_POST['quantity'][$size] : 0;
+            $sizes_and_quantity[$size] = $quantity;
+        }
     }
 
+    $Description_img_names = [];
+
+    if (isset($_FILES['Description_img']['tmp_name'])) {
+        $upload_dir = '../images/Description_images/';
+
+        foreach ($_FILES['Description_img']['tmp_name'] as $key => $Des_tmp_name) {
+            $des_file_name = basename($_FILES['Description_img']['name'][$key]);
+            $des_target_file = $upload_dir . $des_file_name;
+
+            if (move_uploaded_file($Des_tmp_name, $des_target_file)) {
+                $Description_img_names[] = $des_file_name;
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
+        }
+    }
+
+    $Description_img_names_json = json_encode($Description_img_names);
+    $escaped_json = mysqli_real_escape_string($product_info, $Description_img_names_json);
+
     $sizes_and_quantity_json = json_encode($sizes_and_quantity);
+    $escaped_sizes_and_quantity_json = mysqli_real_escape_string($product_info, $sizes_and_quantity_json);
 
     if (isset($_FILES['product_img'])) {
-      $directory = "../image/product/";
-      $product_img = $_FILES['product_img']['name'];
-      $temp_name = $_FILES['product_img']['tmp_name'];
-      $already_exist = $directory.$product_img;
-      if (!file_exists($already_exist)) {
-        if (move_uploaded_file($temp_name, "../Images/product_images/$product_img")) 
-        {
-          ?>
-          <script>
-            $(document).ready(function () {
-              Swal.fire({
-                  title: "Data or file has been uploaded",
-                  html: "<font color='white'> Check this out and upload the related pictures of product</font>",
-                  icon: "success",
-                  showCloseButton: true,
-                  confirmButtonText: `Okay!`, 
-              })
-            })
-          </script>
-          <?php
-          mysqli_query($product_info, "SET FOREIGN_KEY_CHECKS = 0");
+        $directory = "../image/product/";
+        $product_img = basename($_FILES['product_img']['name']);
+        $temp_name = $_FILES['product_img']['tmp_name'];
+        $already_exist = $directory . $product_img;
 
-          $product_query = mysqli_query($product_info,"insert into product_item (product_name, product_image, product_price, product_gender, product_details,product_catg,size_quantity, product_description) values ('$pname','$product_img','$price','$gender','$product_details', $catg, '$sizes_and_quantity_json')");
+        if (!file_exists($already_exist)) {
+            if (move_uploaded_file($temp_name, "../Images/product_images/$product_img")) {
+                ?>
+                <script>
+                    $(document).ready(function () {
+                        Swal.fire({
+                            title: "Data or file has been uploaded",
+                            html: "<font color='white'> Check this out and upload the related pictures of product</font>",
+                            icon: "success",
+                            showCloseButton: true,
+                            confirmButtonText: `Okay!`,
+                        });
+                    });
+                </script>
+                <?php
+                mysqli_query($product_info, "SET FOREIGN_KEY_CHECKS = 0");
+                $query = "INSERT INTO product_item (product_name, product_image, product_price, product_gender, product_details, product_catg, size_quantity, Description_images) VALUES ('$pname', '$product_img', $price, '$gender', '$product_details', '$catg', '$escaped_sizes_and_quantity_json', '$escaped_json')";
 
-          mysqli_query($product_info, "SET FOREIGN_KEY_CHECKS = 1");
+                if ($product_query = mysqli_query($product_info, $query)) {
+                    echo "Product added successfully";
+                } else {
+                    echo "Error: " . mysqli_error($product_info);
+                }
+            }
         }
-        ?>
+    }
+}
+?>
+
+
           <form action="" method="POST" enctype="multipart/form-data">
             <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <label class="block mt-4 text-sm">
@@ -702,7 +738,7 @@
                     Product Related Image
                   </span>
                   <label class="block text-sm">
-                <span class="text-gray-700 dark:text-gray-400">Product Name</span>
+                <span class="text-gray-700 dark:text-gray-400"></span>
                 <?php
                   $pro = mysqli_query($product_info, "SELECT * FROM product_item ORDER BY product_id DESC LIMIT 1");
                   if($exe = mysqli_fetch_assoc($pro)){
@@ -720,26 +756,12 @@
                   class="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Picture 1</label>
                 <input id="picture" type="file"
                   class="flex h-10 w-full rounded-md border border-input  px-3 py-2 text-sm text-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                  name="product_img1" accept="image/png, image/jpeg">
-              </div>
-              <div class=" mt-4 grid w-full max-w-xs items-center gap-1.5">
-                <label
-                  class="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Picture 2</label>
-                <input id="picture" type="file"
-                  class="flex h-10 w-full rounded-md border border-input  px-3 py-2 text-sm text-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                  name="product_img2" accept="image/png, image/jpeg">
-              </div>
-              <div class=" mt-4 grid w-full max-w-xs items-center gap-1.5">
-                <label
-                  class="text-sm text-gray-400 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Picture 3</label>
-                <input id="picture" type="file"
-                  class="flex h-10 w-full rounded-md border border-input  px-3 py-2 text-sm text-gray-400 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                  name="product_img3" accept="image/png, image/jpeg">
+                  name="images[]" accept="image/png, image/jpeg" multiple require>
               </div>
               <div class="flex mt-6 text-sm">
                 <input type="submit"
                   class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                  name="update">
+                  name="update" >
               </div>
             </div>
             
@@ -762,34 +784,42 @@
           </script>
         <?php
       }
-    }
-  }
-}
 ?>
   <?php
     if(isset($_POST['update'])){
+      include '../Pages/config.php';
+
       $product_related = $_POST['update_catg'];
+
       mysqli_query($product_info, "SET FOREIGN_KEY_CHECKS = 0");
-      $a = mysqli_query( $product_info,"UPDATE IGNORE product_item SET product_related_img  = $product_related WHERE product_id=$product_related");
+      $a = mysqli_query( $product_info,"UPDATE IGNORE product_item SET pr_img  = $product_related WHERE product_id=$product_related"); 
       mysqli_query($product_info, "SET FOREIGN_KEY_CHECKS = 1");
-      if(isset($_FILES['product_img1'])){
-        $file_img1 = $_FILES['product_img1']['name'];
-        $file_tmp1 = $_FILES['product_img1']['tmp_name'];
-        move_uploaded_file($file_tmp1, "../Images/Product_images/RF_images/$file_img1");
-        $query_img1 = mysqli_query( $product_info,"insert into product_images (pr_id, pr_img) values ($product_related, '$file_img1')");
-        
+
+      $images_names =  [];
+
+      if(isset($_FILES['images']['tmp_name'])){
+
+        $upload_dir = '../images/Product_images/RF_images/';  
+
+        foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
+          $file_name = basename($_FILES['images']['name'][$key]);
+          $target_file = $upload_dir . $file_name;
+          echo $target_file;
+
+          if (move_uploaded_file($tmp_name, $target_file)) {
+            $images_names[] = $file_name;
+            // echo $file_name;;
+          } else {
+            echo "Sorry, there was an error uploading your file.";
+          }
+        }
       }
-      if(isset($_FILES['product_img2'])){
-        $file_img2 = $_FILES['product_img2']['name'];
-        $file_tmp2 = $_FILES['product_img2']['tmp_name'];
-        move_uploaded_file($file_tmp2, "../Images/Product_images/RF_images/$file_img2");
-        $query_img2 = mysqli_query( $product_info,"insert into product_images (pr_id, pr_img) values ($product_related, '$file_img2')");
-      }
-      if(isset($_FILES['product_img3'])){
-        $file_img3 = $_FILES['product_img3']['name'];
-        $file_tmp3 = $_FILES['product_img3']['tmp_name'];
-        move_uploaded_file($file_tmp3, "../Images/Product_images/RF_images/$file_img3");
-        $query_img3 = mysqli_query( $product_info,"insert into product_images (pr_id, pr_img) values ($product_related, '$file_img3')");
+      if (!empty($images_names)) {
+        $json_images = json_encode($images_names);
+            $query_img = "INSERT INTO product_images (pr_id, pr_img) VALUES ($product_related, ' $json_images')";
+            if (!mysqli_query($product_info, $query_img)) {
+                echo "Error inserting image: " . mysqli_error($product_info);
+            }
       }
         ?>
         <script>

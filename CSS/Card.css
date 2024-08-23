@@ -107,7 +107,13 @@ body {
 .product-image:hover .quick_view{
   transform: translateY(-10px);
 }
+.buttons{
+  visibility: hidden;
+}
 
+.mySwiper:hover .buttons{
+  visibility: visible;
+}
 @media (max-width: 768px) {
   .product-card {
     flex: 1 1 calc(50% - 30px);

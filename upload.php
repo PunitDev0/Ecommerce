@@ -10,7 +10,8 @@ if (isset($_POST['submit'])) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Loop through each file
+    // Loop through 
+    each file
     foreach ($_FILES['images']['tmp_name'] as $key => $tmp_name) {
         $fileName = basename($_FILES['images']['name'][$key]);
         $targetFilePath = $uploadDir . $fileName;
