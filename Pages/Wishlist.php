@@ -1,32 +1,5 @@
 <?php
-// Include your database connection file
-$wishlist = mysqli_connect('localhost', 'root', '', 'user_wishlist');
 
-
-// Start session if not already started
-session_start();
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get data from POST request
-    $action = $_POST['action'];
-    $product_id = $_POST['product_id'];
-    $user_id = $_SESSION['user_id'];
-    if ($action === 'add') {
-        // Add to wishlist
-        $query = "INSERT INTO wishlist_$user_id (user_id, product_id) VALUES ($user_id, $product_id)";
-    } else if ($action === 'remove') {
-        // Remove from wishlist
-        $query = "DELETE FROM wishlist_$user_id WHERE user_id = $user_id AND product_id = $product_id";
-    }
-
-    // Execute the query and check for success
-    if (mysqli_query($wishlist, $query)) {
-        echo json_encode(['success' => true]);
-    } else {
-        echo json_encode(['success' => false, 'error' => mysqli_error($conn)]);
-    }
-    
-}
 ?>
 
 

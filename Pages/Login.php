@@ -8,23 +8,28 @@ if (!$conn) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email =  $_POST['email'];
     $password =  $_POST['password'];
+    
 
     $user = mysqli_query($conn,"SELECT * FROM user_info WHERE email = '$email'");
-    $admin = mysqli_query($conn,"SELECT * FROM admin_info WHERE admin_email = '$email'");
-     
+    $admin = mysqli_query($conn,"SELECT * FROM admin_info WHERE email = '$email'");
+    
     if($user || $admin){
         if($user_data = mysqli_fetch_assoc($user)){
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_id'] = $user_data['id'];
                 $_SESSION['user_name'] = $user_data['name'];
                 $_SESSION['user_email'] = $user_data['email'];
+                $_SESSION['user_image'] = $user_data['user_img'];
                 header('Location: Home.php');
             }else if($admin_data = mysqli_fetch_assoc($admin)){
                 $_SESSION['logged_in'] = true;
                 $_SESSION['admin_id'] = $admin_data['id'];
                 $_SESSION['admin_name'] = $admin_data['name'];
                 $_SESSION['admin_email'] = $admin_data['email'];
+                $_SESSION['admin_image'] = $admin_data['user_img'];
                 header('Location: Home.php');
+            }else{
+                
             }
         }
 }

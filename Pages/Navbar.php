@@ -29,7 +29,7 @@
                 </div>
             </div>
             <form id="nav-form" action="Product.php" method="GET">
-                <input type="hidden" name="page" id="page-input" />
+                <input type="text" name="page" id="page-input" value=""/>
                 <div class="hidden md:flex gap-6 text-sm font-medium" id="nav">
                     <a href="./Home.php">Home</a>
                     <a href="#"  onclick="submitForm('1')">Polos</a>
@@ -52,14 +52,26 @@
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
                         <?php
-                            if(isset($_SESSION['image']) && !empty($_SESSION['image'])) {
-                                echo '<img src="' . $_SESSION['image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
+                            if(isset($_SESSION['admin_image']) && !empty($_SESSION['admin_image'])) {
+                                echo '<img src="../images/user_images/' . $_SESSION['admin_image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
+                            } else if(isset($_SESSION['user_image']) && !empty($_SESSION['user_image'])){
+                                echo '<img src="' . $_SESSION['user_image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
                             } else {
                                 echo '<img src="../images/default-user.png" alt="Default User Image" class="w-full h-full object-cover"/>';
                             }
                         ?>
                     </div>
-                    <h1 class="text-gray-900 font-medium"><?php echo $_SESSION['username'] ?? 'Guest'; ?></h1>
+                    <h1 class="text-gray-900 font-medium">
+                        <?php 
+                              if(isset($_SESSION['user_id'])){
+                                echo $_SESSION['user_name'];
+                              }elseif(isset($_SESSION['admin_id'])){
+                                echo $_SESSION['admin_name'];
+                              }else{
+                                echo 'Guest';
+                              }
+                        // echo $_SESSION['admin_name'] ?? 'Guest'; 
+                        ?></h1>
                 </div>
 
                 <!-- Divider -->
@@ -81,6 +93,19 @@
                         </div>
                         <i class="bx bx-chevron-right text-xl"></i>
                     </a>
+                    <a href="../Admin/index.php" class="flex items-center <?php
+                        if(isset($_SESSION['admin_id'])){
+                            echo 'block';
+                        }else{
+                            echo 'hidden';
+                        }
+                    ?> justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
+                        <div class="flex gap-2 items-center">
+                        <i class='bx bxs-user-check'></i>
+                            <p>Admin</p>
+                        </div>
+                        <i class="bx bx-chevron-right text-xl"></i>
+                    </a>
                     <!-- Add more links as needed -->
                 </div>
 
@@ -89,7 +114,7 @@
 
                 <!-- Sign Out -->
                 <div class="mt-4">
-                    <a href="" class="flex gap-4 items-center text-red-500 hover:text-red-600 transition-colors duration-300">
+                    <a href="logout.php" class="flex gap-4 items-center text-red-500 hover:text-red-600 transition-colors duration-300">
                         <i class="bx bx-power-off text-xl"></i>
                         <p>Sign Out</p>
                     </a>

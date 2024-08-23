@@ -46,10 +46,10 @@
           </div>
           <div class="Cards my-10">
               <h1 class="text-center text-3xl">FEATURED COLLECTION'S</h1>
-              <div class="horizontalCard">
+              <div class="horizontalCard product-list">
                 <?php include './Card.php' ?>
               </div>
-              <div class="verticalCard hidden">
+              <div class="verticalCard hidden product-list">
                 <?php include './verticleCard.php' ?>
               </div>
           </div>

@@ -19,14 +19,29 @@ switch ($sort_by) {
         break;
 }
 
-$category_id = isset($_GET['page']) ? intval($_GET['page']) : 0;
-// echo $category_id;
+if(isset($_GET['submit'])){
+  // $pr = $_GET['pr_id'];
+  // echo $pr;
+  $category_id = isset($_GET['pr_id']) ? intval($_GET['pr_id']) : 0;
+  // echo $category_id;
+  
+  $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
+  $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
+  
+  $query = "SELECT * FROM product_item WHERE product_catg=$category_id AND product_price BETWEEN $min_price AND $max_price ORDER BY $sort_by";
+  $item = mysqli_query($product_info, $query);
+}else{
+  $category_id = isset($_GET['page']) ? intval($_GET['page']) : 0;
+  // echo $category_id;
+  
+  $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
+  $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
+  
+  $query = "SELECT * FROM product_item WHERE product_catg=$category_id AND product_price BETWEEN $min_price AND $max_price";
+  $item = mysqli_query($product_info, $query);
+  // $category_id = isset($_GET['page']) ? intval($_GET['page']) : 0;
+}
 
-$min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
-$max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
-
-$query = "SELECT * FROM product_item WHERE product_catg=$category_id AND product_price BETWEEN $min_price AND $max_price ";
-$item = mysqli_query($product_info, $query);
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +52,8 @@ $item = mysqli_query($product_info, $query);
   <title>Responsive Products Grid</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
   <style>
     .heart-icon {
         position: absolute;
@@ -48,63 +65,120 @@ $item = mysqli_query($product_info, $query);
     .heart-icon:hover {
         color: red;
     }
+    .buttons{
+      visibility: hidden;
+      transition : all ease-in-out;
+    }
+
+    .mySwiper:hover .buttons{
+      visibility: visible;
+    }
+    
+    /* Adjusting size, border, or any other styles */
+    
   </style>
 </head>
 <body class="bg-gray-100">
   <div class="container mx-auto p-4">
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <?php
-        if(isset($_GET['product_name'])){
-          $product_id = $_GET['product_name'];
-          $query = "Select * from product where product_name = $product_id";
-          $qury_m=mysqli_query($product_info, $query);
-         if($qury_m){
-          $_SESSION['product_m']=$qury_m['product_name'];
-         }else{
-          echo "No product found";
-         }
-        }
+        // if(isset($_GET['product_name'])){
+        //   $product_id = $_GET['product_name'];
+        //   $query = "Select * from product where product_name = $product_id";
+        //   $qury_m=mysqli_query($product_info, $query);
+        //  if($qury_m){
+        //   $_SESSION['product_m']=$qury_m['product_name'];
+        //  }else{
+        //   echo "No product found";
+        //  }
+        // }
       ?>
       <?php
         while ($items = mysqli_fetch_array($item)) {
       ?>
-        <div class="bg-white rounded-lg overflow-hidden flex flex-col items-center relative ">
-          <div class="relative w-full bg-gray-100 p-2 border border-gray-200 flex items-center justify-center overflow-hidden">
-            <img class="object-contain h-64 w-full" src="../Images/Product_images/<?php echo $items['product_image']; ?>" alt="<?php echo $items['product_name']; ?>">
+        <div class="bg-white rounded-lg h-[480px] overflow-hidden flex flex-col relative ">
             <?php
-            $wishlist = mysqli_connect('localhost', 'root', '', 'user_wishlist');
-
-              // Assume $product_info is your MySQL connection
               $user_id = $_SESSION['user_id'];
               $product_id = $items['product_id'];
-
-              // Check if the product is already in the wishlist
-              $query = "SELECT * FROM wishlist_$user_id WHERE product_id = $product_id";
-              $result = mysqli_query($wishlist, $query);
-              $isInWishlist = mysqli_num_rows($result) > 0;
+              // $query = "SELECT * FROM wishlist_$user_id WHERE product_id = $product_id";x  
+              // $result = mysqli_query($wishlist, $query);
+              // $isInWishlist = mysqli_num_rows($result) > 0;
+              // echo $product_id;
+              // echo $user_id
               ?>
+             
+                 <!-- Example item card -->
+                 <div class="item-card p-4  rounded-lg">
+                    <form id="hidden-form" method="POST" style="display: none;">
+                        <input type="hidden" name="action" id="form-action">
+                        <input type="hidden" name="product_id" id="form-product_id">
+                        <input type="hidden" name="user_id" id="form-user_id" value="<?php echo $user_id; ?>">
+                    </form>
+                    <i class="fas fa-heart heart-icon text-gray-400 cursor-pointer text-2xl transition-colors duration-300" data-product-id="<?php echo $product_id; ?>"></i>
+                    <!-- Other item details -->
+                </div>
 
-            <form action="./Wishlist.php" method="GET">
-                <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
-                <input type="hidden" name="action" value="<?php echo $isInWishlist ? 'remove' : 'add'; ?>">
-                <button type="submit" class="heart-icon">
-                    <i class="<?php echo $isInWishlist ? 'fas fa-heart text-red-500' : 'far fa-heart text-xl'; ?>"></i>
-                </button>
-            </form>
-            <div class = "h-8 w-full bg-red-900 absolute bottom-0 translate-y-10 "></div>
-          </div>
-          <div class="p-4 text-center">
-            <p class="font-bold text-lg"><?php echo $items['product_name']; ?></p>
-            <p class="text-red-500 text-xl mt-2">$<?php echo $items['product_price']; ?></p>
-            <form action="details.php" method="GET">
-                  <input type="hidden" name="id" value="<?php echo $items['product_id']; ?>">
-                  <button type="submit" class="add-to-cart bg-black text-white py-2 px-4 mt-4 rounded transition duration-300 hover:bg-gray-700">
-                  <?php echo $items['product_id']; ?>
-                      Add to Cart
-                  </button>
-              </form>
 
-          </div>
+
+
+
+
+              <div class="swiper mySwiper w-full">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <!-- <img src="./images/Product_images/8110912f-4db1-4296-ad00-0cb9573851ba.jpg" alt=""> -->
+                        <div class=" h-full w-full bg-gray-100 p-2 border border-gray-200 flex items-center justify-center overflow-hidden">
+                          <img class="object-contain h-64 " src="../Images/Product_images/<?php echo $items['product_image']; ?>" alt="<?php echo $items['product_name']; ?>">
+                          
+                     </div>
+                  </div>
+                  <?php
+                      $related_items = mysqli_query($product_info, "SELECT * FROM product_images where pr_id = $product_id");
+
+                      $image_filenames = [];
+
+                      while ($row = mysqli_fetch_assoc($related_items)) {
+                        // Decode JSON data
+                        $images_json = $row['pr_img']; // Assuming 'pr_img' contains JSON data
+                        $images_array = json_decode($images_json, true); // Decode JSON to PHP array
+                    
+                        if (is_array($images_array)) {
+                            // Add the image filenames to the array
+                            $image_filenames = array_merge($image_filenames, $images_array);
+                        }
+                    }
+                    foreach ($image_filenames as $image_filename) {
+                  ?>
+                  <div class="swiper-slide relative !important">
+                      <div class="h-full w-full bg-gray-100 p-2 border border-gray-200 flex items-center justify-center overflow-hidden">
+                          <img class="object-contain h-64" src="../images/Product_images/RF_images/<?php echo htmlspecialchars($image_filename); ?>" alt="Product Image">
+                          <!--  -->
+                      </div>
+                  </div>
+                  <?php
+                      }
+                  ?>
+                </div>
+                <div class=" z-50 absolute -translate-y-10 m-auto">
+                  <button class=" buttons absolute translate-x-52 text-2xl" id="custom-prev-button"><i class='bx bxs-chevron-right'></i></button>
+                  <button class=" buttons absolute custom-next-button text-2xl"><i class='bx bxs-chevron-left translate-x-5'></i></button>
+                </div>
+              </div>
+
+              <div class="p-4 text-center">
+                  <p class="truncate text-base md:text-base lg:text-base">
+                      <?php echo $items['product_name']; ?>
+                  </p>
+                  <p class="text-red-500 text-lg md:text-xl lg:text-2xl mt-2">
+                      $<?php echo $items['product_price']; ?>
+                  </p>
+                  <form action="details.php" method="GET">
+                      <input type="hidden" name="id" value="<?php echo $items['product_id']; ?>">
+                      <button type="submit" class="add-to-cart bg-black text-white py-2 px-4 mt-4 rounded transition duration-300 hover:bg-gray-700">
+                           Add to Cart
+                      </button>
+                  </form>
+              </div>
         </div>
         
       <?php
@@ -114,6 +188,68 @@ $item = mysqli_query($product_info, $query);
   </div>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const heartIcons = document.querySelectorAll('.heart-icon');
+    const hiddenForm = document.getElementById('hidden-form');
+    const actionInput = document.getElementById('form-action');
+    const productIdInput = document.getElementById('form-product_id');
+    const userIdInput = document.getElementById('form-user_id');
+
+    heartIcons.forEach(icon => {
+        const productId = icon.getAttribute('data-product-id');
+
+        // Check localStorage to set the initial state
+        if (localStorage.getItem(`wishlist-${productId}`) === 'liked') {
+            icon.classList.add('text-red-500');
+        } else {
+            icon.classList.remove('text-red-500');
+        }
+
+        icon.addEventListener('click', function() {
+            const action = this.classList.contains('text-red-500') ? 'remove' : 'add';
+
+            // Update localStorage
+            if (action === 'remove') {
+                this.classList.remove('text-red-500');
+                localStorage.removeItem(`wishlist-${productId}`);
+            } else {
+                this.classList.add('text-red-500');
+                localStorage.setItem(`wishlist-${productId}`, 'liked');
+            }
+
+            // Update hidden form fields
+            actionInput.value = action;
+            productIdInput.value = productId;
+
+            // Send request using fetch API
+            fetch('wishlist_handler.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(new FormData(hiddenForm))
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+
+
+
+    const swiper = new Swiper(".mySwiper", {
+      navigation: false,
+    });
+  
+
+  </script>
 </html>
 
 

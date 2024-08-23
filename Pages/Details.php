@@ -25,42 +25,56 @@ $product = mysqli_fetch_assoc($product_query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Page</title>
-    <link rel="stylesheet" href="../CSS/Details.css">
-    <link rel="stylesheet" href="../CSS/Swiper3.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
 
 
 </head>
-<body class="font-sans antialiased">
-    <div class="MainDetails">
+<body class="Details font-sans antialiased">
             <div class="Navbar">
                 <?php include './Navbar.php'; ?>
             </div>
 
             <main class="container mx-auto p-4">
                 <div class="flex flex-wrap">
-                    <div class="w-full md:w-1/2 p-2">
+                    <div class="w-full  md:w-1/2 p-2" >
                         <div class="product-images">
                             <div class="main-image mb-4">
-                                <img src="../Images/Product_images/<?php echo $product['product_image']; ?>" alt="Product Image" class="mainImage w-full h-auto object-contain rounded transition-all ease-in-out">
+                                <img src="../Images/Product_images/<?php echo $product['product_image']; ?>" alt="Product Image" class="mainImage w-full h-full object-contain rounded transition-all ease-in-out">
                             </div>
                             <div class="swiper mySwiper4">
-                                <div class="swiper-wrapper flex justify-center gap-10">
+                                <div class="swiper-wrapper flex  gap-10">
                                     <?php
-                                        $related_items = mysqli_query($product_info, "SELECT * FROM product_images where pr_id = $product_id");
-                                        while ($related_item = mysqli_fetch_array($related_items)) {
+                                        $related_items = mysqli_query($product_info, "SELECT * FROM product_images WHERE pr_id = $product_id");
+
+                                        // Initialize an array to store image filenames
+                                        $image_filenames = [];
+
+                                        while ($row = mysqli_fetch_assoc($related_items)) {
+                                            // Decode JSON data
+                                            $images_json = $row['pr_img']; // Assuming 'pr_img' contains JSON data
+                                            $images_array = json_decode($images_json, true); // Decode JSON to PHP array
+                                        
+                                            if (is_array($images_array)) {
+                                                // Add the image filenames to the array
+                                                $image_filenames = array_merge($image_filenames, $images_array);
+                                            }
+                                        }
+
+                                        // Loop through image filenames and generate swiper slides
+                                        foreach ($image_filenames as $image_filename) {
                                     ?>
-                                        <div class="swiper-slide flex justify-center items-center">
+                                        <div class="swiper-slide flex-auto flex justify-center items-center">
                                             <div class="image w-24 h-24 md:w-32 md:h-32">
-                                                <img src="../Images/Product_images/RF_images/<?php echo $related_item['pr_img'];?>" class="w-full h-full object-contain rounded" alt="" id="relatedImage" />
+                                                <img src="../images/Product_images/RF_images/<?php echo htmlspecialchars($image_filename); ?>" class="w-full h-full object-contain rounded" alt="Related Image" id="relatedImage" />
                                             </div>
                                         </div>
                                     <?php
                                         }
                                     ?>
-                                </div>
+                                                            </div>
                             </div>
                         </div>
                     </div>
@@ -124,19 +138,49 @@ $product = mysqli_fetch_assoc($product_query);
                     
                 </div>
                 
-                <div class="NewProduct mt-12 p-10">
+                <!-- <div class="NewProduct mt-12 p-10">
                     <h1 class="text-center text-3xl mb-10">NEW PRODUCTS</h1>
-                    <?php include '../Swipers/Swiper3.php'; ?>
-                </div>
-            </main>
+                </div> -->
 
-            <div class="Footer">
-                <?php include './Footer.php'; ?>
-            </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
- 
+            <!-- Existing sections above -->
+
+                <div id="AdditionalSection" class="container mx-auto my-12 p-4">
+                    <div class="flex flex-wrap items-center justify-center md:justify-between gap-4">
+                    <?php
+                          $related_items = mysqli_query($product_info, "SELECT * FROM product_item WHERE product_id = $product_id");
+
+                                        // Initialize an array to store image filenames
+                          $image_filenames = [];
+
+                          while ($row = mysqli_fetch_assoc($related_items)) {
+                              // Decode JSON data
+                              $images_json = $row['Description_images']; // Assuming 'pr_img' contains JSON data
+                              $images_array = json_decode($images_json, true); // Decode JSON to array
+                          
+                             if (is_array($images_array)) {
+                                 // Add the image filenames to the array
+                                 $image_filenames = array_merge($image_filenames, $images_array);
+                             }
+                         }
+
+                         // Loop through image filenames and generate swiper slides
+                         foreach ($image_filenames as $image_filename) {
+                     ?>
+                        <div class="w-full p-2">
+                            <img src="../images/Description_images/<?php echo htmlspecialchars($image_filename); ?>" alt="Additional Image" class="w-full h-auto object-contain rounded transition-all duration-500 transform hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+                <?php
+                     }
+                ?>
+        </main>
+        <div class="Footer">
+            <?php include './Footer.php'; ?>
+        </div>
+
 </body>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js" ></script>
 <script src="../JS/Details.js"></script>
 <script src="../JS/loco.js"></script>

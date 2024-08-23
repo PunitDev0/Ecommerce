@@ -1,3 +1,5 @@
+console.log('hello');
+
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
 
@@ -19,21 +21,42 @@ function openTab(evt, tabName) {
 }
 
 var swiper = new Swiper(".mySwiper4", {
-    slidesPerView: 4,
-    spaceBetween: 30,
-    grabCursor: true,
+    slidesPerView: 3, // Adjust the number of slides per view
+    spaceBetween: 30, // Space between slides
+    // loop: true, // Loop slides
     pagination: {
         el: ".swiper-pagination",
         clickable: true,
     },
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+    },
+    breakpoints: {
+        640: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+        },
+        768: {
+            slidesPerView: 2,
+            spaceBetween: 30,
+        },
+        1024: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+        },
+    }
 });
 document.getElementsByClassName('tablinks')[0].click();
 document.querySelectorAll('#relatedImage').forEach(img => {
     img.addEventListener('click', function() {
         console.log('helo');
-        
         document.querySelector('.mainImage').src = this.src;
     });
 });
-const image = document.querySelectorAll('#relatedImage')
-console.log(image);
+document.querySelectorAll('#relatedImage').forEach(img => {
+    img.addEventListener('mouseover', function() {
+        console.log('helo');
+        document.querySelector('.mainImage').src = this.src;
+    });
+});

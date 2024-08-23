@@ -1,12 +1,10 @@
 <?php
   session_start();
-
-//   if (!$_SESSION['user_id'] || $_SESSION['admin_id']) {
-//     // If not logged in, redirect to login page
-//     header("Location: ./Login.php");
-//     exit();
-// }
-
+  if (!$_SESSION['logged_in']) {
+    // If not logged in, redirect to login page
+    header("Location: ./Login.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

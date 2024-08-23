@@ -106,28 +106,6 @@
     <!-- Add your product cards or list elements here -->
 
     <script>
-        // Function to toggle card views
-        function toggleCardView(view) {
-            const productList = document.querySelector('.product-list');
-
-            if (view === 'list') {
-                productList.classList.remove('grid-view');
-                productList.classList.add('list-view');
-            } else if (view === 'grid') {
-                productList.classList.remove('list-view');
-                productList.classList.add('grid-view');
-            }
-        }
-
-        // Event listeners for view toggle buttons
-        document.getElementById('list-view').addEventListener('click', function () {
-            toggleCardView('list');
-        });
-
-        document.getElementById('grid-view').addEventListener('click', function () {
-            toggleCardView('grid');
-        });
-
         // Sort Form Submission
         document.getElementById('sort-by').addEventListener('input', function (event) {
             event.preventDefault();
