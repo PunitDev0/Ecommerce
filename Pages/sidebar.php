@@ -119,7 +119,7 @@
                   </div>
                   <input type="range" name="min_price" id="min-price" min="0" max="1000" value="0" step="1">
                   <input type="range" name="max_price" id="max-price" min="0" max="1000" value="1000">
-                  <input type="text" name="pr_id" value="<?php echo $_GET['page']?>">
+                  <input type="text" name="pr_id">
                   <button type="submit" name="submit" class="border-2 px-4 rounded-lg bg-[#333] text-white hover:bg-gray-400 transition-all">Filter</button>
                 </form>
               </div>

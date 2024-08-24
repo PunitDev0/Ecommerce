@@ -82,6 +82,7 @@
         <p class="text-sm text-gray-600 md:hidden">There are 16 products.</p>
         <div class="sort-form">
             <form id="sort-form" method="GET" action="">
+                <input type="text" >
                 <label for="sort-by" class="mr-2">Sort by:</label>
                 <select id="sort-by" name="sort" class="border border-gray-300 p-2 rounded">
                     <option value="relevance">Relevance</option>

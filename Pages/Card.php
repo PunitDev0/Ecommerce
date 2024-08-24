@@ -15,32 +15,19 @@ switch ($sort_by) {
         $order_by = 'product_price DESC';
         break;
     default:
-        $order_by = 'id ASC';
+        $order_by = 'product_id ASC';
         break;
 }
 
-if(isset($_GET['submit'])){
-  // $pr = $_GET['pr_id'];
-  // echo $pr;
-  $category_id = isset($_GET['pr_id']) ? intval($_GET['pr_id']) : 0;
-  // echo $category_id;
+  $category_id = $_SESSION['id'];
   
   $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
   $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
   
-  $query = "SELECT * FROM product_item WHERE product_catg=$category_id AND product_price BETWEEN $min_price AND $max_price ORDER BY $sort_by";
+  $query = "SELECT * FROM product_item WHERE product_catg=$category_id AND product_price BETWEEN $min_price AND $max_price order by $order_by";
   $item = mysqli_query($product_info, $query);
-}else{
-  $category_id = isset($_GET['page']) ? intval($_GET['page']) : 0;
-  // echo $category_id;
-  
-  $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
-  $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
-  
-  $query = "SELECT * FROM product_item WHERE product_catg=$category_id AND product_price BETWEEN $min_price AND $max_price";
-  $item = mysqli_query($product_info, $query);
-  // $category_id = isset($_GET['page']) ? intval($_GET['page']) : 0;
-}
+
+
 
 ?>
 
@@ -55,7 +42,7 @@ if(isset($_GET['submit'])){
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
   <style>
-    .heart-icon {
+    /* .heart-icon {
         position: absolute;
         top: 0.5rem;
         right: 0.5rem;
@@ -64,7 +51,7 @@ if(isset($_GET['submit'])){
     }
     .heart-icon:hover {
         color: red;
-    }
+    } */
     .buttons{
       visibility: hidden;
       transition : all ease-in-out;
@@ -98,36 +85,25 @@ if(isset($_GET['submit'])){
       ?>
         <div class="bg-white rounded-lg h-[480px] overflow-hidden flex flex-col relative ">
             <?php
-              $user_id = $_SESSION['user_id'];
-              $product_id = $items['product_id'];
-              // $query = "SELECT * FROM wishlist_$user_id WHERE product_id = $product_id";x  
-              // $result = mysqli_query($wishlist, $query);
-              // $isInWishlist = mysqli_num_rows($result) > 0;
-              // echo $product_id;
-              // echo $user_id
+                if(isset($_SESSION['user_logged_in'])){
+                  $user_id = $_SESSION['user_id'];
+                }
+                $product_id = $items['product_id'];
               ?>
-             
-                 <!-- Example item card -->
-                 <div class="item-card p-4  rounded-lg">
-                    <form id="hidden-form" method="POST" style="display: none;">
-                        <input type="hidden" name="action" id="form-action">
-                        <input type="hidden" name="product_id" id="form-product_id">
-                        <input type="hidden" name="user_id" id="form-user_id" value="<?php echo $user_id; ?>">
-                    </form>
-                    <i class="fas fa-heart heart-icon text-gray-400 cursor-pointer text-2xl transition-colors duration-300" data-product-id="<?php echo $product_id; ?>"></i>
-                    <!-- Other item details -->
-                </div>
-
-
-
-
-
-
-              <div class="swiper mySwiper w-full">
+                 <div class="swiper mySwiper w-full">
+                    <div class="item-card p-4 z-50 rounded-lg absolute right-0">
+                      <form id="hidden-form" method="POST" style="display: none;">
+                          <input type="hidden" name="action" id="form-action">
+                          <input type="hidden" name="product_id" id="form-product_id">
+                          <input type="hidden" name="user_id" id="form-user_id" value="<?php echo $user_id; ?>">
+                      </form>
+                      <i class="fas fa-heart heart-icon text-gray-400 cursor-pointer text-xl transition-colors duration-300" data-product-id="<?php echo $product_id; ?>"></i>
+                      <!-- Other item details -->
+                  </div>
                 <div class="swiper-wrapper">
                   <div class="swiper-slide">
                     <!-- <img src="./images/Product_images/8110912f-4db1-4296-ad00-0cb9573851ba.jpg" alt=""> -->
-                        <div class=" h-full w-full bg-gray-100 p-2 border border-gray-200 flex items-center justify-center overflow-hidden">
+                        <div class=" h-full w-full  p-2 border  flex items-center justify-center overflow-hidden">
                           <img class="object-contain h-64 " src="../Images/Product_images/<?php echo $items['product_image']; ?>" alt="<?php echo $items['product_name']; ?>">
                           
                      </div>
@@ -192,9 +168,6 @@ if(isset($_GET['submit'])){
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const heartIcons = document.querySelectorAll('.heart-icon');
-    const hiddenForm = document.getElementById('hidden-form');
-    const actionInput = document.getElementById('form-action');
-    const productIdInput = document.getElementById('form-product_id');
     const userIdInput = document.getElementById('form-user_id');
 
     heartIcons.forEach(icon => {
@@ -219,28 +192,51 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem(`wishlist-${productId}`, 'liked');
             }
 
-            // Update hidden form fields
-            actionInput.value = action;
-            productIdInput.value = productId;
-
             // Send request using fetch API
             fetch('wishlist_handler.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: new URLSearchParams(new FormData(hiddenForm))
+                body: new URLSearchParams({
+                    action: action,
+                    product_id: productId,
+                    user_id: userIdInput.value // Ensure this value is set
+                })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(result => {
                 console.log('Success:', result);
+                updateWishlistSidebar();
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         });
     });
+
+    function updateWishlistSidebar() {
+        fetch('Navbar.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.getElementById('wishlist').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error updating wishlist sidebar:', error);
+        });
+    }
 });
+
 
 
 

@@ -808,8 +808,9 @@ $users = mysqli_fetch_array($querry);
                     class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
                     <th class="px-4 py-3">Client</th>
                     <th class="px-4 py-3">Amount</th>
-                    <th class="px-4 py-3">Created Date</th>
-                    <th class="px-4 py-3">Update Date</th>
+                    <th class="px-4 py-3">Category</th>
+                    <th class="px-4 py-3">Gender</th>
+                    <th class="px-4 py-3">Uploaded_At</th>
                     <th class="px-4 py-3">Actions</th>
                   </tr>
                 </thead>
@@ -854,6 +855,12 @@ $users = mysqli_fetch_array($querry);
                     <span
                         class="px-2 py-1 font-semibold leading-tight text-orange-700 bg-orange-100 rounded-full dark:text-white dark:bg-orange-600">
                       <?php echo $item['product_gender']?>
+                      </span>
+                    </td>
+                    <td class="px-4 py-3 text-sm">
+                    <span
+                        class="px-2 py-1 font-semibold leading-tight text-orange-700  rounded-full dark:text-white ">
+                      <?php echo $item['uploaded_at']?>
                       </span>
                     </td>
                     <td class="px-4 py-3">

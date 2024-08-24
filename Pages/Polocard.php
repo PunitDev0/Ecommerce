@@ -12,22 +12,22 @@
 <body>
   <div class="containers ">
     <?php
-        $conn = mysqli_connect('localhost', 'root', '', 'userinfo');
-        $item = mysqli_query($conn, "SELECT * FROM polo_item");
+        include './config.php';
+        $item = mysqli_query($product_info, "SELECT * FROM product_item WHERE product_catg = 1");
         while ($items = mysqli_fetch_array($item)) {
       ?>
-        <div href="details.php?id=<?php echo $items['id']; ?>" class="product-card">
+        <div href="details.php?id=<?php echo $items['product_id']; ?>" class="product-card">
           <div class="product-image relative overflow-hidden">
-            <img src="../Assests/image/WatchImage1.png">
-            <div class=" quick_view h-10 w-fit rounded-lg backdrop-blur-md shadow-lg flex items-center justify-center py-2 px-4  absolute bottom-0 translate-y-10">
+            <img src="../images/product_images/<?php echo $items['product_image']?>">
+            <div class=" quick_view h-10 w-fit rounded-lg bg-white shadow-xl flex items-center justify-center py-2 px-4  absolute bottom-0 translate-y-10">
               <p>Quick View</p>
             </div>
           </div>
           <div class="product-info">
-            <p class="product-name"><?php echo $items['product_name']; ?></p>
+            <p class="product-name truncate"><?php echo $items['product_name']; ?></p>
             <p class="product-price">$<?php echo $items['product_price']; ?></p>
             <form action="details.php" method="GET">
-                  <input type="hidden" name="id" value="<?php echo $items['id'];?>">
+                  <input type="hidden" name="id" value="<?php echo $items['product_id'];?>">
                   <button type="submit" class="add-to-cart bg-black text-white py-2 px-4 mt-4 rounded transition duration-300 hover:bg-gray-700">
                       Add to Cart
                   </button>
