@@ -30,19 +30,26 @@ $product = mysqli_fetch_assoc($product_query);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <style>
+        body,html {
+                scroll-behavior: smooth;
+                transition: 0.3s;
+            }
+
+    </style>
 
 </head>
 <body class="Details font-sans antialiased">
-            <div class="Navbar">
-                <?php include './Navbar.php'; ?>
-            </div>
-
-            <main class="container mx-auto p-4">
+    
+    <div class="Navbar fixed w-full z-50">
+        <?php include './Navbar.php'; ?>
+    </div>
+            <main class="container mx-auto p-4 py-28">
                 <div class="flex flex-wrap">
                     <div class="w-full  md:w-1/2 p-2" >
                         <div class="product-images">
                             <div class="main-image mb-4">
-                                <img src="../Images/Product_images/<?php echo $product['product_image']; ?>" alt="Product Image" class="mainImage w-full h-full object-contain rounded transition-all ease-in-out">
+                                <img src="../Images/Product_images/<?php echo $product['product_image']; ?>" alt="Product Image" class="mainImage w-full h-full object-contain rounded transition-all ease-in-out" style="max-height: 500px;">
                             </div>
                             <div class="swiper mySwiper4">
                                 <div class="swiper-wrapper flex  gap-10">
@@ -183,5 +190,5 @@ $product = mysqli_fetch_assoc($product_query);
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js" ></script>
 <script src="../JS/Details.js"></script>
-<script src="../JS/loco.js"></script>
+<!-- <script src="../JS/loco.js"></script> -->
 </html>

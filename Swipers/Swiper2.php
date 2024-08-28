@@ -21,8 +21,8 @@
     $result = mysqli_query($product_info, $query);
     while($product = mysqli_fetch_assoc($result)){
   ?>
-      <div class="swiper-slide flex justify-center items-center  h-36 w-36">
-        <div class="relative w-4/5 h-4/5 rounded-md bg-opacity-80 shadow-lg">
+      <div class="swiper-slide flex justify-center items-center mt-16 h-40 w-40">
+        <div class="relative w-full h-full rounded-md bg-opacity-80 shadow-lg">
           <img src="../images/Product_images/<?php echo $product['product_image']?>" alt="" class="h-full w-full object-contain" />
         </div>
       </div>

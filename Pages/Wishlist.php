@@ -1,9 +1,3 @@
-<?php
-
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +13,28 @@
 <body class="font-sans antialiased">
 
    <div class="MainCart">
+                        <?php
+                        include './config.php';
+                        $user_id = $_GET['userID'];
+
+
+                            $query = "SELECT * FROM user_wishlist.wishlist_$user_id AS w 
+                                    LEFT JOIN product_info.product_item AS pr 
+                                    ON w.product_id = pr.product_id";
+
+                                  $result = mysqli_query($wishlist, $query);
+
+                                  $wishlistItems = [];
+                                  $totalPrice = 0;
+
+                                    if ($result && $result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            $wishlistItems[] = $row;
+                                            $totalPrice += $row['product_price'];
+                                        }
+                                        // echo $user_id;
+                                    }
+                                    ?>
     <div class="Navbar">
             <?php include './Navbar.php'; ?>
         </div>
@@ -30,18 +46,9 @@
                     <div class="border-2 border-gray-200 shadow-lg p-4 flex-1">
                         <h1 class="text-2xl font-bold mb-4 opacity-60">Shopping Cart</h1>
                         <div class="cart-items">
-                        <?php
-                                $wish = mysqli_connect('localhost','root','','user_wishlist');
-                                $product = mysqli_connect('localhost','root','','product_info');
-                                $user_id = $_SESSION['user_id'];
-                                $id = $_GET['product_id'];
-                                if($id){
-                                    $query = "SELECT * FROM user_wishlist.wishlist_$user_id AS w LEFT JOIN product_info.product_item AS pr ON w.product_id = pr.product_id WHERE w.product_id = $id";
-                                    $result = mysqli_query($wish, $query);
-                                }
-                                while($item = mysqli_fetch_array($result)){
-                                
-                            ?>
+                                    <?php
+                                    foreach ($wishlistItems as $item) {
+                                        ?>
                                 <div class="cart-item flex flex-col md:flex-row items-center mb-2 border-2 p-2">
                                     <div class="w-full md:w-2/12 bg-gray-200">
                                         <img src="../images/Product_images/<?php echo $item['product_image']; ?>" alt="Product Image" class="w-full object-contain rounded h-full">
@@ -72,7 +79,7 @@
                         <div class="border-2 border-gray-200 rounded-lg shadow p-4">
                             <div class="flex justify-between mb-4">
                                 <span>6 items</span>
-                                <span>$<?php echo $total; ?></span>
+                                <span>$<?php echo $totalPrice;   ?></span>
                             </div>
                             <div class="flex justify-between mb-4">
                                 <span>Shipping</span>
@@ -104,7 +111,7 @@
         </main>
 
         <div class="Footer">
-            <?php include './Footer.html'; ?>
+            <?php include './Footer.php'; ?>
         </div>
 
    </div>
