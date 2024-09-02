@@ -265,7 +265,34 @@
                     </div>
                 
         </div>
+        <script>
+        // JavaScript to handle the AJAX request
+        document.getElementById('wishlist-icon').addEventListener('click', function() {
+            // Make AJAX request to update wishlist
+            fetch('wishlist.php', {
+                method: 'GET',
+                credentials: 'same-origin',
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Inject the received data into the wishlist section
+                document.getElementById('wishlist-items').innerHTML = data;
 
+                // Update the wishlist count and total
+                const count = document.querySelectorAll('#wishlist-items .wishlist-item').length;
+                const total = [...document.querySelectorAll('#wishlist-items .wishlist-item .price')]
+                    .reduce((sum, el) => sum + parseFloat(el.innerText.replace('$', '')), 0);
+                
+                document.getElementById('wishlist-count').innerText = `${count} items`;
+                document.getElementById('wishlist-total').innerText = `$${total.toFixed(2)}`;
+            });
+        });
+
+        // Optional: Close wishlist
+        document.getElementById('bx-wish').addEventListener('click', function() {
+            document.getElementById('wishlist').classList.add('translate-x-[300px]');
+        });
+    </script>   
         <script src="../JS/Navbar.js"></script>
     </body>
     </html>

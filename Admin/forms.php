@@ -16,7 +16,7 @@
   <script src="./assets/js/init-alpine.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
-  <script src="../vendor/jquery/jquery-3.2.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -715,23 +715,7 @@ if (isset($_POST['sub'])) {
                         });
                     });
                 </script>
-                <?php
-                mysqli_query($product_info, "SET FOREIGN_KEY_CHECKS = 0");
-                $query = "INSERT INTO product_item (product_name, product_image, product_price, product_gender, product_details, product_catg, size_quantity, Description_images) VALUES ('$pname', '$product_img', $price, '$gender', '$product_details', '$catg', '$escaped_sizes_and_quantity_json', '$escaped_json')";
-
-                if ($product_query = mysqli_query($product_info, $query)) {
-                    echo "Product added successfully";
-                } else {
-                    echo "Error: " . mysqli_error($product_info);
-                }
-            }
-        }
-    }
-}
-?>
-
-
-          <form action="" method="POST" enctype="multipart/form-data">
+                        <form action="" method="POST" enctype="multipart/form-data">
             <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
             <label class="block mt-4 text-sm">
                   <span class="text-gray-700 dark:text-gray-400">
@@ -785,6 +769,24 @@ if (isset($_POST['sub'])) {
         <?php
       }
 ?>
+
+                <?php
+                mysqli_query($product_info, "SET FOREIGN_KEY_CHECKS = 0");
+                $query = "INSERT INTO product_item (product_name, product_image, product_price, product_gender, product_details, product_catg, size_quantity, Description_images) VALUES ('$pname', '$product_img', $price, '$gender', '$product_details', '$catg', '$escaped_sizes_and_quantity_json', '$escaped_json')";
+
+                if ($product_query = mysqli_query($product_info, $query)) {
+                    echo "Product added successfully";
+                } else {
+                    echo "Error: " . mysqli_error($product_info);
+                }
+            }
+        }
+    }
+}
+?>
+
+
+  
   <?php
     if(isset($_POST['update'])){
       include '../Pages/config.php';

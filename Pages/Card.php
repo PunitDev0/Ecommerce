@@ -40,7 +40,7 @@ switch ($sort_by) {
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
+  <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
   <style>
     /* .heart-icon {
         position: absolute;
@@ -192,49 +192,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem(`wishlist-${productId}`, 'liked');
             }
 
-            // Send request using fetch API
-            fetch('wishlist_handler.php', {
+            // Send AJAX request
+            $.ajax({
+                url: 'wishlist_handler.php',
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
+                data: {
                     action: action,
                     product_id: productId,
                     user_id: userIdInput.value // Ensure this value is set
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                },
+                success: function(result) {
+                    console.log('Success:', result);
+                    updateWishlistSidebar();
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
                 }
-                return response.json();
-            })
-            .then(result => {
-                console.log('Success:', result);
-                updateWishlistSidebar();
-            })
-            .catch(error => {
-                console.error('Error:', error);
             });
         });
     });
-
-    function updateWishlistSidebar() {
-        fetch('Navbar.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(html => {
-            document.getElementById('wishlist').innerHTML = html;
-        })
-        .catch(error => {
-            console.error('Error updating wishlist sidebar:', error);
-        });
-    }
 });
 
 

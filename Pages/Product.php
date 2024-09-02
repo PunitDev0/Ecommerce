@@ -28,15 +28,12 @@
     </style>
   </head>
   <body>
+    <div class="Navbar fixed w-full z-50">
+      <?php include './Navbar.php' ?>
+    </div>
     <div class="MainPage">
       <!-- here include navbar -->
-
-      <div class="Navbar">
-        <?php include './Navbar.php' ?>
-      </div>
-
-
-      <div class="Content flex p-8 ">
+      <div class="Content flex py-28 px-10">
         <div class="box1">
           <?php include'./sidebar.php'?>
         </div>
@@ -61,5 +58,5 @@
     </div>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js"></script>
-  <script src="../JS/loco.js"></script>
+  <!-- <script src="../JS/loco.js"></script> -->
 </html>

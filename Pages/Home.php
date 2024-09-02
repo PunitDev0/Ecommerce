@@ -15,33 +15,12 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
   <title>Document</title>
-  <style>
-    .grid-div p{
-      color:white;
-    }
-    .grid-item{
-      overflow:hidden;  
-      transition:all;
-    }
-    .grid-div{
-      transition:all;
-      transform: translateY(350px);
-
-    }
-    .grid-item:hover {
-      scale:1.02;
-    }
-    .grid-item:hover .grid-div{
-        transform: translateY(0);
-    }
-
-  </style>
 </head>
-<body class=" text-white">
-  <div class="MainHome">
-    <div class="Navbar">
-      <?php include './Navbar.php' ?>
-    </div>
+<body class=" text-white bg-gray-100 overflow-x-hidden">
+  <div class="Navbar fixed z-50 w-full">
+    <?php include './Navbar.php' ?>
+  </div>
+  <div class="MainHome py-[100px]">
     <div class="SwiperAdd relative">
       <?php include '../Swipers/Swiper.html' ?>
     </div>
@@ -126,6 +105,7 @@
         <h1 class="text-center mb-3 text-lg font-bold">Find Things You'll Love</h1>
         <?php include '../Swipers/Swiper2.php' ?>
       </div>
+    
 
       <div class="Cards my-10 flex flex-col w-full items-center">
         <h1 class="text-center text-3xl">FEATURED COLLECTION'S</h1>

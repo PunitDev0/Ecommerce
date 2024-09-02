@@ -51,7 +51,7 @@
                 <input type="text" id="phoneNumber" name="phoneNumber" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
             </div>
             <div class="col-span-2 flex justify-end">
-                <button type="submit" class="px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">Save Address</button>
+                <button type="submit" name ="submit" class="px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md">Save Address</button>
             </div>
         </form>
     </div>
