@@ -1,3 +1,13 @@
+<?php
+// Define the directory containing images
+$directory = '../Images/Product_images/';
+
+// Get all image files with supported extensions
+$images = glob($directory . "/*.{jpg,jpeg,png,gif}", GLOB_BRACE);
+
+// Convert the PHP array of images to a JSON array for JavaScript
+$imagesJSON = json_encode($images);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -130,12 +140,11 @@
       </ul>
     </div>
     <div class="image">
-      <img src="../Images/Product_images/Embracing the Heritage of Style_ Perpetuating Old Money Elegance Through the Ages_.jpg" alt="">
+      <img src="" alt="" id = "rotating-image">
     </div>
   </div>
 
   <script>
-    // Toggle category visibility
     document.querySelectorAll('.toggle-btn').forEach((button) => {
       button.addEventListener('click', () => {
         const ul = button.nextElementSibling;
@@ -155,6 +164,22 @@
         document.querySelector('#max-price').addEventListener('input', () => {
             document.getElementById('max-price-output').innerText = '$' + document.querySelector('#max-price').value;
         });
+
+        const images = <?php echo $imagesJSON; ?>;
+        
+        let currentImageIndex = 0;
+
+        function changeImage() {
+            const imgElement = document.getElementById('rotating-image');
+            imgElement.src = images[currentImageIndex];
+            currentImageIndex++;            
+            if (currentImageIndex >= images.length) {
+                currentImageIndex = 0;
+            }
+        }
+        setInterval(changeImage, 600);
+        changeImage();
+
     
   </script>
 </body>
