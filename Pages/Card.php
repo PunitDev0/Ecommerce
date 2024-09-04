@@ -126,7 +126,7 @@ switch ($sort_by) {
                     foreach ($image_filenames as $image_filename) {
                   ?>
                   <div class="swiper-slide relative !important">
-                      <div class="h-full w-full bg-gray-100 p-2 border border-gray-200 flex items-center justify-center overflow-hidden">
+                      <div class="h-full w-full  p-2 border border-gray-200 flex items-center justify-center overflow-hidden">
                           <img class="object-contain h-64" src="../images/Product_images/RF_images/<?php echo htmlspecialchars($image_filename); ?>" alt="Product Image">
                           <!--  -->
                       </div>

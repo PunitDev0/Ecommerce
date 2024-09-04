@@ -21,7 +21,7 @@
             <div class="bg-gray-900 h-6 flex items-center justify-center">
                 <h4 class="text-white text-center">Get Exclusive Discount 50%OFF</h4>
             </div>
-            <nav id = "navbar" class="flex justify-between items-center h-20 px-3 md:px-12 relative bg-white">
+            <nav id = "navbar" class="flex justify-between items-center h-[70px] px-3 md:px-12 relative bg-white">
                 <div class="flex items-center" id="menu">
                     <i class="bx bx-menu text-lg cursor-pointer md:hidden"></i>
                     <div class="ml-4">
@@ -43,7 +43,14 @@
                     if(isset($_GET['page'])){
                         $id = $_GET['page'];
                         $_SESSION['id'] = $id;
+                        echo $_SESSION['id'];
                     }
+                    if (isset($_SESSION['user_id'])) {
+                        $user_id = $_SESSION['user_id'];
+                    } else {
+                        $user_id = isset($_GET['userID']) ? $_GET['userID'] : null;
+                    }
+                    
                 ?>
                 <div class="flex gap-5 text-2xl">
                     <a href="#" class="hover:-translate-y-2 transition-transform"><i class="bx bx-heart"></i></a>
@@ -92,13 +99,15 @@
                             </div>
                             <i class="bx bx-chevron-right text-xl"></i>
                         </a>
-                        <a href="./userAddress.php" class="flex items-center justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
+                       <form action="">
+                       <a href="./userAddress.php" class="flex items-center justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
                             <div class="flex gap-2 items-center">
                                 <i class="bx bx-map text-xl"></i>
                                 <p>Address</p>
                             </div>
                             <i class="bx bx-chevron-right text-xl"></i>
                         </a>
+                       </form>
                         <a href="../Admin/index.php" class="flex items-center <?php
                             if(isset($_SESSION['admin_id'])){
                                 echo 'block';

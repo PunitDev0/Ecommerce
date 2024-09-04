@@ -1,10 +1,64 @@
+<?php
+include './config.php';
+session_start();
+
+// Make sure $user_id is defined properly
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+} else {
+    die("Error: User ID not found in session.");
+}
+
+if (isset($_POST['submit'])) {
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $address1 = $_POST['addressLine1'];
+    $address2 = $_POST['addressLine2'];
+    $city = $_POST['city'];
+    $state = $_POST['state'];
+    $zipCode = $_POST['zipCode'];
+    $country = $_POST['country'];
+    $phone = $_POST['phoneNumber'];
+
+    $fullAddress = $address1 . ' ' . $address2;
+    $fullname = $firstName . ' ' . $lastName;
+    $customerData = [
+        'name' => $fullname,
+        'address' => $fullAddress,
+        'city' => $city,
+        'state' => $state,
+        'zip_code' => $zipCode,
+        'country' => $country,
+        'phone' => $phone
+    ];
+
+    // Convert array to JSON string
+    $customerJson = json_encode($customerData);
+
+    // Use a prepared statement to avoid SQL injection
+    $stmt = $conn->prepare("UPDATE user_info SET User_address = ? WHERE id = ?");
+    $stmt->bind_param("si", $customerJson, $user_id);
+
+    // Execute the query
+    if ($stmt->execute()) {
+        echo "User address updated successfully.";
+    } else {
+        echo "Error updating record: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
+
+// Close the database connection
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-
     <title>Document</title>
 </head>
 <body>
@@ -13,7 +67,7 @@
     </div>
     <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
         <h2 class="text-2xl font-bold mb-4">Shipping Address</h2>
-        <form id="addressForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form id="addressForm" class="grid grid-cols-1 md:grid-cols-2 gap-6" method = "POST">
             <div>
                 <label class="block text-sm font-medium text-gray-700" for="firstName">First Name</label>
                 <input type="text" id="firstName" name="firstName" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
