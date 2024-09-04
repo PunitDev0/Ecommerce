@@ -15,6 +15,7 @@
    <div class="MainCart">
                         <?php
                         include './config.php';
+                        session_start();
                         $user_id = $_GET['userID'];
 
 

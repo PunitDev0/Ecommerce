@@ -43,7 +43,7 @@
                     if(isset($_GET['page'])){
                         $id = $_GET['page'];
                         $_SESSION['id'] = $id;
-                        echo $_SESSION['id'];
+                        // echo $_SESSION['id'];
                     }
                     if (isset($_SESSION['user_id'])) {
                         $user_id = $_SESSION['user_id'];
@@ -96,6 +96,13 @@
                             <div class="flex gap-2 items-center">
                                 <i class="bx bxs-user-circle text-xl"></i>
                                 <p>Edit Profile</p>
+                            </div>
+                            <i class="bx bx-chevron-right text-xl"></i>
+                        </a>
+                        <a href="./Personal_info.php" class="flex items-center gap-4 justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
+                            <div class="flex gap-2 items-center">
+                            <i class='bx bx-shopping-bag'></i>
+                                <p>My Orders</p>
                             </div>
                             <i class="bx bx-chevron-right text-xl"></i>
                         </a>
