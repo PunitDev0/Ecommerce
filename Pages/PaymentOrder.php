@@ -49,7 +49,7 @@
           <div class="flex items-center justify-between mt-4">
             <div class="flex items-center">
               <!-- Product Image -->
-              <img src="./Images/Product_images/61bqww99XnL._SY741_.jpg" alt="Product Image" class="w-24 h-24 mr-4 rounded-md">
+              <img src="../Images/Product_images/61bqww99XnL._SY741_.jpg" alt="Product Image" class="w-32 h-32 mr-4 rounded-md">
               <div>
                 <p class="font-semibold">YIXTY Resistance Bands Set for Exercise</p>
                 <p class="text-sm text-gray-500">1 item</p>

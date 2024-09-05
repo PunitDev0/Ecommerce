@@ -43,10 +43,14 @@ function submitForm(page) {
 }
 const user = document.querySelector('.bxs-user')
 const submenu = document.querySelector('.sub-menu')
-user.addEventListener('click', () => {
+user.addEventListener('mouseenter', () => {
     console.log("hello world");
-    
-
+    // const ul = button.nextElementSibling;
+    submenu.classList.toggle('max-h-0');
+    submenu.classList.toggle('max-h-96');
+  });
+user.addEventListener('mouseleave', () => {
+    console.log("hello world");
     // const ul = button.nextElementSibling;
     submenu.classList.toggle('max-h-0');
     submenu.classList.toggle('max-h-96');

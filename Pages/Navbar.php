@@ -55,7 +55,7 @@
                 <div class="flex gap-5 text-2xl">
                     <a href="#" class="hover:-translate-y-2 transition-transform"><i class="bx bx-heart"></i></a>
                     <a href="#" class="hover:-translate-y-2 transition-transform"><i class="bx bx-cart"></i></a>
-                    <a href="#" class="hover:-translate-y-2 transition-transform"><i class="bx bxs-user"></i></a>
+                    <a href="./User_info.php" class="hover:-translate-y-2 transition-transform"><i class="bx bxs-user"></i></a>
                 </div>
             </nav>
             
@@ -92,14 +92,14 @@
 
                     <!-- Menu Links -->
                     <div class="mt-4 space-y-3">
-                        <a href="./Personal_info.php" class="flex items-center gap-4 justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
+                        <a href="./User_info.php" class="flex items-center gap-4 justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
                             <div class="flex gap-2 items-center">
                                 <i class="bx bxs-user-circle text-xl"></i>
                                 <p>Edit Profile</p>
                             </div>
                             <i class="bx bx-chevron-right text-xl"></i>
                         </a>
-                        <a href="./Personal_info.php" class="flex items-center gap-4 justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
+                        <a href="./MyOrders.php" class="flex items-center gap-4 justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
                             <div class="flex gap-2 items-center">
                             <i class='bx bx-shopping-bag'></i>
                                 <p>My Orders</p>
@@ -107,7 +107,7 @@
                             <i class="bx bx-chevron-right text-xl"></i>
                         </a>
                        <form action="">
-                       <a href="./userAddress.php" class="flex items-center justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
+                       <a href="./User_Address.php" class="flex items-center justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
                             <div class="flex gap-2 items-center">
                                 <i class="bx bx-map text-xl"></i>
                                 <p>Address</p>

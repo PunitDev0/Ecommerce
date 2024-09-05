@@ -21,10 +21,11 @@ if (isset($_POST['submit'])) {
     $phone = $_POST['phoneNumber'];
 
     $fullAddress = $address1 . ' ' . $address2;
-    $fullname = $firstName . ' ' . $lastName;
     $customerData = [
-        'name' => $fullname,
-        'address' => $fullAddress,
+        'fname' => $firstName,
+        'lname' => $lastName,
+        'address' => $address1,
+        'address2' => $address2,
         'city' => $city,
         'state' => $state,
         'zip_code' => $zipCode,
