@@ -18,9 +18,9 @@
         </style>
     <body class="min-h-screen min-w-full font-poppins text-black">
         <div class="shadow-lg ">
-            <div class="bg-gray-900 h-6 flex items-center justify-center">
+            <!-- <div class="bg-gray-900 h-6 flex items-center justify-center">
                 <h4 class="text-white text-center">Get Exclusive Discount 50%OFF</h4>
-            </div>
+            </div> -->
             <nav id = "navbar" class="flex justify-between items-center h-[70px] px-3 md:px-12 relative bg-white">
                 <div class="flex items-center" id="menu">
                     <i class="bx bx-menu text-lg cursor-pointer md:hidden"></i>
