@@ -41,7 +41,7 @@ function submitForm(page) {
     document.getElementById('page-input').value = page;
     document.getElementById('nav-form').submit();
 }
-const user = document.querySelector('.bxs-user')
+const user = document.querySelector('.user-icon')
 const submenu = document.querySelector('.sub-menu')
 user.addEventListener('mouseenter', () => {
     console.log("hello world");

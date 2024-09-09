@@ -62,8 +62,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $cart_table = "CREATE TABLE IF NOT EXISTS cart_$user_id (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
-                product_id INT NOT NULL
+                product_id INT NOT NULL,
+                quantity INT NOT NULL,
             )";
             mysqli_query($CartConn, $cart_table);
 

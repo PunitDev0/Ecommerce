@@ -12,20 +12,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../CSS/Home.css">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.2/gsap.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  
   <title>Document</title>
+  <style>
+    body{
+      cursor: url("../Assests/cursor.png"), auto;
+    }
+  </style>
 </head>
 <body class=" text-white bg-gray-100 overflow-x-hidden">
   <div class="Navbar fixed z-50 w-full">
     <?php include './Navbar.php' ?>
   </div>
-  <div class="MainHome py-[100px]">
+  <div class="MainHome py-[74px]">
     <div class="SwiperAdd relative">
       <?php include '../Swipers/Swiper.html' ?>
     </div>
-    
-    
     <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 h-full w-full relative" style="grid-template-rows: repeat(2, minmax(200px, 300px))">
 
 <!-- First item: spans two rows -->

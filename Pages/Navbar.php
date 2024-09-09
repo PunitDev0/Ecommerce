@@ -1,8 +1,6 @@
     <!DOCTYPE html>
     <html lang="en">
     <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet" />
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
         <script src="https://cdn.tailwindcss.com"></script>
@@ -23,7 +21,9 @@
             </div> -->
             <nav id = "navbar" class="flex justify-between items-center h-[70px] px-3 md:px-12 relative bg-white">
                 <div class="flex items-center" id="menu">
-                    <i class="bx bx-menu text-lg cursor-pointer md:hidden"></i>
+                    <div class="md:hidden">
+                    <i class="bx bx-menu text-lg cursor-pointer "></i>
+                    </div>
                     <div class="ml-4">
                         <a href="./Home.php"><img src="../Assests/image/logo.png" alt="Logo" class="h-12 opacity-60" /></a>
                     </div>
@@ -55,11 +55,10 @@
                 <div class="flex gap-5 text-2xl">
                     <a href="#" class="hover:-translate-y-2 transition-transform"><i class="bx bx-heart"></i></a>
                     <a href="#" class="hover:-translate-y-2 transition-transform"><i class="bx bx-cart"></i></a>
+                    <div class="user-icon">
                     <a href="./User_info.php" class="hover:-translate-y-2 transition-transform"><i class="bx bxs-user"></i></a>
-                </div>
-            </nav>
-            
-            <div class="sub-menu absolute z-30 right-10 w-52 max-h-0 overflow-hidden transition-[max-height] duration-700 ease-in-out rounded-lg shadow-lg bg-white border border-gray-200">
+
+                    <div class="sub-menu absolute z-30 right-10 w-52 max-h-0 overflow-hidden transition-[max-height] duration-700 ease-in-out rounded-lg translate-y-5 shadow-lg bg-white border border-gray-200">
                 <div class="p-4">
                     <!-- User Info -->
                     <div class="flex items-center gap-4">
@@ -74,7 +73,7 @@
                                 }
                             ?>
                         </div>
-                        <h1 class="text-gray-900 font-medium">
+                        <h1 class="text-gray-900 font-medium text-base">
                             <?php 
                                 if(isset($_SESSION['user_id'])){
                                     echo $_SESSION['user_name'];
@@ -95,22 +94,15 @@
                         <a href="./User_info.php" class="flex items-center gap-4 justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
                             <div class="flex gap-2 items-center">
                                 <i class="bx bxs-user-circle text-xl"></i>
-                                <p>Edit Profile</p>
+                                <p class="text-base">Edit Profile</p>
                             </div>
-                            <i class="bx bx-chevron-right text-xl"></i>
-                        </a>
-                        <a href="./MyOrders.php" class="flex items-center gap-4 justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
-                            <div class="flex gap-2 items-center">
-                            <i class='bx bx-shopping-bag'></i>
-                                <p>My Orders</p>
-                            </div>
-                            <i class="bx bx-chevron-right text-xl"></i>
+                       <i class="bx bx-chevron-right text-xl"></i>
                         </a>
                        <form action="">
                        <a href="./User_Address.php" class="flex items-center justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
                             <div class="flex gap-2 items-center">
                                 <i class="bx bx-map text-xl"></i>
-                                <p>Address</p>
+                                <p class="text-base">Address</p>
                             </div>
                             <i class="bx bx-chevron-right text-xl"></i>
                         </a>
@@ -124,12 +116,19 @@
                         ?> justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
                             <div class="flex gap-2 items-center">
                             <i class='bx bxs-user-check'></i>
-                                <p>Admin</p>
+                                <p class="text-base">Admin</p>
                             </div>
                             <i class="bx bx-chevron-right text-xl"></i>
                         </a>
                         <!-- Add more links as needed -->
-                    </div>
+                        </a>
+                        <a href="./MyOrders.php" class="flex items-center gap-4 justify-between text-gray-700 hover:text-blue-500 transition-colors duration-300">
+                            <div class="flex gap-2 items-center">
+                            <i class='bx bx-shopping-bag'></i>
+                                <p class="text-base">My Orders</p>
+                            </div>
+                            <i class="bx bx-chevron-right text-xl"></i> 
+                        </a>
 
                     <!-- Divider -->
                     <div class="w-full bg-gray-300 h-0.5 mt-4"></div>
@@ -138,12 +137,17 @@
                     <div class="mt-4">
                         <a href="logout.php" class="flex gap-4 items-center text-red-500 hover:text-red-600 transition-colors duration-300">
                             <i class="bx bx-power-off text-xl"></i>
-                            <p>Sign Out</p>
+                            <p class="text-base">Sign Out</p>
                         </a>
                     </div>
                 </div>
             </div>
 
+                    </div>
+                </div>
+            </nav>
+            
+          
         </div>
         <div class="sidebar fixed top-0 left-0 h-screen w-52 backdrop-blur-lg p-5 transform -translate-x-52 transition-transform duration-300 ease-in-out z-10 flex flex-col gap-4 md:hidden" id="sidebar">
             <div class="absolute right-3 top-3 cursor-pointer bx-close">
@@ -282,27 +286,6 @@
                 
         </div>
         <script>
-        // JavaScript to handle the AJAX request
-        document.getElementById('wishlist-icon').addEventListener('click', function() {
-            // Make AJAX request to update wishlist
-            fetch('wishlist.php', {
-                method: 'GET',
-                credentials: 'same-origin',
-            })
-            .then(response => response.text())
-            .then(data => {
-                // Inject the received data into the wishlist section
-                document.getElementById('wishlist-items').innerHTML = data;
-
-                // Update the wishlist count and total
-                const count = document.querySelectorAll('#wishlist-items .wishlist-item').length;
-                const total = [...document.querySelectorAll('#wishlist-items .wishlist-item .price')]
-                    .reduce((sum, el) => sum + parseFloat(el.innerText.replace('$', '')), 0);
-                
-                document.getElementById('wishlist-count').innerText = `${count} items`;
-                document.getElementById('wishlist-total').innerText = `$${total.toFixed(2)}`;
-            });
-        });
 
         // Optional: Close wishlist
         document.getElementById('bx-wish').addEventListener('click', function() {

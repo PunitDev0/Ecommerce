@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Footer with Tailwind CSS</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
   <style>
     .hover-grow:hover {
       margin-left: 10px;
@@ -20,8 +14,6 @@
       }
     }
   </style>
-</head>
-<body>
   <!-- Other content -->
 
   <footer class="bg-gray-100 text-white py-8 w-full">
@@ -92,5 +84,3 @@
     }
   </script>
 
-</body>
-</html>
