@@ -59,7 +59,7 @@ $product = mysqli_fetch_assoc($product_query);
             </div>
             <div class="w-full md:w-1/2 p-2">
                 <div class="product-details">
-                    <h1 class="text-3xl font-bold mb-2"><?php echo $product['product_name']; ?></h1>
+                    <h1 class="md:text-3xl text-lg font-bold mb-2"><?php echo $product['product_name']; ?></h1>
                     <p class="text-2xl text-red-600 mb-2">$<?php echo $product['product_price']; ?></p>
                     <p class="text-red-600 font-bold mb-4">HURRY! ONLY 3 ITEMS LEFT IN STOCK</p>
                     <div class="delivery-info mb-4 border-2 p-3 flex items-center gap-3">

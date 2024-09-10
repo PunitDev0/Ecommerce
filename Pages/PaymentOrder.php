@@ -203,9 +203,6 @@ include('config.php');
 	use Razorpay\Api\Api;
 
 	$user_id = $_SESSION['user_id'];
-
-	$totalPriceWithTax = 40800;
-
 	
 	$keyId = 'rzp_test_kBREEooxYkKLPo'; 
 	$keySecret = 'P5NsdNUNPas0c0C74oCjkk1Y';  
@@ -234,7 +231,7 @@ include('config.php');
 				"currency": "INR",
 				"name": "Your Website Name",
 				"description": "Purchase Description",
-				"image": "https://yourwebsite.com/logo.png", // Replace with your logo
+				"image": "../Assests/image/logo.png", // Replace with your logo
 				"order_id": "<?php echo $orderId; ?>", // Razorpay Order ID from server-side
 				"handler": function(response) {
 					alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
