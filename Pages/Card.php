@@ -108,10 +108,24 @@ $item = mysqli_query($product_info, $query);
             $<?php echo $items['product_price']; ?>
           </p>
           <div class="flex justify-between space-x-2 mt-2">
-            <form action="details.php" method="GET">
+               <?php
+              $query = "SELECT * FROM cart_$user_id WHERE product_id = $product_id";
+              // Run the query and check if it succeeded
+              $result = mysqli_query($cart, $query);
+               ?>
+            <form action="<?php echo  (mysqli_num_rows($result) > 0) ? "Cart.php" : "details.php" ?>" method="GET">
               <input type="hidden" name="id" value="<?php echo $items['product_id']; ?>">
               <button type="submit" class="add-to-cart bg-black text-white py-1 px-2 sm:px-3 sm:py-2 text-xs sm:text-sm md:text-xs rounded transition duration-300 hover:bg-gray-700 w-full">
-                Add to Cart
+                <?php
+                  if(mysqli_num_rows($result) > 0){
+                    // Product is already in the cart
+                    echo "Go to Cart";
+                        } else {
+                            // Product is not in the cart
+                            echo "Add to Cart";
+                        }
+                    
+                ?>
               </button>
             </form>
             <form action="details.php" method="GET">
