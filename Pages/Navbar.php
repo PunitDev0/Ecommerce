@@ -15,7 +15,7 @@
             }
         </style>
     <body class="min-h-screen min-w-full font-poppins text-black">
-        <div class="shadow-lg ">
+        <div class="shadow-xl ">
             <!-- <div class="bg-gray-900 h-6 flex items-center justify-center">
                 <h4 class="text-white text-center">Get Exclusive Discount 50%OFF</h4>
             </div> -->

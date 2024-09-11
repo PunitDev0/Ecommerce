@@ -81,7 +81,7 @@ $item = mysqli_query($product_info, $query);
             foreach ($image_filenames as $image_filename) {
             ?>
               <div class="swiper-slide">
-                <div class="h-full w-full p-2 border flex items-center justify-center overflow-hidden">
+                <div class="p-2 border flex items-center justify-center overflow-hidden ">
                   <img class="object-contain h-64" src="../images/Product_images/RF_images/<?php echo htmlspecialchars($image_filename); ?>" alt="Product Image">
                 </div>
               </div>
@@ -114,7 +114,7 @@ $item = mysqli_query($product_info, $query);
                 Add to Cart
               </button>
             </form>
-            <form action="details.php" method="POST">
+            <form action="details.php" method="GET">
               <input type="hidden" name="id" value="<?php echo $items['product_id']; ?>">
               <button type="submit" class="buy-now bg-green-500 text-white py-1 px-2 sm:px-3 sm:py-2 text-xs sm:text-sm md:text-xs rounded transition duration-300 hover:bg-green-700 w-full">
                 Buy Now
@@ -175,5 +175,10 @@ $item = mysqli_query($product_info, $query);
 
   const swiper = new Swiper(".mySwiper", {
     navigation: false,
+    autoplay: {
+    delay: 3000, // Time in ms before the next slide
+    disableOnInteraction: false, // Continue autoplay after interaction
+  },
+  loop: true,
   });
 </script>
