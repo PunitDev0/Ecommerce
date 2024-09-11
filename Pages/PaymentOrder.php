@@ -48,37 +48,21 @@ include('config.php');
 				<p class="text-gray-400">Check your items. And select a suitable shipping method.</p>
 				<div class="mt-8 space-y-3  bg-white px-2 py-4 sm:px-6 max-h-[300px] overflow-y-auto">
 					<?php
-					$query = "SELECT * FROM user_cart.cart_$user_id AS w 
-                                  LEFT JOIN product_info.product_item AS pr 
-                                  ON w.product_id = pr.product_id";
+					$product_id = $_GET['product_id'];
+					$_SESSION['product_id'] = $product_id;
 
-					$result = mysqli_query($cart, $query);
+					$related_items = mysqli_query($product_info, "SELECT * FROM product_item WHERE product_id = $product_id");
 
-					$cartItems = [];
-					$totalPrice = 0;
-
-					if ($result && $result->num_rows > 0) {
-						while ($row = $result->fetch_assoc()) {
-							$cartItems[] = $row;
-							$totalPrice += $row['product_price'];
-						}
-						$Tax = $totalPrice * 0.10;
-						$_SESSION['totalPriceWithTax'] = $totalPrice + $Tax;
-					}
-					$totalPriceWithTax = $_SESSION['totalPriceWithTax'];
-
-					foreach ($cartItems as $item) {
-
+					$item = mysqli_fetch_assoc($related_items);
+					echo $item['product_name'];
 					?>
 						<div class="flex flex-col rounded-lg bg-white sm:flex-row border ">
 							<img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="../Images/Product_images/<?php echo $item['product_image'] ?>" alt="" />
 							<div class="flex w-full flex-col px-4 py-4">
 								<span class="font-semibold"><?php echo $item['product_name'] ?></span>
-								<span class="float-right text-gray-400"> Quantity :</span><?php echo $item['quantity'] ?></span>
-								<p class="text-lg font-bold">$138.99</p>
+								<p class="text-lg font-bold">$<?php echo $item['product_price'] ?></p>
 							</div>
 						</div>
-					<?php } ?>
 				</div>
 			</div>
 		</div>
@@ -131,7 +115,7 @@ include('config.php');
 			<div class="mt-10 ">
 				<p class="text-xl font-medium">Payment Details</p>
 				<p class="text-gray-400">Complete your order by providing your payment details.</p>
-				<div id="cardPayment">
+				<!-- <div id="cardPayment">
 					<label for="email" class="mt-4 mb-2 block text-sm font-medium">Email</label>
 					<div class="relative">
 						<input type="text" id="email" name="email" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="your.email@gmail.com" />
@@ -178,22 +162,25 @@ include('config.php');
 						<input type="text" name="billing-zip" class="flex-shrink-0 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none sm:w-1/6 focus:z-10 focus:border-blue-500 focus:ring-blue-500" placeholder="ZIP" />
 					</div>
 
-				</div>
+				</div> -->
 				<div class="mt-6 border-t border-b py-2">
 					<div class="flex items-center justify-between">
 						<p class="text-sm font-medium text-gray-900">Subtotal</p>
-						<p class="font-semibold text-gray-900">$399.00</p>
+						<p class="font-semibold text-gray-900">$<?php echo $item['product_price'] ?></p>
 					</div>
 					<div class="flex items-center justify-between">
 						<p class="text-sm font-medium text-gray-900">Shipping</p>
-						<p class="font-semibold text-gray-900">$8.00</p>
+						<p class="font-semibold text-gray-900">$<?php echo $Total = $item['product_price'] + 40?></p>
 					</div>
 				</div>
 				<div class="mt-6 flex items-center justify-between">
 					<p class="text-sm font-medium text-gray-900">Total</p>
-					<p class="text-2xl font-semibold text-gray-900">$408.00</p>
+					<p class="text-2xl font-semibold text-gray-900">$<?php echo $Total ?></p>
 				</div>
-				<button id="button" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
+				<form action="#" method="POST">
+					<input type="hidden" name="product_id" value="<?php echo $_SESSION['product_id']?>">
+					<button id="button" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -210,7 +197,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-
+$_SESSION['total'] = $Total; 
 // Razorpay API credentials
 $keyId = 'rzp_test_kBREEooxYkKLPo'; 
 $keySecret = 'P5NsdNUNPas0c0C74oCjkk1Y';  
@@ -219,7 +206,7 @@ $api = new Api($keyId, $keySecret);
 // Create a new Razorpay order
 try {
     $order = $api->order->create([
-        'amount' => $totalPriceWithTax * 100,  // Amount in paise (1 INR = 100 paise)
+        'amount' => $Total * 100,  // Amount in paise (1 INR = 100 paise)
         'currency' => 'INR',
         'receipt' => 'order_rcptid_' . $user_id,
         'payment_capture' => 1 // Auto-capture
@@ -241,7 +228,7 @@ document.getElementById('button').onclick = function(e) {
 
     var options = {
         "key": "<?php echo $keyId; ?>", // Razorpay Key ID
-        "amount": "<?php echo $totalPriceWithTax * 100; ?>", // Amount in paise
+        "amount": "<?php echo $Total * 100; ?>", // Amount in paise
         "currency": "INR",
         "name": "Your Website Name",
         "description": "Purchase Description",

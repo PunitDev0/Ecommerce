@@ -1,6 +1,13 @@
 <?php
-    session_start();
-?>  
+session_start();
+include './config.php'; // Include your database connection file
+
+// Fetch user ID from session or other logic
+$user_id = $_SESSION['user_id'];
+
+// Query to get user orders and associated product details
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,32 +78,26 @@
                 <h2 class="text-2xl font-semibold mb-4">My Orders</h2>
                 <div class="space-y-4">
                     <!-- Order 1 -->
-                    <div class="border border-gray-300 rounded-lg p-2 flex items-center space-x-4">
-                        <img class="w-16 h-16 object-cover rounded" src="https://via.placeholder.com/100" alt="Product Image">
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold">Product-Name</h3>
-                            <p class="text-sm text-gray-600">₹999</p>
-                        </div>
-                        <span class="text-green-600 font-semibold">Delivered</span>
-                    </div>
+                     <?php 
+                     $user_id = $_SESSION['user_id'];
+                        $query = "SELECT * FROM product_info.user_order AS w 
+                        LEFT JOIN product_info.product_item AS pr 
+                        ON w.product_id = pr.product_id where user_id = '$user_id'";
 
-                    <div class="border border-gray-300 rounded-lg p-4 flex items-center space-x-4">
-                        <img class="w-16 h-16 object-cover rounded" src="https://via.placeholder.com/100" alt="Product Image">
+                        $result = mysqli_query($product_info,$query);
+                        while($row = mysqli_fetch_assoc($result)){
+                     ?>
+                    <a href="./OrderDetails.php?product_id=<?php echo urlencode($row['product_id']); ?>" class="block border border-gray-300 rounded-lg p-2 flex items-center space-x-4">
+                        <img class="w-16 h-16 object-cover rounded" src="../Images/Product_images/<?php echo htmlspecialchars($row['product_image']); ?>" alt="Product Image">
                         <div class="flex-1">
-                            <h3 class="text-lg font-semibold">Product-Name</h3>
-                            <p class="text-sm text-gray-600">₹999</p>
+                            <h3 class="text-lg font-semibold"><?php echo $row['product_name']; ?></h3>
+                            <p class="text-sm text-gray-600"><?php $row['product_price']; ?></p>
                         </div>
                         <span class="text-green-600 font-semibold">Delivered</span>
-                    </div>
-
-                    <div class="border border-gray-300 rounded-lg p-4 flex items-center space-x-4">
-                        <img class="w-16 h-16 object-cover rounded" src="https://via.placeholder.com/100" alt="Product Image">
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold">Product-Name</h3>
-                            <p class="text-sm text-gray-600">₹999</p>
-                        </div>
-                        <span class="text-green-600 font-semibold">Delivered</span>
-                    </div>
+                    </a>
+                        <?php
+                        }
+                        ?>
                 </div>
             </div>
         </div>

@@ -26,9 +26,10 @@ $api = new Api($keyId, $keySecret);
 $payment_id = $_POST['payment_id'];
 $order_id = $_POST['order_id'];
 $signature = $_POST['signature'];
+$product_id = $_SESSION['product_id'];
 
 // Fetch other order details (like amount, address) if not stored earlier
-$amount = 5000;  // Example amount, should be stored or fetched dynamically
+$amount = $_SESSION['total'];  // Example amount, should be stored or fetched dynamically
 $currency = 'INR';
 $address = $_SESSION['address']; // Should be fetched dynamically from session or DB
 
@@ -46,8 +47,7 @@ try {
     $status = 'completed';
 
     // Correct connection variable (change $conn based on your actual variable in config.php)
-    $sql = "INSERT INTO user_orders (user_id, razorpay_payment_id, razorpay_order_id, amount, currency, status, address)
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO user_order (user_id, razorpay_payment_id, razorpay_order_id, amount, currency, status, address, product_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $product_info->prepare($sql); // Use the correct connection variable, not $product_info
     if ($stmt === false) {
@@ -55,7 +55,7 @@ try {
     }
 
     // Bind parameters and execute query
-    if (!$stmt->bind_param('sssssss', $user_id, $payment_id, $order_id, $amount, $currency, $status, $address)) {
+    if (!$stmt->bind_param('ssssssss', $user_id, $payment_id, $order_id, $amount, $currency, $status, $address, $product_id)) {
         die(json_encode(['status' => 'failure', 'error' => 'MySQL bind_param error: ' . $stmt->error]));
     }
 
