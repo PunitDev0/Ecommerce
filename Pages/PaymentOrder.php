@@ -25,6 +25,7 @@ include('config.php');
 			$user_id = $_SESSION['user_id'];
 			$query = mysqli_query($conn, "SELECT User_Address FROM user_info WHERE id = $user_id");
 			$row = mysqli_fetch_array($query);
+			$_SESSION['address'] = $row['User_Address'];
 			$user_address = json_decode($row['User_Address'], true);
 			?>
 
@@ -62,8 +63,10 @@ include('config.php');
 							$totalPrice += $row['product_price'];
 						}
 						$Tax = $totalPrice * 0.10;
-						$totalPriceWithTax = $totalPrice + $Tax;
+						$_SESSION['totalPriceWithTax'] = $totalPrice + $Tax;
 					}
+					$totalPriceWithTax = $_SESSION['totalPriceWithTax'];
+
 					foreach ($cartItems as $item) {
 
 					?>
@@ -196,69 +199,85 @@ include('config.php');
 	</div>
 	</div>
 	<?php
-	// session_start();
-	include('config.php');
-	require_once '../razorpay/Razorpay.php';
+include('config.php'); // Ensure this contains database connection setup
+require_once '../razorpay/Razorpay.php';
 
-	use Razorpay\Api\Api;
+use Razorpay\Api\Api;
 
-	$user_id = $_SESSION['user_id'];
-	
-	$keyId = 'rzp_test_kBREEooxYkKLPo'; 
-	$keySecret = 'P5NsdNUNPas0c0C74oCjkk1Y';  
+// Ensure the user is logged in
+if (!isset($_SESSION['user_id'])) {
+    die(json_encode(['status' => 'failure', 'error' => 'User not logged in.']));
+}
 
-	$api = new Api($keyId, $keySecret);
+$user_id = $_SESSION['user_id'];
 
-	$order = $api->order->create(array(
-		'amount' => $totalPriceWithTax, 
-		'currency' => 'INR',
-		'receipt' => 'order_rcptid_' . $user_id,
-		'payment_capture' => 1,
-		
-	));
+// Razorpay API credentials
+$keyId = 'rzp_test_kBREEooxYkKLPo'; 
+$keySecret = 'P5NsdNUNPas0c0C74oCjkk1Y';  
 
+$api = new Api($keyId, $keySecret);
+// Create a new Razorpay order
+try {
+    $order = $api->order->create([
+        'amount' => $totalPriceWithTax * 100,  // Amount in paise (1 INR = 100 paise)
+        'currency' => 'INR',
+        'receipt' => 'order_rcptid_' . $user_id,
+        'payment_capture' => 1 // Auto-capture
+    ]);
 
-	$orderId = $order['id'];
-	?>
+    $orderId = $order['id'];
+    // echo json_encode(['status' => 'success', 'order_id' => $orderId]);
 
+} catch (Exception $e) {
+    die(json_encode(['status' => 'failure', 'error' => $e->getMessage()]));
+}
+
+?>
 	<script src="../JS/Main.js"></script>
 	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	<script>
-		document.getElementById('button').onclick = function(e) {
-			var options = {
-				"key": "<?php echo $keyId; ?>", // Your Razorpay Key ID
-				"amount": "<?php echo $totalPriceWithTax * 100; ?>", // Amount in paise (from PHP server-side)
-				"currency": "INR",
-				"name": "Your Website Name",
-				"description": "Purchase Description",
-				"image": "../Assests/image/logo.png", // Replace with your logo
-				"order_id": "<?php echo $orderId; ?>", // Razorpay Order ID from server-side
-				"handler": function(response) {
-					alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-					// Optionally send the payment ID to your server for verification
-					$.ajax({
-						url: "verify_payment.php",
-						type: "POST",
-						data: {
-							payment_id: response.razorpay_payment_id,
-							order_id: response.razorpay_order_id,
-							signature: response.razorpay_signature
-						},
-						success: function(data) {
-							alert('Payment verified successfully!');
-							// Redirect to a success page or update UI accordingly
-						}
-					});
-				},
-				"theme": {
-					"color": "#3399cc"
-				}
-			};
-			var rzp = new Razorpay(options);
-			rzp.open();
-			e.preventDefault();
-		}
-	</script>
+document.getElementById('button').onclick = function(e) {
+    e.preventDefault();
+
+    var options = {
+        "key": "<?php echo $keyId; ?>", // Razorpay Key ID
+        "amount": "<?php echo $totalPriceWithTax * 100; ?>", // Amount in paise
+        "currency": "INR",
+        "name": "Your Website Name",
+        "description": "Purchase Description",
+        "image": "../Assests/image/logo.png", // Company logo
+        "order_id": "<?php echo $orderId; ?>", // Razorpay Order ID
+        "handler": function(response) {
+            // Simulate successful payment in test mode
+            console.log("Simulating successful payment in test mode");
+
+            $.ajax({
+                url: "verify_payment.php",
+                type: "POST",
+                data: {
+                    payment_id: response.razorpay_payment_id,
+                    order_id: response.razorpay_order_id,
+                    signature: response.razorpay_signature
+                },
+                success: function(data) {
+                    alert('Payment verified successfully!');
+                },
+                error: function(err) {
+                    alert('Payment verification failed!');
+                }
+            });
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.open();
+}
+
+</script>
+
 </body>
 
 </html>
