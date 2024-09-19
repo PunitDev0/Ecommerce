@@ -140,8 +140,10 @@ $item = mysqli_query($product_info, $query);
     <?php
     }
     ?>
+    <button class="btn">clear</button>
   </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
@@ -149,26 +151,37 @@ $item = mysqli_query($product_info, $query);
   const heartIcons = document.querySelectorAll('.heart-icon');
   const userIdInput = document.getElementById('form-user_id');
 
+  // Iterate over all heart icons
   heartIcons.forEach(icon => {
     const productId = icon.getAttribute('data-product-id');
-    
-    // Check localStorage to set the initial color of the heart icon
+
+    // Initialize icon state from localStorage
     if (localStorage.getItem(`wishlist-${productId}`) === 'liked') {
-      icon.classList.add('text-red-500');
+      icon.classList.add('text-red-500'); // Liked state
+      icon.classList.remove('text-gray-400');
     } else {
+      icon.classList.add('text-gray-400'); // Default state
       icon.classList.remove('text-red-500');
     }
 
+    // Handle click event on heart icon
     icon.addEventListener('click', function() {
-      const action = icon.classList.contains('text-red-500') ? 'remove' : 'add';
+      const isLiked = icon.classList.contains('text-red-500');
+      const action = isLiked ? 'remove' : 'add';
 
-      // Toggle the heart icon color based on action
+      console.log(`Icon clicked for product ${productId}: Action is ${action}`);
+
+      // Toggle heart icon color
       if (action === 'remove') {
         icon.classList.remove('text-red-500');
+        icon.classList.add('text-gray-400');
         localStorage.removeItem(`wishlist-${productId}`);
+        console.log(`Removed product ${productId} from wishlist`);
       } else {
+        icon.classList.remove('text-gray-400');
         icon.classList.add('text-red-500');
         localStorage.setItem(`wishlist-${productId}`, 'liked');
+        console.log(`Added product ${productId} to wishlist`);
       }
 
       // Send AJAX request to update the server-side wishlist
@@ -181,7 +194,7 @@ $item = mysqli_query($product_info, $query);
           user_id: userIdInput.value
         },
         success: function(result) {
-          console.log('Success:', result);
+          console.log('AJAX Success:', result);
         },
         error: function(xhr, status, error) {
           console.error('AJAX Error:', error);
@@ -190,6 +203,7 @@ $item = mysqli_query($product_info, $query);
     });
   });
 });
+
 
 
   const swiper = new Swiper(".mySwiper", {
