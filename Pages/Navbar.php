@@ -46,7 +46,7 @@
 
 <body class="min-h-screen min-w-full font-poppins text-black">
     <div class="shadow-lg">
-        <nav id="navbar" class="flex justify-between items-center h-[80px] px-4 md:px-12 bg-white border-b border-gray-200">
+        <nav id="navbar" class="flex justify-between items-center h-[65px] px-4 md:px-12 bg-white border-b border-gray-200">
             <!-- Left section: Logo and Hamburger Menu -->
             <div class="flex items-center" id="menu">
                 <div class="md:hidden">

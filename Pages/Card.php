@@ -19,12 +19,13 @@ switch ($sort_by) {
     break;
 }
 
-$category_id = $_SESSION['id'];
+// $category_id = $_SESSION['id'];
+$catgid = $_GET['page'];
 
 $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
 $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
 
-$query = "SELECT * FROM product_item WHERE product_catg=$category_id AND product_price BETWEEN $min_price AND $max_price order by $order_by";
+$query = "SELECT * FROM product_item WHERE product_catg=$catgid AND product_price BETWEEN $min_price AND $max_price order by $order_by";
 $item = mysqli_query($product_info, $query);
 ?>
 <style>
