@@ -22,8 +22,8 @@
     while($product = mysqli_fetch_assoc($result)){
   ?>
       <div class="swiper-slide flex justify-center items-center mt-16 h-40 w-40">
-        <div class="relative w-full h-full rounded-md bg-opacity-80 shadow-lg">
-          <img src="../images/Product_images/<?php echo $product['product_image']?>" alt="" class="h-full w-full object-contain" />
+        <div class="relative w-[7rem] h-[7rem] rounded-full bg-opacity-80 shadow-2xl">
+          <img src="../images/Product_images/<?php echo $product['product_image']?>" alt="" class="h-full w-full object-cover mix-blend-multiply rounded-full" />
         </div>
       </div>
   <?php
@@ -38,7 +38,6 @@
   <script>
     var swiper = new Swiper(".mySwiper2", {
       slidesPerView: 6,
-      spaceBetween: 30,
       freeMode: true,
       loop: true,
       autoplay: {
@@ -65,7 +64,7 @@
         },
         1024: {
           slidesPerView: 5,
-          spaceBetween: 40,
+          spaceBetween: 10,
         },
       },
     });

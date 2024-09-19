@@ -12,17 +12,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     if ($action == 'add') {
-        $sql = "INSERT INTO wishlist_$user_id (product_id) VALUES ($product_id)";
-    } elseif ($action == 'remove') {
-        $sql = "DELETE FROM wishlist_$user_id WHERE product_id = $product_id";
-    }
-
-    if ($wishlist->query($sql) === TRUE) {
+        // Use prepared statements to prevent SQL injection
+        $sql = "INSERT INTO wishlist_$user_id (product_id) VALUES (?)";
+        $stmt = $wishlist->prepare($sql);
+        $stmt->bind_param('i', $product_id);
+        $stmt->execute();
         echo "Success";
-    } else {
-        echo "Error: " . $sql . "<br>" . $wishlist->error;
+    } elseif ($action == 'remove') {
+        $sql = "DELETE FROM wishlist_$user_id WHERE product_id = ?";
+        $stmt = $wishlist->prepare($sql);
+        $stmt->bind_param('i', $product_id);
+        $stmt->execute();
+        echo "Removed";
     }
-
-    $wishlist->close();
+    $stmt->close();
 }
 ?>

@@ -28,16 +28,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="flex flex-col min-h-screen">
-    <div class="flex-grow flex justify-center items-center py-16">
-        <div class="bg-white p-12 rounded-lg shadow-lg w-full max-w-md mx-4 border-2">
-            <h2 class="text-2xl font-bold mb-6 text-center">Verify OTP</h2>
-            <form action="" method="POST">
-                <div class="mb-6">
-                    <label for="otp" class="block text-sm font-medium text-gray-700">Enter OTP</label>
-                    <input type="text" id="otp" name="otp" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black sm:text-sm">
+<div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row w-full max-w-4xl">
+            <!-- Left Image Section -->
+            <div class="hidden md:flex w-full md:w-1/2 bg-gray-100 justify-center items-center p-10">
+                <img src="../Assests/image/postponed-concept.png" alt="OTP Illustration" class="object-contain">
+            </div>
+            <!-- Right Form Section -->
+            <div class="w-full md:w-1/2 p-8">
+                <div class="text-right">
+                    <a href="#" class="text-sm text-gray-500 hover:text-indigo-600">Need help? <span class="font-semibold">Contact Us</span></a>
                 </div>
-                <button type="submit" class="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800">Verify OTP</button>
-            </form>
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Verify OTP</h2>
+                <p class="text-sm text-gray-600 mb-8">Enter the One-Time Password sent to your email/phone</p>
+                <form action="#">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700" for="otp">OTP</label>
+                        <input id="otp" name="otp" type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter your OTP" required>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Verify OTP</button>
+                </form>
+                <div class="mt-8">
+                    <p class="text-sm text-gray-500 text-center">Didn't receive the OTP?</p>
+                    <a href="#" class="text-indigo-600 hover:text-indigo-800 block text-center mt-2">Resend OTP</a>
+                </div>
+            </div>
         </div>
     </div>
 </body>

@@ -146,46 +146,51 @@ $item = mysqli_query($product_info, $query);
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const heartIcons = document.querySelectorAll('.heart-icon');
-    const userIdInput = document.getElementById('form-user_id');
+  const heartIcons = document.querySelectorAll('.heart-icon');
+  const userIdInput = document.getElementById('form-user_id');
 
-    heartIcons.forEach(icon => {
-      const productId = icon.getAttribute('data-product-id');
-      if (localStorage.getItem(`wishlist-${productId}`) === 'liked') {
-        icon.classList.add('text-red-500');
-      } else {
+  heartIcons.forEach(icon => {
+    const productId = icon.getAttribute('data-product-id');
+    
+    // Check localStorage to set the initial color of the heart icon
+    if (localStorage.getItem(`wishlist-${productId}`) === 'liked') {
+      icon.classList.add('text-red-500');
+    } else {
+      icon.classList.remove('text-red-500');
+    }
+
+    icon.addEventListener('click', function() {
+      const action = icon.classList.contains('text-red-500') ? 'remove' : 'add';
+
+      // Toggle the heart icon color based on action
+      if (action === 'remove') {
         icon.classList.remove('text-red-500');
+        localStorage.removeItem(`wishlist-${productId}`);
+      } else {
+        icon.classList.add('text-red-500');
+        localStorage.setItem(`wishlist-${productId}`, 'liked');
       }
 
-      icon.addEventListener('click', function() {
-        const action = this.classList.contains('text-red-500') ? 'remove' : 'add';
-        if (action === 'remove') {
-          this.classList.remove('text-red-500');
-          localStorage.removeItem(`wishlist-${productId}`);
-        } else {
-          this.classList.add('text-red-500');
-          localStorage.setItem(`wishlist-${productId}`, 'liked');
+      // Send AJAX request to update the server-side wishlist
+      $.ajax({
+        url: 'wishlist_handler.php',
+        method: 'POST',
+        data: {
+          action: action,
+          product_id: productId,
+          user_id: userIdInput.value
+        },
+        success: function(result) {
+          console.log('Success:', result);
+        },
+        error: function(xhr, status, error) {
+          console.error('AJAX Error:', error);
         }
-
-        $.ajax({
-          url: 'wishlist_handler.php',
-          method: 'POST',
-          data: {
-            action: action,
-            product_id: productId,
-            user_id: userIdInput.value
-          },
-          success: function(result) {
-            console.log('Success:', result);
-            updateWishlistSidebar();
-          },
-          error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);
-          }
-        });
       });
     });
   });
+});
+
 
   const swiper = new Swiper(".mySwiper", {
     navigation: false,
