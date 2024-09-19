@@ -61,7 +61,7 @@
 <div class="bg-gray-100">
 
     <!-- Filter and Sort Options -->
-    <div class="flex items-center justify-between mb-4 shadow-lg filter p-6 bg-white">
+    <div class="flex items-center justify-between mb-4 shadow-lg filter md:p-6 p-3 bg-white">
         <div class="flex space-x-2">
             <button id="grid-view" class="p-2 border border-gray-300 rounded">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
