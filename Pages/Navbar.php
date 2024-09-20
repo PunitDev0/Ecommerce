@@ -45,8 +45,8 @@
 </style>
 
 <body class="min-h-screen min-w-full font-poppins text-black">
-    <div class="shadow-lg">
-        <nav id="navbar" class="flex justify-between items-center h-[65px] px-4 md:px-12 bg-white border-b border-gray-200">
+    <div class="">
+        <nav id="navbar" class="flex justify-between items-center h-[65px] px-4 md:px-12 border-gray-200">
             <!-- Left section: Logo and Hamburger Menu -->
             <div class="flex items-center" id="menu">
                 <div class="md:hidden">
@@ -67,6 +67,8 @@
                 <a href="#" onclick="submitForm('4')" class="hover-underline hover:text-gray-900 text-gray-600">Accessories</a>
                 <a href="#" onclick="submitForm('')" class="hover-underline hover:text-gray-900 text-gray-600">Contact</a>
             </form>
+
+            <?php $_SESSION['catgid'] = isset($_GET['page']) ? $_GET['page'] : " ";?>
 
             <!-- Right section: Icons and User Dropdown -->
             <div class="flex items-center gap-5 text-xl">

@@ -107,11 +107,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-  // const swiper = new Swiper(".mySwiper", {
-  //   navigation: false,
-  //   autoplay: {
-  //     delay: 3000, // Time in ms before the next slide
-  //     disableOnInteraction: false, // Continue autoplay after interaction
-  //   },
-  //   loop: true,
-  // });
+  const swiper = new Swiper(".mySwiper", {
+    navigation: false,
+    autoplay: {
+      delay: 3000, // Time in ms before the next slide
+      disableOnInteraction: false, // Continue autoplay after interaction
+    },
+    loop: true,
+  });

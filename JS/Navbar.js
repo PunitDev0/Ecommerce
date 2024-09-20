@@ -2,6 +2,22 @@ if (window.history.replaceState) {
   window.history.replaceState(null, null, window.location.href);
 }
 
+window.onload = () => {
+    const navbar= document.getElementById('navbar');
+
+    // Event listener for scrolling
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        console.log(`Scroll Position: ${scrollY}px`);
+        if (scrollY > 230) {
+            console.log(scrollY);
+            navbar.classList.add('bg-white') // Show the indicator when scrolled
+        } else {
+            navbar.classList.remove('bg-white') 
+        }
+    });
+}
+
 document.querySelector('.bx-menu').addEventListener('click', function() {
     // Slide the sidebar in
     gsap.to(".sidebar", {

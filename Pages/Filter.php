@@ -87,7 +87,8 @@
             </form>
         </div>
     </div>
-
+    <?php $_SESSION['catgid'] = isset($_GET['page']) ? $_GET['page'] : " ";?>
+    
     <!-- Title -->
     <div class="container mx-auto">
         <h1 class="text-2xl font-semibold mb-6 text-center">
@@ -107,6 +108,9 @@
             event.preventDefault();
             document.getElementById('sort-form').submit();
         });
+
+       
+
     </script>
 </div>
 

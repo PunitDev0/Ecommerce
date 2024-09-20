@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Animation Example</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            height: 2000px; /* Make the page tall enough to scroll */
+            background: linear-gradient(to bottom, #4caf50, #f0f0f0);
+        }
+
+        /* Navbar styles */
+        #navbar {
+            transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition for background and transform */
+        }
+
+        /* Position the navbar at the top */
+        #navbar {
+            position: fixed;
+            top: 0; /* Start at the top */
+            left: 0;
+            right: 0;
+            height: 70px; /* Height of the navbar */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent; /* Start with transparent */
+            z-index: 1000; /* Ensure it stays on top */
+            transform: translateY(-100%); /* Hide the navbar above the viewport */
+        }
+
+        /* Show navbar when scrolled */
+        .show {
+            transform: translateY(0); /* Move navbar into view */
+        }
+
+        .bg-white {
+            background-color: white !important; /* Ensure background is white when scrolled */
+        }
+    </style>
+</head>
+<body>
+
+<div id="navbar" class="bg-white">
+    <h1 class="text-black font-bold">Navbar</h1>
+</div>
+
+<script>
+    window.onload = () => {
+        const navbar = document.getElementById('navbar');
+        let lastScrollY = 0;
+
+        // Event listener for scrolling
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            console.log(`Scroll Position: ${scrollY}px`);
+
+            // Scrolling down
+            if (scrollY > lastScrollY && scrollY > 237) {
+                navbar.classList.remove('show'); // Hide the navbar
+                navbar.classList.add('bg-white'); // Ensure background is white when hidden
+            } else if (scrollY < lastScrollY) { // Scrolling up
+                navbar.classList.add('show'); // Show the navbar
+                navbar.classList.remove('bg-white'); // Optional: remove background when showing
+            }
+
+            lastScrollY = scrollY; // Update last scroll position
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -58,6 +58,9 @@
           </div>
         </div>
       </div>
+      <div class="z-50">
+      <?php include './index.html'?>
+      </div>
       <div class="Footer">
         <?php include './Footer.php'; ?>
       </div>

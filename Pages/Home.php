@@ -34,53 +34,54 @@ if (!$_SESSION['logged_in']) {
     <div class="SwiperAdd relative">
       <?php include '../Swipers/Swiper.html' ?>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 h-full w-full relative" style="grid-template-rows: repeat(2, minmax(200px, 300px))">
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4 h-full w-full relative" style="grid-template-rows: repeat(2, minmax(200px, 300px));">
 
-      <!-- First item: spans two rows -->
-      <div class="grid-item transition-all ease-in-out lg:row-span-2 row-span-1 bg-gray-800 flex items-center justify-center relative">
-        <img src="../Assests/image/perfume.jpeg" alt="Perfume" class="w-full h-full object-cover">
-        <div class="grid-div absolute text-white p-4">
-          <h2 class="text-lg md:text-xl font-bold">Sale Up To 30% Off</h2>
-          <p class="text-sm md:text-base">Latest Perfume Collection</p>
-          <a href="#" class="text-yellow-500">View Offer</a>
-        </div>
-      </div>
-
-      <!-- Second item -->
-      <div class="grid-item transition-all ease-in-out col-span-1 bg-gray-800 flex items-center justify-center relative">
-        <img src="../Assests/image/Ring.jpeg" alt="Ring" class="w-full h-full object-cover">
-        <div class="grid-div absolute text-white p-4">
-          <h2 class="text-lg md:text-xl font-bold">20% Off Rings</h2>
-          <a href="#" class="text-yellow-500">Shop Now</a>
-        </div>
-      </div>
-
-      <!-- Third item -->
-      <div class="grid-item transition-all ease-in-out col-span-2 bg-gray-800 flex items-center justify-center relative">
-        <img src="../Assests/image/Straight Interface Manual Folding Head Layer Cowhide Strap - Silver Button Head _ 22mm.jpeg" alt="Watch Strap" class="w-full h-full object-cover">
-        <div class="grid-div absolute text-white p-4">
-          <p class="text-sm md:text-base">Luxury Watch Strap</p>
-        </div>
-      </div>
-
-      <!-- Fourth item -->
-      <div class="grid-item transition-all ease-in-out col-span-1 lg:col-span-2 bg-gray-800 flex items-center justify-center relative">
-        <img src="../Assests/image/download.jpeg" alt="Smart Speaker" class="w-full h-full object-cover">
-        <div class="grid-div absolute text-white p-4">
-          <p class="text-sm md:text-base">Smart Speaker</p>
-        </div>
-      </div>
-
-      <!-- Fifth item -->
-      <div class="grid-item transition-all ease-in-out col-span-1 bg-gray-800 flex items-center justify-center relative">
-        <img src="../Assests/image/Shoes.jpeg" alt="Shoes" class="w-full h-full object-cover">
-        <div class="grid-div absolute text-white p-4">
-          <p class="text-lg md:text-xl font-bold">Stylish Shoes</p>
-          <a href="#" class="text-yellow-500">View More</a>
-        </div>
-      </div>
-
+  <!-- First item: spans two rows -->
+  <div class="grid-item transition-transform transform hover:scale-105 ease-in-out duration-300 lg:row-span-2 row-span-1 bg-gray-900 flex items-center justify-center relative overflow-hidden rounded-lg shadow-lg">
+    <img src="../Assests/image/perfume.jpeg" alt="Perfume" class="w-full h-full object-cover hover:opacity-80 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <h2 class="text-xl md:text-2xl font-bold text-white">Sale Up To 30% Off</h2>
+      <p class="text-base md:text-lg text-white">Latest Perfume Collection</p>
+      <a href="#" class="text-yellow-500 hover:underline">View Offer</a>
     </div>
+  </div>
+
+  <!-- Second item -->
+  <div class="grid-item transition-transform transform hover:scale-105 ease-in-out duration-300 col-span-1 bg-gray-900 flex items-center justify-center relative overflow-hidden rounded-lg shadow-lg">
+    <img src="../Assests/image/Ring.jpeg" alt="Ring" class="w-full h-full object-cover hover:opacity-80 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <h2 class="text-xl md:text-2xl font-bold text-white">20% Off Rings</h2>
+      <a href="#" class="text-yellow-500 hover:underline">Shop Now</a>
+    </div>
+  </div>
+
+  <!-- Third item -->
+  <div class="grid-item transition-transform transform hover:scale-105 ease-in-out duration-300 col-span-2 bg-gray-900 flex items-center justify-center relative overflow-hidden rounded-lg shadow-lg">
+    <img src="../Assests/image/Straight Interface Manual Folding Head Layer Cowhide Strap - Silver Button Head _ 22mm.jpeg" alt="Watch Strap" class="w-full h-full object-cover hover:opacity-80 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <p class="text-base md:text-lg text-white">Luxury Watch Strap</p>
+    </div>
+  </div>
+
+  <!-- Fourth item -->
+  <div class="grid-item transition-transform transform hover:scale-105 ease-in-out duration-300 col-span-1 lg:col-span-2 bg-gray-900 flex items-center justify-center relative overflow-hidden rounded-lg shadow-lg">
+    <img src="../Assests/image/download.jpeg" alt="Smart Speaker" class="w-full h-full object-cover hover:opacity-80 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <p class="text-base md:text-lg text-white">Smart Speaker</p>
+    </div>
+  </div>
+
+  <!-- Fifth item -->
+  <div class="grid-item transition-transform transform hover:scale-105 ease-in-out duration-300 col-span-1 bg-gray-900 flex items-center justify-center relative overflow-hidden rounded-lg shadow-lg">
+    <img src="../Assests/image/Shoes.jpeg" alt="Shoes" class="w-full h-full object-cover hover:opacity-80 transition-opacity duration-300">
+    <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center p-4 opacity-0 hover:opacity-100 transition-opacity duration-300">
+      <p class="text-xl md:text-2xl font-bold text-white">Stylish Shoes</p>
+      <a href="#" class="text-yellow-500 hover:underline">View More</a>
+    </div>
+  </div>
+
+</div>
+
 
 
     <section class="section min-h-screen">

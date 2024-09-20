@@ -18,9 +18,10 @@ switch ($sort_by) {
     $order_by = 'product_id ASC';
     break;
 }
+echo $sort_by;
 
-// $category_id = $_SESSION['id'];
-$catgid = $_GET['page'];
+echo $_SESSION['catgid'];
+$catgid = $_SESSION['catgid'];
 
 $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
 $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
@@ -28,6 +29,7 @@ $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
 $query = "SELECT * FROM product_item WHERE product_catg=$catgid AND product_price BETWEEN $min_price AND $max_price order by $order_by";
 $item = mysqli_query($product_info, $query);
 ?>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <style>
   .buttons {
     visibility: hidden;
@@ -83,7 +85,7 @@ $item = mysqli_query($product_info, $query);
             ?>
               <div class="swiper-slide">
                 <div class="p-2 border flex items-center justify-center overflow-hidden ">
-                  <img class="object-contain h-64" src="../images/Product_images/RF_images/<?php echo htmlspecialchars($image_filename); ?>" alt="Product Image">
+                  <img class="object-contain z-[-10] h-64" src="../images/Product_images/RF_images/<?php echo htmlspecialchars($image_filename); ?>" alt="Product Image">
                 </div>
               </div>
             <?php
@@ -109,23 +111,23 @@ $item = mysqli_query($product_info, $query);
             $<?php echo $items['product_price']; ?>
           </p>
           <div class="flex justify-between space-x-2 mt-2">
-            <?php
-            $query = "SELECT * FROM cart_$user_id WHERE product_id = $product_id";
-            // Run the query and check if it succeeded
-            $result = mysqli_query($cart, $query);
-            ?>
-            <form action="<?php echo (mysqli_num_rows($result) > 0) ? "Cart.php" : "details.php" ?>" method="GET">
+               <?php
+              $query = "SELECT * FROM cart_$user_id WHERE product_id = $product_id";
+              // Run the query and check if it succeeded
+              $result = mysqli_query($cart, $query);
+               ?>
+            <form action="<?php echo  (mysqli_num_rows($result) > 0) ? "Cart.php" : "details.php" ?>" method="GET">
               <input type="hidden" name="id" value="<?php echo $items['product_id']; ?>">
               <button type="submit" class="add-to-cart bg-black text-white py-1 px-2 sm:px-3 sm:py-2 text-xs sm:text-sm md:text-xs rounded transition duration-300 hover:bg-gray-700 w-full">
                 <?php
-                if (mysqli_num_rows($result) > 0) {
-                  // Product is already in the cart
-                  echo "Go to Cart";
-                } else {
-                  // Product is not in the cart
-                  echo "Add to Cart";
-                }
-
+                  if(mysqli_num_rows($result) > 0){
+                    // Product is already in the cart
+                    echo "Go to Cart";
+                        } else {
+                            // Product is not in the cart
+                            echo "Add to Cart";
+                        }
+                    
                 ?>
               </button>
             </form>
@@ -141,32 +143,9 @@ $item = mysqli_query($product_info, $query);
     <?php
     }
     ?>
-    <button id="toast-button">Show Toast</button>
   </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/framework7@10.0.0/js/framework7.bundle.min.js"></script>
-<script>
-        // Initialize Framework7 app
-        var app = new Framework7({
-            root: '#app',
-            // other parameters
-        });
-
-        // Event listener for the button
-        document.getElementById('toast-button').addEventListener('click', function() {
-            // Create and open a toast
-            var myToast = app.toast.create({
-                text: 'Hello, how are you?',
-                on: {
-                    opened: function () {
-                        console.log('Toast opened');
-                    }
-                }
-            });
-            myToast.open();
-        });
-    </script>
-<script type="module" src="../JS/Card.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="../JS/Card.js"></script>
