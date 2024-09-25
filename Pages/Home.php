@@ -82,7 +82,12 @@ if (!$_SESSION['logged_in']) {
 
 </div>
 
-
+<div class="tempelate py-14 sm:px-10">
+            <?php 
+            $color = "#457488";
+            $image = "../Assests/Shoe.png";
+            include './Tempelate.php'?>
+        </div>
 
     <section class="section min-h-screen">
       <div class="Home-image grid grid-cols-1 md:grid-cols-3 gap-4 mt-20">
@@ -122,16 +127,23 @@ if (!$_SESSION['logged_in']) {
 
 
 
-      <div class="FindThings flex flex-col mt-2 relative p-[50px] w-screen h-[25rem] bg-[#F3F3F3]">
+      <div class="FindThings flex flex-col mt-10 relative w-screen h- bg-[#F3F3F3]">
         <h1 class="text-center mb-3 text-lg font-bold">Find Things You'll Love</h1>
         <?php include '../Swipers/Swiper2.php' ?>
       </div>
 
 
-      <div class="Cards my-10 flex flex-col w-full items-center">
+      <div class="Cards mt-10 flex flex-col w-full items-center">
         <h1 class="text-center text-3xl">FEATURED COLLECTION'S</h1>
         <?php include './Polocard.php' ?>
       </div>
+
+        <div class="tempelate py-14 sm:px-10">
+          <?php 
+          $color ="#DDA983";
+          $image = "../Assests/WatchImage2.png";
+          include './Tempelate.php'?>
+        </div>
 
       <div class="Items">
         <div class="box ">

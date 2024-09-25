@@ -7,6 +7,9 @@ module.exports = {
       colors : {
         DarkRed:'#FF0000'
       },
+      screens: {
+        'xs': '400px', // Add your custom 400px breakpoint
+      },
     },
   },
   plugins: [],
