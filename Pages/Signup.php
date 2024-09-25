@@ -13,9 +13,7 @@ session_start();
 $mail = new PHPMailer(true);
 
 // Database connections
-$conn = mysqli_connect('localhost', 'root', '', 'user');
-$wishlistConn = mysqli_connect('localhost', 'root', '', 'user_wishlist');
-$CartConn = mysqli_connect('localhost', 'root', '', 'user_cart');
+include './config.php';
 
 // Check for connection errors
 if (!$conn) {
@@ -48,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 user_id INT NOT NULL,
                 product_id INT NOT NULL
             )";
-            if (!mysqli_query($wishlistConn, $wishlist_table)) {
-                echo "Error creating wishlist table: " . mysqli_error($wishlistConn);
+            if (!mysqli_query($wishlist, $wishlist_table)) {
+                echo "Error creating wishlist table: " . mysqli_error($wishlist);
             }
 
             $cart_table = "CREATE TABLE IF NOT EXISTS cart_$user_id (
@@ -57,8 +55,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 product_id INT NOT NULL,
                 quantity INT NOT NULL
             )";
-            if (!mysqli_query($CartConn, $cart_table)) {
-                echo "Error creating cart table: " . mysqli_error($CartConn);
+            if (!mysqli_query($cart, $cart_table)) {
+                echo "Error creating cart table: " . mysqli_error($cart);
             }
 
             // Generate OTP
@@ -102,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Close database connections
 mysqli_close($conn);
-mysqli_close($wishlistConn);
-mysqli_close($CartConn);
+mysqli_close($wishlist);
+mysqli_close($cart);
 ?>
 
 <!DOCTYPE html>
