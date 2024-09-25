@@ -63,11 +63,10 @@
       <div class="flex flex-wrap justify-between items-center mt-8 border-t border-gray-700 pt-4">
         <p class="text-gray-400 text-sm">© 2024 - Ecommerce software by PrestaShop™</p>
         <div class="flex space-x-4">
-          <img src="visa.png" alt="Visa" class="w-10 h-10">
-          <img src="paypal.png" alt="PayPal" class="w-10 h-10">
-          <img src="discover.png" alt="Discover" class="w-10 h-10">
-          <img src="american-express.png" alt="American Express" class="w-10 h-10">
-          <img src="mastercard.png" alt="Mastercard" class="w-10 h-10">
+          <img src="../Assests/visa_PNG25.png" alt="Visa" class="w-10 h-6">
+          <img src="../Assests/paypal-logo-png-512.png" alt="PayPal" class="w-10 h-6">
+          <img src="../Assests/PAYTM.NS_BIG-463f18d2.png" alt="Discover" class="w-15 h-6">
+          <img src="../Assests/upi-logo-png-4-free-png-images-download-84465.png" alt="American Express" class="w-15 h-6">
         </div>
       </div>
     </div>

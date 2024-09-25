@@ -50,21 +50,20 @@
         clickable: true,
       },
       breakpoints: {
+        400: {
+          slidesPerView: 2,
+        },
         430: {
           slidesPerView: 2,
-          spaceBetween: 10,
         },
         500: {
           slidesPerView: 3,
-          spaceBetween: 20,
         },
         768: {
           slidesPerView: 4,
-          spaceBetween: 30,
         },
         1024: {
-          slidesPerView: 5,
-          spaceBetween: 10,
+          slidesPerView: 6,
         },
       },
     });
