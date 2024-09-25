@@ -18,7 +18,7 @@ $product = mysqli_fetch_assoc($product_query);
     <main class="container mx-auto p-4 py-28">
         <div class="flex flex-wrap">
             <div class="w-full md:w-1/2 p-2">
-                <div class="product-images">
+                <div class="product-images h-fit">
                     <div class="main-image mb-4">
                         <img src="../Images/Product_images/<?php echo $product['product_image']; ?>" alt="Product Image" class="mainImage w-full h-full object-contain rounded transition-all ease-in-out" style="max-height: 500px;">
                     </div>
@@ -76,12 +76,12 @@ $product = mysqli_fetch_assoc($product_query);
                                 <input type="number" id="quantity" name="quantity" min="1" max="10" value="1" class="border p-2 rounded w-20">
                             </div>
                             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
-                            <button type="submit" name="add_to_cart" class="add-to-cart bg-black text-white py-2 px-4 rounded transition duration-300 hover:bg-gray-700">ADD TO CART</button>
+                            <button type="submit" name="add_to_cart" class="add-to-cart bg-black text-white py-2 px-4 rounded transition duration-300 md:text-lg text-xs hover:bg-gray-700">ADD TO CART</button>
                         </form>
                         <form action="PaymentOrder.php" method="GET" class="flex items-center gap-4">
                             <input type="hidden" name="product_id" value="<?php echo $product['product_id']; ?>">
                             <input type="hidden" name="quantity" value="1">
-                            <button type="submit" name="buy_now" class="buy-now bg-green-500 text-white py-2 px-4 rounded transition duration-300 hover:bg-green-700">BUY NOW</button>
+                            <button type="submit" name="buy_now" class="buy-now bg-green-500 text-white py-2 px-4 rounded transition duration-300 md:text-lg text-xs hover:bg-green-700">BUY NOW</button>
                         </form>
                     </div>
                     <div class="policies my-4 border-2 shadow-xl">
@@ -146,7 +146,7 @@ $product = mysqli_fetch_assoc($product_query);
                     }
                 }
 
-                // Loop through image filenames and generate swiper slides
+                // Loop through image filenamesf and generate swiper slides
                 foreach ($image_filenames as $image_filename) {
                 ?>
                     <div class="w-full p-2">
@@ -159,7 +159,7 @@ $product = mysqli_fetch_assoc($product_query);
     ?>
     </main>
     <div class="Footer">
-        <?php include './Footer.php'; ?>
+         <?php include './Footer.php'; ?>
     </div>
 
 </div>
@@ -172,6 +172,7 @@ $product = mysqli_fetch_assoc($product_query);
     slidesPerView: 'auto',
     spaceBetween: 10,
     freeMode: true,
+    loop: true,
   });
 </script>
 </body>

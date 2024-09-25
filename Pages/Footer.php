@@ -7,7 +7,7 @@
       color: black;
     }
     @media (max-width: 500px) {
-      ul {
+      .ul {
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s ease;
@@ -21,7 +21,7 @@
       <div class="flex flex-wrap -mx-4">
         <div class="w-full md:w-1/4 px-4 mb-8 md:mb-0 leading-8">
           <h3 class="text-lg font-bold mb-4 hover-grow cursor-pointer" onclick="toggleList(this)">Contact</h3>
-          <ul>
+          <ul class="ul">
             <li>Address</li>
             <li>130 Street, Arizona</li>
             <li>85002, United States</li>
@@ -31,7 +31,7 @@
         </div>
         <div class="w-full md:w-1/4 px-4 mb-8 md:mb-0">
           <h3 class="text-lg font-bold mb-4 hover-grow cursor-pointer" onclick="toggleList(this)">Your Account</h3>
-          <ul class="leading-8">
+          <ul class="leading-8 ul">
             <li><a href="#" class="hover:text-blue-400 transition-all hover-grow">Personal info</a></li>
             <li><a href="#" class="hover:text-blue-400 hover-grow transition-all">Orders</a></li>
             <li><a href="#" class="hover:text-blue-400 hover-grow transition-all">Credit slips</a></li>
@@ -40,7 +40,7 @@
         </div>
         <div class="w-full md:w-1/4 px-4 mb-8 md:mb-0">
           <h3 class="text-lg font-bold mb-4 hover-grow cursor-pointer" onclick="toggleList(this)">Products</h3>
-          <ul class="leading-8">
+          <ul class="leading-8 ul">
             <li><a href="#" class="hover:text-blue-400 hover-grow transition-all">Prices drop</a></li>
             <li><a href="#" class="hover:text-blue-400 hover-grow transition-all">New products</a></li>
             <li><a href="#" class="hover:text-blue-400 hover-grow transition-all">Best sales</a></li>
@@ -50,7 +50,7 @@
         </div>
         <div class="w-full md:w-1/4 px-4 mb-8 md:mb-0">
           <h3 class="text-lg font-bold mb-4 hover-grow cursor-pointer" onclick="toggleList(this)">Our Company</h3>
-          <ul class="leading-8">
+          <ul class="leading-8 ul">
             <li><a href="#" class="hover:text-blue-400 hover-grow transition-all">Delivery</a></li>
             <li><a href="#" class="hover:text-blue-400 hover-grow transition-all">Legal Notice</a></li>
             <li><a href="#" class="hover:text-blue-400 hover-grow transition-all">Terms and conditions of use</a></li>
