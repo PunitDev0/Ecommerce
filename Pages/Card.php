@@ -4,6 +4,8 @@ include './config.php';
 if (!$product_info) {
   die("Connection failed: " . mysqli_connect_error());
 }
+echo $_SESSION['catgid'];
+$catgid = $_SESSION['catgid'];
 
 $sort_by = isset($_GET['sort']) ? $_GET['sort'] : 'relevance';
 
@@ -20,8 +22,6 @@ switch ($sort_by) {
 }
 echo $sort_by;
 
-echo $_SESSION['catgid'];
-$catgid = $_SESSION['catgid'];
 
 $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
 $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;

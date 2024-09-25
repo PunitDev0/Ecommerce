@@ -238,21 +238,21 @@ document.getElementById('button').onclick = function(e) {
             // Simulate successful payment in test mode
             console.log("Simulating successful payment in test mode");
 
-            $.ajax({
-                url: "verify_payment.php",
-                type: "POST",
-                data: {
-                    payment_id: response.razorpay_payment_id,
-                    order_id: response.razorpay_order_id,
-                    signature: response.razorpay_signature
-                },
-                success: function(data) {
-                    alert('Payment verified successfully!');
-                },
-                error: function(err) {
-                    alert('Payment verification failed!');
-                }
-            });
+            // $.ajax({
+            //     url: "verify_payment.php",
+            //     type: "POST",
+            //     data: {
+            //         payment_id: response.razorpay_payment_id,
+            //         order_id: response.razorpay_order_id,
+            //         signature: response.razorpay_signature
+            //     },
+            //     success: function(data) {
+            //         alert('Payment verified successfully!');
+            //     },
+            //     error: function(err) {
+            //         alert('Payment verification failed!');
+            //     }
+            // });
         },
         "theme": {
             "color": "#3399cc"

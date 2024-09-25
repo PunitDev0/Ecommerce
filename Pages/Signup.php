@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -8,12 +9,15 @@ require 'PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/src/SMTP.php';
 session_start();
 
+// Initialize PHPMailer
 $mail = new PHPMailer(true);
 
+// Database connections
 $conn = mysqli_connect('localhost', 'root', '', 'user');
 $wishlistConn = mysqli_connect('localhost', 'root', '', 'user_wishlist');
 $CartConn = mysqli_connect('localhost', 'root', '', 'user_cart');
 
+// Check for connection errors
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
@@ -23,23 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-    // Handle file upload
-    // $target_dir = "../Images/user_images/";
-    // $target_file = $target_dir . basename($_FILES["image"]["name"]);
-    // $check = getimagesize($_FILES["image"]["tmp_name"]);
-
-    // if ($check !== false) {
-    //     if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
-    //         $image = $target_file;
-    //     } else {
-    //         echo "Sorry, there was an error uploading your file.";
-    //         exit;
-    //     }
-    // } else {
-    //     echo "File is not an image.";
-    //     exit;
-    // }
-
     // Check if the email already exists
     $check_email_query = "SELECT * FROM user_info WHERE email = '$email'";
     $result = mysqli_query($conn, $check_email_query);
@@ -47,81 +34,88 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (mysqli_num_rows($result) > 0) {
         echo "Email already exists!";
     } else {
-        // Insert user info into the database
-        $query = "INSERT INTO user_info (name, email, password) VALUES ('$username', '$email', '$password')";
-        if (mysqli_query($conn, $query)) {
-            $user_id = mysqli_insert_id($conn);
+        // Hash the password using bcrypt
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-            // Create wishlist and cart tables
+        // Insert user info into the database with hashed password
+        $query = "INSERT INTO user_info (name, email, password) VALUES ('$username', '$email', '$hashed_password')";
+        if (mysqli_query($conn, $query)) {
+            $user_id = mysqli_insert_id($conn); // Get the inserted user's ID
+
+            // Create wishlist and cart tables for the user
             $wishlist_table = "CREATE TABLE IF NOT EXISTS wishlist_$user_id (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
                 product_id INT NOT NULL
             )";
-            mysqli_query($wishlistConn, $wishlist_table);
+            if (!mysqli_query($wishlistConn, $wishlist_table)) {
+                echo "Error creating wishlist table: " . mysqli_error($wishlistConn);
+            }
 
             $cart_table = "CREATE TABLE IF NOT EXISTS cart_$user_id (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 product_id INT NOT NULL,
-                quantity INT NOT NULL,
+                quantity INT NOT NULL
             )";
-            mysqli_query($CartConn, $cart_table);
+            if (!mysqli_query($CartConn, $cart_table)) {
+                echo "Error creating cart table: " . mysqli_error($CartConn);
+            }
 
             // Generate OTP
             $otp = rand(100000, 999999);
             $_SESSION['otp'] = $otp;
-            $_SESSION['otp_expiration'] = time() + 300;
+            $_SESSION['otp_expiration'] = time() + 300; // OTP expiration in 5 minutes
 
-            $to = $email;
-            $subject = "Your OTP Code";
-            $message = "Your OTP code is $otp. It will expire in 5 minutes.";
-            $headers = "From: no-reply@example.com";
+            try {
+                // SMTP configuration
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'your-email@gmail.com'; // Your Gmail address
+                $mail->Password = 'your-email-password'; // Use an app password for Gmail
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                $mail->Port = 465;
 
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                try {
-                    // eyzm wyiz cfpx ymis
-                    // SMTP configuration
-                    $mail->isSMTP();
-                    $mail->Host = 'smtp.gmail.com'; 
-                    $mail->SMTPAuth = true;
-                    $mail->Username = 'punitdeveloper1@gmail.com'; // Your Gmail address
-                    $mail->Password = 'eyzmwyizcfpxymis'; // Your Gmail password (or app password)
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                    $mail->Port = 465;
-                
-                    // Recipients
-                    $mail->setFrom('punitdeveloper1@gmail.com', 'Stoods Styling'); // Sender's email and name
-                    $mail->addAddress($email); // Add a recipient
-                
-                    // Content
-                    $mail->isHTML(true);
-                    $mail->Subject = 'Your OTP Code';
-                    $mail->Body = "Your OTP code is $otp. It will expire in 5 minutes.";
-                    
-                    // Send the email
-                    $mail->send();
-                    echo 'OTP sent to your email. Please verify to complete the registration.';
-                    header("Location: VerifyOTP.php"); // Redirect to OTP verification page
-                    exit;
-                } catch (Exception $e) {
-                    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                }
-            } else {
-                echo "Failed to send OTP. Please try again.";
+                // Recipients
+                $mail->setFrom('your-email@gmail.com', 'Your Website Name'); // Sender's email and name
+                $mail->addAddress($email); // Add a recipient
+
+                // Content
+                $mail->isHTML(true);
+                $mail->Subject = 'Your OTP Code';
+                $mail->Body = "Your OTP code is $otp. It will expire in 5 minutes.";
+
+                // Send the email
+                $mail->send();
+                echo 'OTP sent to your email. Please verify to complete the registration.';
+                header("Location: VerifyOTP.php"); // Redirect to OTP verification page
+                exit;
+            } catch (Exception $e) {
+                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
+        } else {
+            // Error while inserting into database
+            echo "Error: " . mysqli_error($conn);
         }
     }
 }
+
+// Close database connections
+mysqli_close($conn);
+mysqli_close($wishlistConn);
+mysqli_close($CartConn);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="">
     <div class="min-h-screen flex items-center shadow-2xl justify-center">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row w-full max-w-4xl">
@@ -132,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- Right Form Section -->
             <div class="w-full md:w-1/2 p-8">
                 <div class="text-right">
-                    <a href="./Login.php"text-sm text-gray-500 hover:text-indigo-600">Don't you have an account? <span class="font-semibold">Login</span></a>
+                    <a href="./Login.php" text-sm text-gray-500 hover:text-indigo-600">Don't you have an account? <span class="font-semibold">Login</span></a>
                 </div>
                 <h2 class="text-3xl font-bold text-gray-800 mb-6">Welcome Back</h2>
                 <p class="text-sm text-gray-600 mb-8">Login to your account</p>
@@ -168,4 +162,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         window.history.replaceState(null, null, window.location.href);
     }
 </script>
+
 </html>

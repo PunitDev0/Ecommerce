@@ -60,7 +60,7 @@ try {
     }
 
     if (!$stmt->execute()) {
-        die(json_encode(['status' => 'failure', 'error' => 'MySQL execute error: ' . $stmt->error]));
+        die(json_encode(['status' => 'failure', 'erro   r' => 'MySQL execute error: ' . $stmt->error]));
     }
 
     $stmt->close();
