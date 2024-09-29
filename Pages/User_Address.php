@@ -42,7 +42,7 @@ if (isset($_POST['submit'])) {
 
     // Execute the query
     if ($stmt->execute()) {
-        echo "User address updated successfully.";
+        $successMessage = "User address updated successfully.";
     } else {
         echo "Error updating record: " . $stmt->error;
     }
@@ -74,6 +74,20 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Boxicons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        #addressForm {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+#addressForm.show {
+    max-height: 1000px; /* Adjust according to your form's expected height */
+    opacity: 1;
+}
+
+    </style>
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
@@ -131,15 +145,24 @@ $conn->close();
         <form class="flex-1 lg:p-6 md:p-4 p-2" method="POST">
             <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-md lg:p-6 md:p-4 p-2">
                 <h2 class="text-2xl font-semibold mb-4">Manage Addresses</h2>
-                <button class="mb-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                <?php if (isset($successMessage)) : ?>
+                    <div class="bg-green-100 text-green-800 p-4 rounded mb-4">
+                        <?php echo $successMessage; ?>
+                    </div>
+                <?php elseif (isset($errorMessage)) : ?>
+                    <div class="bg-red-100 text-red-800 p-4 rounded mb-4">
+                        <?php echo $errorMessage; ?>
+                    </div>
+                <?php endif; ?>
+                <button id="addAddressBtn" class="mb-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                     + Add a New Address
                 </button>
 
-                <div class="bg-blue-50 p-6 rounded-lg shadow-inner">
-                    <h3 class="text-xl font-semibold mb-4">Edit Address</h3>
-                    <button class="px-4 py-2 mb-6 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-                        Use my current location
-                    </button>
+                <div id="addressForm" class="bg-blue-50 p-6 rounded-lg shadow-inner hidden">
+                <h3 class="text-xl font-semibold mb-4">Edit Address</h3>
+                <button class="px-4 py-2 mb-6 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                    Use my current location
+                </button>
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
@@ -258,6 +281,24 @@ $conn->close();
             document.getElementById('menu-2').classList.add('hidden');
         }
     });
+
+    document.getElementById('addAddressBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+
+    const addressForm = document.getElementById('addressForm');
+
+    if (addressForm.classList.contains('hidden')) {
+        addressForm.classList.remove('hidden');
+        setTimeout(() => {
+            addressForm.classList.add('show');
+        }, 10); // A slight delay to trigger the animation
+    } else {
+        addressForm.classList.remove('show');
+        setTimeout(() => {
+            addressForm.classList.add('hidden');
+        }, 500); // Wait for animation to complete before hiding
+    }
+});
 </script>
 
 </html>
