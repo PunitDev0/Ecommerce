@@ -1,70 +1,71 @@
 <?php
-    session_start();
-    include'./config.php';
-    // echo $_SESSION['user_id'];
+session_start();
+include './config.php';
+// echo $_SESSION['user_id'];
 
-    if (isset($_SESSION['user_id'])) {
-        $user_id = $_SESSION['user_id'];
-    } else {
-        die("Error: User ID not found in session.");
-    }
-    
-    if (isset($_POST['submit'])) {
-        $firstName = $_POST['firstName'];
-        $lastName = $_POST['lastName'];
-        $address1 = $_POST['addressLine1'];
-        $address2 = $_POST['addressLine2'];
-        $city = $_POST['city'];
-        $state = $_POST['state'];
-        $zipCode = $_POST['zipCode'];
-        $country = $_POST['country'];
-        $phone = $_POST['phoneNumber'];
-    
-        // $fullAddress = $address1 . ' ' . $address2;
-        $customerData = [
-            'fname' => $firstName,
-            'lname' => $lastName,
-            'address' => $address1,
-            'address2' => $address2,
-            'city' => $city,
-            'state' => $state,
-            'zip_code' => $zipCode,
-            'country' => $country,
-            'phone' => $phone
-        ];
-    
-        // Convert array to JSON string
-        $customerJson = json_encode($customerData);
-        // echo $customerJson;
-        // Use a prepared statement to avoid SQL injection
-        $stmt = $conn->prepare("UPDATE user_info SET User_address = ? WHERE id = ?");
-        $stmt->bind_param("si", $customerJson, $user_id);
-    
-        // Execute the query
-        if ($stmt->execute()) {
-            echo "User address updated successfully.";
-        } else {
-            echo "Error updating record: " . $stmt->error;
-        }
-    
-        $stmt->close();
-    }
-    
-    // Close the database connection
-
-
+if (isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
-    $query = mysqli_query($conn,"SELECT User_Address FROM user_info where id = $user_id");
-    $row = mysqli_fetch_array($query);
-    $user_address = json_decode($row['User_Address'], true);
-    // print_r($user_address);
+} else {
+    die("Error: User ID not found in session.");
+}
 
-    
-    $conn->close();
+if (isset($_POST['submit'])) {
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $address1 = $_POST['addressLine1'];
+    $address2 = $_POST['addressLine2'];
+    $city = $_POST['city'];
+    $state = $_POST['state'];
+    $zipCode = $_POST['zipCode'];
+    $country = $_POST['country'];
+    $phone = $_POST['phoneNumber'];
+
+    // $fullAddress = $address1 . ' ' . $address2;
+    $customerData = [
+        'fname' => $firstName,
+        'lname' => $lastName,
+        'address' => $address1,
+        'address2' => $address2,
+        'city' => $city,
+        'state' => $state,
+        'zip_code' => $zipCode,
+        'country' => $country,
+        'phone' => $phone
+    ];
+
+    // Convert array to JSON string
+    $customerJson = json_encode($customerData);
+    // echo $customerJson;
+    // Use a prepared statement to avoid SQL injection
+    $stmt = $conn->prepare("UPDATE user_info SET User_address = ? WHERE id = ?");
+    $stmt->bind_param("si", $customerJson, $user_id);
+
+    // Execute the query
+    if ($stmt->execute()) {
+        echo "User address updated successfully.";
+    } else {
+        echo "Error updating record: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
+
+// Close the database connection
+
+
+$user_id = $_SESSION['user_id'];
+$query = mysqli_query($conn, "SELECT User_Address FROM user_info where id = $user_id");
+$row = mysqli_fetch_array($query);
+$user_address = json_decode($row['User_Address'], true);
+// print_r($user_address);
+
+
+$conn->close();
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,23 +75,24 @@
     <!-- Boxicons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-100 font-sans antialiased">
     <?php include 'Navbar.php'; ?>
     <div class="min-h-screen flex flex-col md:flex-row">
         <!-- Sidebar -->
         <div class="bg-white shadow-md w-full mt-6 md:w-64 p-6">
             <div class="flex items-center shadow-xl space-x-4 mb-8">
-            <div class="w-14 h-14 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
-                            <?php
-                                if(isset($_SESSION['admin_image']) && !empty($_SESSION['admin_image'])) {
-                                    echo '<img src="../images/user_images/' . $_SESSION['admin_image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
-                                } else if(isset($_SESSION['user_image']) && !empty($_SESSION['user_image'])){
-                                    echo '<img src="' . $_SESSION['user_image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
-                                } else {
-                                    echo '<img src="../images/default-user.png" alt="Default User Image" class="w-full h-full object-cover"/>';
-                                }
-                            ?>
-                        </div>
+                <div class="w-14 h-14 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
+                    <?php
+                    if (isset($_SESSION['admin_image']) && !empty($_SESSION['admin_image'])) {
+                        echo '<img src="../images/user_images/' . $_SESSION['admin_image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
+                    } else if (isset($_SESSION['user_image']) && !empty($_SESSION['user_image'])) {
+                        echo '<img src="' . $_SESSION['user_image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
+                    } else {
+                        echo '<img src="../images/default-user.png" alt="Default User Image" class="w-full h-full object-cover"/>';
+                    }
+                    ?>
+                </div>
                 <div>
                     <h2 class="text-xl font-semibold">Puneet Kumar</h2>
                 </div>
@@ -127,7 +129,7 @@
 
         <!-- Main Content -->
         <form class="flex-1 lg:p-6 md:p-4 p-2" method="POST">
-            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md lg:p-6 md:p-4 p-2">
+            <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-md lg:p-6 md:p-4 p-2">
                 <h2 class="text-2xl font-semibold mb-4">Manage Addresses</h2>
                 <button class="mb-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                     + Add a New Address
@@ -142,39 +144,39 @@
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label class="block text-gray-700">First Name</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name ="firstName"placeholder="<?php echo $user_address['fname']?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="firstName" placeholder="<?php echo $user_address['fname'] ?>">
                         </div>
                         <div>
                             <label class="block text-gray-700">First Name</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name ="lastName"placeholder="<?php echo $user_address['lname']?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="lastName" placeholder="<?php echo $user_address['lname'] ?>">
                         </div>
                         <div>
                             <label class="block text-gray-700">10-digit mobile number</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="phoneNumber" placeholder="<?php echo $user_address['phone']?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="phoneNumber" placeholder="<?php echo $user_address['phone'] ?>">
                         </div>
                         <div>
                             <label class="block text-gray-700">Pincode</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="zipCode" placeholder="<?php echo $user_address['zip_code']?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="zipCode" placeholder="<?php echo $user_address['zip_code'] ?>">
                         </div>
                         <div>
                             <label class="block text-gray-700">Locality</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="country" placeholder="<?php echo $user_address['country']?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="country" placeholder="<?php echo $user_address['country'] ?>">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-gray-700">Address1 (Area and Street)</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="addressLine1" placeholder="<?php echo $user_address['address']?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="addressLine1" placeholder="<?php echo $user_address['address'] ?>">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-gray-700">Address2 (Area and Street)</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="addressLine2" placeholder="<?php echo $user_address['address2']?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="addressLine2" placeholder="<?php echo $user_address['address2'] ?>">
                         </div>
                         <div>
                             <label class="block text-gray-700">City/District/Town</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="city" placeholder="<?php echo $user_address['city']?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="city" placeholder="<?php echo $user_address['city'] ?>">
                         </div>
                         <div>
                             <label class="block text-gray-700">State</label>
-                            <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="state" placeholder="<?php echo $user_address['state']?>" ></input>
+                            <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="state" placeholder="<?php echo $user_address['state'] ?>"></input>
                         </div>
                     </div>
                     <!-- Save Button -->
@@ -185,8 +187,77 @@
                     </div>
                 </div>
             </div>
+            <div class="container mx-auto p-4">
+                <!-- Card 1 -->
+                <div class="bg-white shadow-lg rounded-lg p-4 mb-4 flex justify-between items-center space-x-4">
+                    <div>
+                        <h2 class="font-bold">Kunal</h2>
+                        <p>8376905677</p>
+                        <p>Gali no.8, house no.18, first floor, Molarband ext, Badarpur, Molarband market, Badarpur, New Delhi, Delhi - <strong>110044</strong></p>
+                    </div>
+                    <div class="relative">
+                        <button id="menu-btn-1" class="text-gray-600 focus:outline-none">
+                            <!-- Three dots icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v.01M12 12v.01M12 18v.01" />
+                            </svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="menu-1" class="hidden absolute right-0 bg-white shadow-lg rounded-lg py-2 w-32">
+                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-200">Edit</button>
+                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-200">Delete</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-white shadow-lg rounded-lg p-4 flex justify-between items-center space-x-4">
+                    <div>
+                        <h2 class="font-bold">Kunal</h2>
+                        <p>8376905677</p>
+                        <p>SUNIL COLLECTION=shop no.B-1, gali no.19, MAIN MOLARBAND MARKET, BADARPUR, New Delhi, Delhi - <strong>110044</strong></p>
+                    </div>
+                    <div class="relative">
+                        <button id="menu-btn-2" class="text-gray-600 focus:outline-none">
+                            <!-- Three dots icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v.01M12 12v.01M12 18v.01" />
+                            </svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="menu-2" class="hidden absolute right-0 bg-white shadow-lg rounded-lg py-2 w-32">
+                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-200">Edit</button>
+                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-200">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
     </form>
+
     </div>
 </body>
+<script>
+    document.getElementById('menu-btn-1').addEventListener('click', function(e) {
+        e.preventDefault()
+        document.getElementById('menu-1').classList.toggle('hidden');
+    });
+
+    document.getElementById('menu-btn-2').addEventListener('click', function(e) {
+        e.preventDefault()
+
+        document.getElementById('menu-2').classList.toggle('hidden');
+    });
+
+    // Optional: Close the menu if clicked outside
+    window.addEventListener('click', function(e) {
+        if (!document.getElementById('menu-btn-1').contains(e.target)) {
+            document.getElementById('menu-1').classList.add('hidden');
+        }
+        if (!document.getElementById('menu-btn-2').contains(e.target)) {
+            document.getElementById('menu-2').classList.add('hidden');
+        }
+    });
+</script>
+
 </html>
