@@ -62,11 +62,6 @@ if (isset($_POST['submit'])) {
     // Convert the updated address array back to JSON
     $updatedAddressesJson = json_encode($existingAddresses, JSON_PRETTY_PRINT);
 
-    // Print the JSON to debug
-    echo "<pre>";
-    print_r($updatedAddressesJson);  // This will output the JSON in readable format
-    echo "</pre>";
-
     // Prepare to update the database
     $stmt = $conn->prepare("UPDATE user_info SET User_Address = ? WHERE id = ?");
     if (!$stmt) {
@@ -101,9 +96,7 @@ if ($row && !empty($row['User_Address'])) {
     }
     
     // Print user address for debugging
-    echo "<pre>";
-    print_r($user_address);
-    echo "</pre>";
+  
 } else {
     echo "No address found for this user.";
 }
@@ -221,7 +214,7 @@ $conn->close();
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label class="block text-gray-700">First Name</label>
-                            <input type="text" name="firstName" value="<?php echo isset($existingAddresses['fname']) ? htmlspecialchars($existingAddresses['fname']) : ''; ?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="firstName" >
                         </div>
                         <div>
                             <label class="block text-gray-700">First Name</label>
