@@ -101,6 +101,34 @@ if ($row && !empty($row['User_Address'])) {
     echo "No address found for this user.";
 }
 
+
+// Handle address deletion
+if (isset($_POST['delete'])) {
+    $indexToDelete = $_POST['address_index'];
+
+    // Remove the selected address from the array
+    unset($user_address[$indexToDelete]);
+
+    // Reindex the array to maintain consistency
+    $addresses = array_values($user_address);
+
+    // Convert the updated array back to JSON and update the database
+    $updatedAddressesJson = json_encode($user_address, JSON_PRETTY_PRINT);
+    $stmt = $conn->prepare("UPDATE user_info SET User_Address = ? WHERE id = ?");
+    $stmt->bind_param("si", $updatedAddressesJson, $user_id);
+    
+    if ($stmt->execute()) {
+        echo "Address deleted successfully.";
+    } else {
+        die("Error updating record: " . $stmt->error);
+    }
+
+    // Reload the page to reflect changes
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
+
 // Close the database connection
 $conn->close();
 ?>
@@ -258,49 +286,35 @@ $conn->close();
                 </div>
             </div>
             <div class="container mx-auto p-4">
-                <!-- Card 1 -->
+            <?php if (!empty($user_address)) : ?>
+             <?php foreach ($user_address as $index => $address) : ?>
                 <div class="bg-white shadow-lg rounded-lg p-4 mb-4 flex justify-between items-center space-x-4">
                     <div>
-                        <h2 class="font-bold">Kunal</h2>
-                        <p>8376905677</p>
-                        <p>Gali no.8, house no.18, first floor, Molarband ext, Badarpur, Molarband market, Badarpur, New Delhi, Delhi - <strong>110044</strong></p>
+                        <h2 class="font-bold"><?= htmlspecialchars($address['fname'] . ' ' . $address['lname']) ?></h2>
+                        <p><?= htmlspecialchars($address['phone']) ?></p>
+                        <p><?= htmlspecialchars($address['address'] . ', ' . $address['address2'] . ', ' . $address['city'] . ', ' . $address['state'] . ' - ') ?>
+                        <strong><?= htmlspecialchars($address['zip_code']) ?></strong></p>
                     </div>
                     <div class="relative">
-                        <button id="menu-btn-1" class="text-gray-600 focus:outline-none">
+                        <button id="menu-btn-<?= $index ?> " class="menu-btn text-gray-600 focus:outline-none">
                             <!-- Three dots icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v.01M12 12v.01M12 18v.01" />
                             </svg>
                         </button>
                         <!-- Dropdown menu -->
-                        <div id="menu-1" class="hidden absolute right-0 bg-white shadow-lg rounded-lg py-2 w-32">
-                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-200">Edit</button>
-                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-200">Delete</button>
-                        </div>
+                        <div id="menu-<?= $index ?>" class="deletebutton hidden absolute right-0 bg-white shadow-lg rounded-lg py-2 w-32">
+                        <form method="POST" action="">
+                            <input type="hidden" name="address_index" value="<?= $index ?>">
+                            <button type="submit" name="delete" class="block w-full text-left px-4 py-2 hover:bg-gray-200">Delete</button>
+                        </form>
+                    </div>
                     </div>
                 </div>
-
-                <!-- Card 2 -->
-                <div class="bg-white shadow-lg rounded-lg p-4 flex justify-between items-center space-x-4">
-                    <div>
-                        <h2 class="font-bold">Kunal</h2>
-                        <p>8376905677</p>
-                        <p>SUNIL COLLECTION=shop no.B-1, gali no.19, MAIN MOLARBAND MARKET, BADARPUR, New Delhi, Delhi - <strong>110044</strong></p>
-                    </div>
-                    <div class="relative">
-                        <button id="menu-btn-2" class="text-gray-600 focus:outline-none">
-                            <!-- Three dots icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v.01M12 12v.01M12 18v.01" />
-                            </svg>
-                        </button>
-                        <!-- Dropdown menu -->
-                        <div id="menu-2" class="hidden absolute right-0 bg-white shadow-lg rounded-lg py-2 w-32">
-                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-200">Edit</button>
-                            <button class="block w-full text-left px-4 py-2 hover:bg-gray-200">Delete</button>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
+                <?php else : ?>
+                    <p>No addresses found.</p>
+                <?php endif; ?>
             </div>
         </form>
     </form>
@@ -308,25 +322,12 @@ $conn->close();
     </div>
 </body>
 <script>
-    document.getElementById('menu-btn-1').addEventListener('click', function(e) {
-        e.preventDefault()
-        document.getElementById('menu-1').classList.toggle('hidden');
-    });
-
-    document.getElementById('menu-btn-2').addEventListener('click', function(e) {
-        e.preventDefault()
-
-        document.getElementById('menu-2').classList.toggle('hidden');
-    });
-
-    // Optional: Close the menu if clicked outside
-    window.addEventListener('click', function(e) {
-        if (!document.getElementById('menu-btn-1').contains(e.target)) {
-            document.getElementById('menu-1').classList.add('hidden');
-        }
-        if (!document.getElementById('menu-btn-2').contains(e.target)) {
-            document.getElementById('menu-2').classList.add('hidden');
-        }
+   document.querySelectorAll(".menu-btn").forEach((btn, index) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault()
+            const menu = document.querySelector('.deletebutton');
+            menu.classList.toggle('hidden');
+        });
     });
 
     document.getElementById('addAddressBtn').addEventListener('click', function(e) {
