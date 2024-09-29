@@ -1,27 +1,28 @@
 <?php
 session_start();
-include './config.php';
-// echo $_SESSION['user_id'];
+include './config.php'; // Assuming this contains the $conn database connection
 
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
-} else {
+// Check if user ID is present in session
+if (!isset($_SESSION['user_id'])) {
     die("Error: User ID not found in session.");
 }
 
-if (isset($_POST['submit'])) {
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
-    $address1 = $_POST['addressLine1'];
-    $address2 = $_POST['addressLine2'];
-    $city = $_POST['city'];
-    $state = $_POST['state'];
-    $zipCode = $_POST['zipCode'];
-    $country = $_POST['country'];
-    $phone = $_POST['phoneNumber'];
+$user_id = $_SESSION['user_id'];
 
-    // $fullAddress = $address1 . ' ' . $address2;
-    $customerData = [
+if (isset($_POST['submit'])) {
+    // Get user input and sanitize it
+    $firstName = htmlspecialchars($_POST['firstName']);
+    $lastName = htmlspecialchars($_POST['lastName']);
+    $address1 = htmlspecialchars($_POST['addressLine1']);
+    $address2 = htmlspecialchars($_POST['addressLine2']);
+    $city = htmlspecialchars($_POST['city']);
+    $state = htmlspecialchars($_POST['state']);
+    $zipCode = htmlspecialchars($_POST['zipCode']);
+    $country = htmlspecialchars($_POST['country']);
+    $phone = htmlspecialchars($_POST['phoneNumber']);
+
+    // Create an array for the new address data
+    $newAddress = [
         'fname' => $firstName,
         'lname' => $lastName,
         'address' => $address1,
@@ -33,36 +34,88 @@ if (isset($_POST['submit'])) {
         'phone' => $phone
     ];
 
-    // Convert array to JSON string
-    $customerJson = json_encode($customerData);
-    // echo $customerJson;
-    // Use a prepared statement to avoid SQL injection
-    $stmt = $conn->prepare("UPDATE user_info SET User_address = ? WHERE id = ?");
-    $stmt->bind_param("si", $customerJson, $user_id);
-
-    // Execute the query
-    if ($stmt->execute()) {
-        $successMessage = "User address updated successfully.";
-    } else {
-        echo "Error updating record: " . $stmt->error;
+    // Prepare a SELECT statement to retrieve existing addresses
+    $stmt = $conn->prepare("SELECT User_Address FROM user_info WHERE id = ?");
+    if (!$stmt) {
+        die("Error preparing statement: " . $conn->error);
     }
 
+    // Bind the user ID parameter
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+
+    // Decode the existing addresses from JSON
+    $existingAddresses = [];
+    if ($row && !empty($row['User_Address'])) {
+        $existingAddresses = json_decode($row['User_Address'], true);
+        // Handle JSON decoding errors
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            die("Error decoding JSON: " . json_last_error_msg());
+        }
+    }
+
+    // Add the new address to the existing array
+    $existingAddresses[] = $newAddress; // Adding as a new entry
+
+    // Convert the updated address array back to JSON
+    $updatedAddressesJson = json_encode($existingAddresses, JSON_PRETTY_PRINT);
+
+    // Print the JSON to debug
+    echo "<pre>";
+    print_r($updatedAddressesJson);  // This will output the JSON in readable format
+    echo "</pre>";
+
+    // Prepare to update the database
+    $stmt = $conn->prepare("UPDATE user_info SET User_Address = ? WHERE id = ?");
+    if (!$stmt) {
+        die("Error preparing update statement: " . $conn->error);
+    }
+
+    // Bind the parameters (JSON string and user ID)
+    $stmt->bind_param("si", $updatedAddressesJson, $user_id);
+
+    // Execute the UPDATE query
+    if ($stmt->execute()) {
+        echo "User address updated successfully.";
+    } else {
+        die("Error updating record: " . $stmt->error);
+    }
+
+    // Close the statement
     $stmt->close();
 }
 
+// Retrieve user addresses for displaying on the form
+$query = $conn->prepare("SELECT User_Address FROM user_info WHERE id = ?");
+$query->bind_param("i", $user_id);
+$query->execute();
+$result = $query->get_result();
+$row = $result->fetch_assoc();
+
+if ($row && !empty($row['User_Address'])) {
+    $user_address = json_decode($row['User_Address'], true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        die("Error decoding JSON: " . json_last_error_msg());
+    }
+    
+    // Print user address for debugging
+    echo "<pre>";
+    print_r($user_address);
+    echo "</pre>";
+} else {
+    echo "No address found for this user.";
+}
+
 // Close the database connection
-
-
-$user_id = $_SESSION['user_id'];
-$query = mysqli_query($conn, "SELECT User_Address FROM user_info where id = $user_id");
-$row = mysqli_fetch_array($query);
-$user_address = json_decode($row['User_Address'], true);
-// print_r($user_address);
-
-
 $conn->close();
-
 ?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -93,6 +146,7 @@ $conn->close();
 <body class="bg-gray-100 font-sans antialiased">
     <?php include 'Navbar.php'; ?>
     <div class="min-h-screen flex flex-col md:flex-row">
+        
         <!-- Sidebar -->
         <div class="bg-white shadow-md w-full mt-6 md:w-64 p-6">
             <div class="flex items-center shadow-xl space-x-4 mb-8">
@@ -167,39 +221,39 @@ $conn->close();
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label class="block text-gray-700">First Name</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="firstName" placeholder="<?php echo $user_address['fname'] ?>">
+                            <input type="text" name="firstName" value="<?php echo isset($existingAddresses['fname']) ? htmlspecialchars($existingAddresses['fname']) : ''; ?>">
                         </div>
                         <div>
                             <label class="block text-gray-700">First Name</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="lastName" placeholder="<?php echo $user_address['lname'] ?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="lastName" placeholder="">
                         </div>
                         <div>
                             <label class="block text-gray-700">10-digit mobile number</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="phoneNumber" placeholder="<?php echo $user_address['phone'] ?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="phoneNumber" placeholder="">
                         </div>
                         <div>
                             <label class="block text-gray-700">Pincode</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="zipCode" placeholder="<?php echo $user_address['zip_code'] ?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="zipCode" placeholder="">
                         </div>
                         <div>
                             <label class="block text-gray-700">Locality</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="country" placeholder="<?php echo $user_address['country'] ?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="country" placeholder="">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-gray-700">Address1 (Area and Street)</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="addressLine1" placeholder="<?php echo $user_address['address'] ?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="addressLine1" placeholder="">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-gray-700">Address2 (Area and Street)</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="addressLine2" placeholder="<?php echo $user_address['address2'] ?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="addressLine2" placeholder="">
                         </div>
                         <div>
                             <label class="block text-gray-700">City/District/Town</label>
-                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="city" placeholder="<?php echo $user_address['city'] ?>">
+                            <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="city" placeholder="">
                         </div>
                         <div>
                             <label class="block text-gray-700">State</label>
-                            <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="state" placeholder="<?php echo $user_address['state'] ?>"></input>
+                            <input class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" name="state" placeholder=""></input>
                         </div>
                     </div>
                     <!-- Save Button -->
