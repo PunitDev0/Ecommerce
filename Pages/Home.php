@@ -82,7 +82,7 @@ if (!$_SESSION['logged_in']) {
 
 </div>
 
-<div class="tempelate py-14 sm:px-10">
+<div class="tempelate py-20 sm:px-10">
             <?php 
             $color = "#457488";
             $image = "../Assests/Shoe.png";
@@ -90,7 +90,7 @@ if (!$_SESSION['logged_in']) {
         </div>
 
     <section class="section min-h-screen">
-      <div class="Home-image grid grid-cols-1 md:grid-cols-3 gap-4 mt-20">
+      <div class="Home-image grid grid-cols-1 md:grid-cols-3 gap-4 md:mt-20">
         <!-- First Box -->
         <div class="box flex  items-center justify-between bg-[#F3F3F3] p-6 text-center rounded-lg shadow-lg">
           <div class="text mb-4 md:mb-0">
@@ -138,7 +138,7 @@ if (!$_SESSION['logged_in']) {
         <?php include './Polocard.php' ?>
       </div>
 
-        <div class="tempelate py-14 sm:px-10">
+        <div class="tempelate py-20 sm:px-10">
           <?php 
           $color ="#DDA983";
           $image = "../Assests/WatchImage2.png";

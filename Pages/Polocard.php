@@ -28,7 +28,7 @@
   </style>
 </head>
 <body>
-  <div class="containers px-10">
+  <div class="containers md:px-10">
     <?php
       include './config.php';
 
@@ -49,12 +49,12 @@
       // Display products
       while ($items = mysqli_fetch_array($item_result)) {
     ?>
-        <div class="product-card">
+        <div class="product-card ">
           <div class="product-image relative overflow-hidden">
-            <img src="../images/product_images/<?php echo htmlspecialchars($items['product_image']); ?>" alt="Product Image">
-            <div class="quick_view h-10 w-fit rounded-lg bg-white shadow-xl flex items-center justify-center py-2 px-4 absolute bottom-0 translate-y-10">
+            <img src="../images/product_images/<?php echo htmlspecialchars($items['product_image']); ?>" alt="Product Image" class="object-cover">
+            <!-- <div class="quick_view h-10 w-fit rounded-lg bg-white shadow-xl flex items-center justify-center py-2 px-4 absolute bottom-0 translate-y-10">
               <p>Quick View</p>
-            </div>
+            </div> -->
           </div>
           <div class="product-info">
             <p class="product-name truncate"><?php echo htmlspecialchars($items['product_name']); ?></p>
