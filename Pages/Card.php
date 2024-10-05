@@ -4,7 +4,7 @@ include './config.php';
 if (!$product_info) {
   die("Connection failed: " . mysqli_connect_error());
 }
-echo $_SESSION['catgid'];
+// echo $_SESSION['catgid'];
 $catgid = $_SESSION['catgid'];
 
 $sort_by = isset($_GET['sort']) ? $_GET['sort'] : 'relevance';
@@ -20,7 +20,7 @@ switch ($sort_by) {
     $order_by = 'product_id ASC';
     break;
 }
-echo $sort_by;
+// echo $sort_by;
 
 
 $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
@@ -46,7 +46,7 @@ $item = mysqli_query($product_info, $query);
     <?php
     while ($items = mysqli_fetch_array($item)) {
     ?>
-      <div class="bg-white rounded-lg h-auto overflow-hidden flex flex-col relative p-2">
+      <div class="bg-white rounded-lg h-auto overflow-hidden flex flex-col relative p-2 border sm:border-none">
         <?php
         if (isset($_SESSION['user_logged_in'])) {
           $user_id = $_SESSION['user_id'];
@@ -93,14 +93,14 @@ $item = mysqli_query($product_info, $query);
             ?>
           </div>
 
-          <div class="z-50 absolute -translate-y-10 m-auto">
+          <!-- <div class="z-50 absolute -translate-y-10 m-auto">
             <button class="buttons absolute translate-x-52 text-2xl" id="custom-prev-button">
               <i class='bx bxs-chevron-right'></i>
             </button>
             <button class="buttons absolute custom-next-button text-2xl">
               <i class='bx bxs-chevron-left translate-x-5'></i>
             </button>
-          </div>
+          </div> -->
         </div>
 
         <div class="p-4 text-center">
@@ -110,7 +110,7 @@ $item = mysqli_query($product_info, $query);
           <p class="text-red-500 text-sm sm:text-lg md:text-xl lg:text-2xl mt-2">
             $<?php echo $items['product_price']; ?>
           </p>
-          <div class="flex justify-between space-x-2 mt-2">
+          <div class="sm:flex justify-between space-x-2 mt-2 hidden">
                <?php
               $query = "SELECT * FROM cart_$user_id WHERE product_id = $product_id";
               // Run the query and check if it succeeded

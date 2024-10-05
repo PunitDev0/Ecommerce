@@ -61,7 +61,7 @@
 <div class="bg-gray-100">
 
     <!-- Filter and Sort Options -->
-    <div class="flex items-center justify-between mb-4 shadow-lg filter md:p-6 p-3 bg-white">
+    <div class="sm:flex hidden items-center justify-between mb-4 shadow-lg filter md:p-6 p-3 bg-white">
         <div class="flex space-x-2">
             <button id="grid-view" class="p-2 border border-gray-300 rounded">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,17 +88,7 @@
         </div>
     </div>
     <?php $_SESSION['catgid'] = isset($_GET['page']) ? $_GET['page'] : " ";?>
-    
-    <!-- Title -->
-    <div class="container mx-auto">
-        <h1 class="text-2xl font-semibold mb-6 text-center">
-            <?php
-            $min_price = isset($_GET['min_price']) ? (int)$_GET['min_price'] : 0;
-            $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
-            echo "Product List: $min_price - $max_price";
-            ?>
-        </h1>
-    </div>
+
 
     <!-- Add your product cards or list elements here -->
 

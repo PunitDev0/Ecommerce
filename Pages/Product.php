@@ -48,7 +48,7 @@
             <?php include'./Filter.php'?>
           </div>
           <div class="Cards my-10">
-              <h1 class="text-center text-3xl">FEATURED COLLECTION'S</h1>
+              <!-- <h1 class="text-center text-3xl">FEATURED COLLECTION'S</h1> -->
               <div class="horizontalCard product-list">
                 <?php include './Card.php' ?>
               </div>
@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="z-50">
-      <?php include './index.html'?>
+      <?php include './index.php'?>
       </div>
       <div class="Footer">
         <?php include './Footer.php'; ?>
