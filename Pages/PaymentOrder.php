@@ -26,22 +26,29 @@ include('config.php');
 			$query = mysqli_query($conn, "SELECT User_Address FROM user_info WHERE id = $user_id");
 			$row = mysqli_fetch_array($query);
 			$_SESSION['address'] = $row['User_Address'];
-			$user_address = json_decode($row['User_Address'], true);
+			$user_addresses = json_decode($row['User_Address'], true);
 			?>
 
 			<div class="p-4 pt-8 mt-5 rounded-lg border bg-white">
 				<p class="text-xl font-medium">Address</p>
 				<div class="mt-8 space-y-4 rounded-lg border bg-white px-4 py-6 sm:px-6">
-					<div class="flex flex-col sm:flex-row">
-						<div class="flex w-full flex-col px-4 py-2">
-							<span class="font-semibold text-lg"><?php echo $user_address['fname'] . " " . $user_address['lname']; ?></span>
-							<p class="text-gray-600"><?php echo $user_address['address'] . ", " . $user_address['address2']; ?></p>
-							<p class="text-gray-600"><?php echo $user_address['city'] . ", " . $user_address['state'] . " " . $user_address['zip_code']; ?></p>
-							<p class="text-gray-600"><?php echo $user_address['country']; ?></p>
-						</div>
-					</div>
+					<form method="POST" action="update_address.php">
+						<?php foreach ($user_addresses as $index => $address) { ?>
+							<div class="flex flex-col sm:flex-row items-start mb-4">
+								<input type="radio" name="selected_address" id="address_<?php echo $index; ?>" value="<?php echo $index; ?>" class="mr-4" <?php if ($index == 0) echo 'checked'; ?>>
+								<label for="address_<?php echo $index; ?>" class="flex w-full flex-col px-4 py-2">
+									<span class="font-semibold text-lg"><?php echo $address['fname'] . " " . $address['lname']; ?></span>
+									<p class="text-gray-600"><?php echo $address['address'] . ", " . $address['address2']; ?></p>
+									<p class="text-gray-600"><?php echo $address['city'] . ", " . $address['state'] . " " . $address['zip_code']; ?></p>
+									<p class="text-gray-600"><?php echo $address['country']; ?></p>
+								</label>
+							</div>
+						<?php } ?>
+						<!-- <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Save Address</button> -->
+					</form>
 				</div>
 			</div>
+
 
 			<div class="px-4 pt-8 border rounded-lg shadow-xl mt-5">
 				<p class="text-xl font-medium">Order Summary</p>
@@ -56,13 +63,13 @@ include('config.php');
 					$item = mysqli_fetch_assoc($related_items);
 					echo $item['product_name'];
 					?>
-						<div class="flex flex-col rounded-lg bg-white sm:flex-row border ">
-							<img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="../Images/Product_images/<?php echo $item['product_image'] ?>" alt="" />
-							<div class="flex w-full flex-col px-4 py-4">
-								<span class="font-semibold"><?php echo $item['product_name'] ?></span>
-								<p class="text-lg font-bold">$<?php echo $item['product_price'] ?></p>
-							</div>
+					<div class="flex flex-col rounded-lg bg-white sm:flex-row border ">
+						<img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="../Images/Product_images/<?php echo $item['product_image'] ?>" alt="" />
+						<div class="flex w-full flex-col px-4 py-4">
+							<span class="font-semibold"><?php echo $item['product_name'] ?></span>
+							<p class="text-lg font-bold">$<?php echo $item['product_price'] ?></p>
 						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -170,7 +177,7 @@ include('config.php');
 					</div>
 					<div class="flex items-center justify-between">
 						<p class="text-sm font-medium text-gray-900">Shipping</p>
-						<p class="font-semibold text-gray-900">$<?php echo $Total = $item['product_price'] + 40?></p>
+						<p class="font-semibold text-gray-900">$<?php echo $Total = $item['product_price'] + 40 ?></p>
 					</div>
 				</div>
 				<div class="mt-6 flex items-center justify-between">
@@ -178,7 +185,7 @@ include('config.php');
 					<p class="text-2xl font-semibold text-gray-900">$<?php echo $Total ?></p>
 				</div>
 				<form action="#" method="POST">
-					<input type="hidden" name="product_id" value="<?php echo $_SESSION['product_id']?>">
+					<input type="hidden" name="product_id" value="<?php echo $_SESSION['product_id'] ?>">
 					<button id="button" class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white">Place Order</button>
 				</form>
 			</div>
@@ -186,84 +193,67 @@ include('config.php');
 	</div>
 	</div>
 	<?php
-include('config.php'); // Ensure this contains database connection setup
-require_once '../razorpay/Razorpay.php';
+	include('config.php'); // Ensure this contains database connection setup
+	require_once '../razorpay/Razorpay.php';
 
-use Razorpay\Api\Api;
+	use Razorpay\Api\Api;
 
-// Ensure the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    die(json_encode(['status' => 'failure', 'error' => 'User not logged in.']));
-}
+	// Ensure the user is logged in
+	if (!isset($_SESSION['user_id'])) {
+		die(json_encode(['status' => 'failure', 'error' => 'User not logged in.']));
+	}
 
-$user_id = $_SESSION['user_id'];
-$_SESSION['total'] = $Total; 
-// Razorpay API credentials
-$keyId = 'rzp_test_kBREEooxYkKLPo'; 
-$keySecret = 'P5NsdNUNPas0c0C74oCjkk1Y';  
+	$user_id = $_SESSION['user_id'];
+	$_SESSION['total'] = $Total;
+	// Razorpay API credentials
+	$keyId = 'rzp_test_kBREEooxYkKLPo';
+	$keySecret = 'P5NsdNUNPas0c0C74oCjkk1Y';
 
-$api = new Api($keyId, $keySecret);
-// Create a new Razorpay order
-try {
-    $order = $api->order->create([
-        'amount' => $Total * 100,  // Amount in paise (1 INR = 100 paise)
-        'currency' => 'INR',
-        'receipt' => 'order_rcptid_' . $user_id,
-        'payment_capture' => 1 // Auto-capture
-    ]);
+	$api = new Api($keyId, $keySecret);
+	// Create a new Razorpay order
+	try {
+		$order = $api->order->create([
+			'amount' => $Total * 100,  // Amount in paise (1 INR = 100 paise)
+			'currency' => 'INR',
+			'receipt' => 'order_rcptid_' . $user_id,
+			'payment_capture' => 1 // Auto-capture
+		]);
 
-    $orderId = $order['id'];
-    // echo json_encode(['status' => 'success', 'order_id' => $orderId]);
+		$orderId = $order['id'];
+		// echo json_encode(['status' => 'success', 'order_id' => $orderId]);
 
-} catch (Exception $e) {
-    die(json_encode(['status' => 'failure', 'error' => $e->getMessage()]));
-}
+	} catch (Exception $e) {
+		die(json_encode(['status' => 'failure', 'error' => $e->getMessage()]));
+	}
 
-?>
+	?>
 	<script src="../JS/Main.js"></script>
 	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	<script>
-document.getElementById('button').onclick = function(e) {
-    e.preventDefault();
+		document.getElementById('button').onclick = function(e) {
+			e.preventDefault();
 
-    var options = {
-        "key": "<?php echo $keyId; ?>", // Razorpay Key ID
-        "amount": "<?php echo $Total * 100; ?>", // Amount in paise
-        "currency": "INR",
-        "name": "Your Website Name",
-        "description": "Purchase Description",
-        "image": "../Assests/image/logo.png", // Company logo
-        "order_id": "<?php echo $orderId; ?>", // Razorpay Order ID
-        "handler": function(response) {
-            // Simulate successful payment in test mode
-            console.log("Simulating successful payment in test mode");
+			var options = {
+				"key": "<?php echo $keyId; ?>", // Razorpay Key ID
+				"amount": "<?php echo $Total * 100; ?>", // Amount in paise
+				"currency": "INR",
+				"name": "Your Website Name",
+				"description": "Purchase Description",
+				"image": "../Assests/image/logo.png", // Company logo
+				"order_id": "<?php echo $orderId; ?>", // Razorpay Order ID
+				"handler": function(response) {
+					// Simulate successful payment in test mode
+					console.log("Simulating successful payment in test mode");
+				},
+				"theme": {
+					"color": "#3399cc"
+				}
+			};
 
-            // $.ajax({
-            //     url: "verify_payment.php",
-            //     type: "POST",
-            //     data: {
-            //         payment_id: response.razorpay_payment_id,
-            //         order_id: response.razorpay_order_id,
-            //         signature: response.razorpay_signature
-            //     },
-            //     success: function(data) {
-            //         alert('Payment verified successfully!');
-            //     },
-            //     error: function(err) {
-            //         alert('Payment verification failed!');
-            //     }
-            // });
-        },
-        "theme": {
-            "color": "#3399cc"
-        }
-    };
-
-    var rzp = new Razorpay(options);
-    rzp.open();
-}
-
-</script>
+			var rzp = new Razorpay(options);
+			rzp.open();
+		}
+	</script>
 
 </body>
 
