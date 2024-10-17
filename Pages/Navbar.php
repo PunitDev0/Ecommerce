@@ -49,7 +49,7 @@
         <nav id="navbar" class="flex justify-between items-center h-[65px] px-4 md:px-12 border-gray-200">
             <!-- Left section: Logo and Hamburger Menu -->
             <div class="flex items-center" id="menu">
-                <div class="md:hidden">
+                <div class="">
                     <i class="bx bx-menu text-3xl cursor-pointer"></i>
                 </div>
                 <div class="ml-4">
@@ -152,7 +152,7 @@
 
 
 
-        <div class="sidebar fixed top-0 left-0 h-screen w-52 backdrop-blur-lg p-5 transform -translate-x-52 transition-transform duration-300 ease-in-out z-10 flex flex-col gap-4 md:hidden" id="sidebar">
+        <div class="sidebar fixed top-0 left-0 h-screen w-52 backdrop-blur-lg p-5 transform -translate-x-52 transition-transform duration-300 ease-in-out z-10 flex flex-col gap-4 " id="sidebar">
             <div class="absolute right-3 top-3 cursor-pointer bx-close">
                 <i class="bx bx-x"></i>
             </div>
@@ -162,6 +162,9 @@
             <a class="sideEle" href="#" onclick="submitForm('Accessories_item')">Accessories</a>
             <a class="sideEle" href="#" onclick="submitForm('shoes_item')">Shoes</a>
             <a class="sideEle" href="#" onclick="submitForm('contact')">Contact</a>
+            <a class="sideEle" href="MyOrders.php" onclick="submitForm('contact')">My Orders</a>
+            <a class="sideEle" href="User_Address.php" onclick="submitForm('contact')">Address</a>
+            <a class="sideEle" href="User_Info.php" onclick="submitForm('contact')">Profile Info</a>
             <i class="bx bx-home-heart sideEle"></i>
             <i class="bx bx-cart sideEle"></i>
             <i class="bx bxs-user sideEle"></i>
