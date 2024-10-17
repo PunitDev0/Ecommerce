@@ -9,6 +9,7 @@ module.exports = {
       },
       screens: {
         'xs': '400px', // Add your custom 400px breakpoint
+        // 'ss': '600px',
       },
     },
   },

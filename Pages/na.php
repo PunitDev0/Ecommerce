@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,4 +37,13 @@
       </div>
       
 </body>
-</html>
+</html> -->
+
+<?php
+// Get the current file name
+$currentFile = basename($_SERVER['PHP_SELF']);
+
+echo $currentFile;  // Outputs: index.php (or whatever the file name is)
+?>
+
+

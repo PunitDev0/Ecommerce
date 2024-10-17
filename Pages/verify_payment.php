@@ -31,7 +31,16 @@ $product_id = $_SESSION['product_id'];
 // Fetch other order details (like amount, address) if not stored earlier
 $amount = $_SESSION['total'];  // Example amount, should be stored or fetched dynamically
 $currency = 'INR';
-$address = $_SESSION['address']; // Should be fetched dynamically from session or DB
+// $selected_address_index = $_POST['index'];
+// $_SESSION['index'];
+// echo $_SESSION['selected_address_index'];
+// Decode the JSON address stored in the session
+$user_addresses = json_decode($_SESSION['address'], true);
+print_r($user_addresses);
+// Get the selected address based on the index
+$selected_address = $user_addresses[$_SESSION['add_id']];
+$selected_address_json = json_encode($selected_address);
+var_dump($selected_address_json);
 
 try {
     // Verify payment signature
@@ -55,7 +64,7 @@ try {
     }
 
     // Bind parameters and execute query
-    if (!$stmt->bind_param('ssssssss', $user_id, $payment_id, $order_id, $amount, $currency, $status, $address, $product_id)) {
+    if (!$stmt->bind_param('ssssssss', $user_id, $payment_id, $order_id, $amount, $currency, $status, $selected_address_json, $product_id)) {
         die(json_encode(['status' => 'failure', 'error' => 'MySQL bind_param error: ' . $stmt->error]));
     }
 
@@ -63,7 +72,7 @@ try {
         die(json_encode(['status' => 'failure', 'erro   r' => 'MySQL execute error: ' . $stmt->error]));
     }
 
-    $stmt->close();
+    // $stmt->close();
 
     // Success response
     echo json_encode(['status' => 'success']);

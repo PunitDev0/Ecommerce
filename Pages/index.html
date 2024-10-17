@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
 </head>
 <body>
-    <div class="h-10 w-full  flex items-center gap-2  px-10">  
+   <div class="main block sm:hidden">
+    <div class="h-10 w-full  flex items-center gap-2 absolute  px-10">  
         <button class=" h-fit w-fit   px-3 py-1 rounded-xl border text-[10px]">
             Sort By
         </button>
-        <button class=" h-fit w-fit  px-3 py-1 rounded-xl border bor text-[10px]">
+        <button class=" h-fit w-fit  px-3 py-1 rounded-xl border bor text-[10px]" id="Filter_Toggle">
             Filter
         </button>
     </div>
-    <div class="bg-gray-100 p-6 rounded-xl shadow-lg w-72 text-gray-800 overflow-auto">
+    <div id="Filter" class="bg-gray-100 p-6 rounded-xl  -translate-x-[300px] shadow-lg w-72 text-gray-800 overflow-auto fixed top-0 left-0 h-full transition-transform duration-500 ease-in-out">
         <!-- Filters Header -->
+        <div class="absolute right-0 top-4 " id="Hide-Filter">
+            <i class='bx bx-x'></i>
+        </div>
         <h2 class="text-2xl font-bold mb-6 text-gray-700">Filters</h2>
       
         <!-- Categories Filter -->
-        <div class="mb-6">
+        <div class="mb-6 ">
           <h3 class="font-semibold mb-2 text-gray-600">Categories</h3>
           <div class="pl-4">
             <label class="flex items-center space-x-2 mb-2 hover:text-blue-500">
@@ -191,7 +196,19 @@
           Apply Filter
         </button>
       </div>
-      
-      
+   </div>
 </body>
+<script>
+    // Toggle the sidebar menu
+    document.querySelector('#Filter_Toggle').addEventListener('click', () => {
+    const filter = document.querySelector('#Filter');
+    filter.classList.toggle('-translate-x-[300px]');
+});
+
+document.querySelector('#Hide-Filter').addEventListener('click', () => {
+    const filter = document.querySelector('#Filter');
+    filter.classList.toggle('-translate-x-[300px]');
+});
+
+</script>
 </html>
