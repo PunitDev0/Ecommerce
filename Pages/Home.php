@@ -30,7 +30,7 @@ if (!$_SESSION['logged_in']) {
   <div class="Navbar fixed z-50 w-full">
     <?php include './Navbar.php' ?>
   </div>
-  <div class="MainHome py-[74px]">
+  <div class="MainHome pt-[74px]">
     <div class="SwiperAdd relative">
       <?php include '../Swipers/Swiper.html' ?>
     </div>
@@ -82,7 +82,7 @@ if (!$_SESSION['logged_in']) {
 
 </div>
 
-<div class="tempelate py-20 sm:px-10">
+<div class="tempelate py-28 sm:px-10">
             <?php 
             $color = "#457488";
             $image = "../Assests/Shoe.png";

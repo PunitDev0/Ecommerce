@@ -157,100 +157,100 @@ include('config.php');
 		</div>
 	</div>
 	</div>
-	<?php
-	include('config.php'); // Ensure this contains database connection setup
-	require_once '../razorpay/Razorpay.php';
+		<?php
+		include('config.php'); // Ensure this contains database connection setup
+		require_once '../razorpay/Razorpay.php';
 
-	use Razorpay\Api\Api;
+		use Razorpay\Api\Api;
 
-	// Ensure the user is logged in
-	if (!isset($_SESSION['user_id'])) {
-		die(json_encode(['status' => 'failure', 'error' => 'User not logged in.']));
-	}
+		// Ensure the user is logged in
+		if (!isset($_SESSION['user_id'])) {
+			die(json_encode(['status' => 'failure', 'error' => 'User not logged in.']));
+		}
 
-	$user_id = $_SESSION['user_id'];
-	$_SESSION['total'] = $Total;
-	// Razorpay API credentials
-	$keyId = 'rzp_test_kBREEooxYkKLPo';
-	$keySecret = 'P5NsdNUNPas0c0C74oCjkk1Y';
+		$user_id = $_SESSION['user_id'];
+		$_SESSION['total'] = $Total;
+		// Razorpay API credentials
+		$keyId = 'rzp_test_kBREEooxYkKLPo';
+		$keySecret = 'P5NsdNUNPas0c0C74oCjkk1Y';
 
-	$api = new Api($keyId, $keySecret);
-	// Create a new Razorpay order
-	try {
-		$order = $api->order->create([
-			'amount' => $Total * 100,  // Amount in paise (1 INR = 100 paise)
-			'currency' => 'INR',
-			'receipt' => 'order_rcptid_' . $user_id,
-			'payment_capture' => 1 // Auto-capture
-		]);
+		$api = new Api($keyId, $keySecret);
+		// Create a new Razorpay order
+		try {
+			$order = $api->order->create([
+				'amount' => $Total * 100,  // Amount in paise (1 INR = 100 paise)
+				'currency' => 'INR',
+				'receipt' => 'order_rcptid_' . $user_id,
+				'payment_capture' => 1 // Auto-capture
+			]);
 
-		$orderId = $order['id'];
-		// echo json_encode(['status' => 'success', 'order_id' => $orderId]);
+			$orderId = $order['id'];
+			// echo json_encode(['status' => 'success', 'order_id' => $orderId]);
 
-	} catch (Exception $e) {
-		die(json_encode(['status' => 'failure', 'error' => $e->getMessage()]));
-	}
+		} catch (Exception $e) {
+			die(json_encode(['status' => 'failure', 'error' => $e->getMessage()]));
+		}
 
-	?>
-	<script src="../JS/Main.js"></script>
-	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-	<script>
-			// Use AJAX to get the selected address details from the database and populate the form fields
-			$('.address').on('click',function(){
-				$.ajax({
-				    url: "get-address.php",
-				    type: "POST",
-					data: {
-						index: $(this).val(),
-					},
-				    dataType: "json",
-				    success: function(data) {
-				        alert(data);
-				    },
-				    error: function(err) {
-				        console.error('THis is error' + err);
-				    }
-				});
-			})
-		document.getElementById('button').onclick = function(e) {
-			e.preventDefault();
-
-			var options = {
-				"key": "<?php echo $keyId; ?>", // Razorpay Key ID
-				"amount": "<?php echo $Total * 100; ?>", // Amount in paise
-				"currency": "INR",
-				"name": "Your Website Name",
-				"description": "Purchase Description",
-				"image": "../Assests/image/logo.png", // Company logo
-				"order_id": "<?php echo $orderId; ?>", // Razorpay Order ID
-				"handler": function(response) {
-					// Simulate successful payment in test mode
-					console.log("Simulating successful payment in test mode");
+		?>
+		<script src="../JS/Main.js"></script>
+		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+		<script>
+				// Use AJAX to get the selected address details from the database and populate the form fields
+				$('.address').on('click',function(){
 					$.ajax({
-						url: "verify_payment.php",
+						url: "get-address.php",
 						type: "POST",
 						data: {
-							payment_id: response.razorpay_payment_id,
-							order_id: response.razorpay_order_id,
-							signature: response.razorpay_signature,
+							index: $(this).val(),
 						},
+						dataType: "json",
 						success: function(data) {
-							alert('Payment verified successfully!' + data);
+							alert(data);
 						},
 						error: function(err) {
-							alert('Payment verification failed!');
+							console.error('THis is error' + err);
 						}
 					});
-				},
-				"theme": {
-					"color": "#3399cc"
-				}
-			};
+				})
+			document.getElementById('button').onclick = function(e) {
+				e.preventDefault();
 
-			var rzp = new Razorpay(options);
-			rzp.open();
-		}
-	</script>
+				var options = {
+					"key": "<?php echo $keyId; ?>", // Razorpay Key ID
+					"amount": "<?php echo $Total * 100; ?>", // Amount in paise
+					"currency": "INR",
+					"name": "Your Website Name",
+					"description": "Purchase Description",
+					"image": "../Assests/image/logo.png", // Company logo
+					"order_id": "<?php echo $orderId; ?>", // Razorpay Order ID
+					"handler": function(response) {
+						// Simulate successful payment in test mode
+						console.log("Simulating successful payment in test mode");
+						$.ajax({
+							url: "verify_payment.php",
+							type: "POST",
+							data: {
+								payment_id: response.razorpay_payment_id,
+								order_id: response.razorpay_order_id,
+								signature: response.razorpay_signature,
+							},
+							success: function(data) {
+								alert('Payment verified successfully!' + data);
+							},
+							error: function(err) {
+								alert('Payment verification failed!');
+							}
+						});
+					},
+					"theme": {
+						"color": "#3399cc"
+					}
+				};
+
+				var rzp = new Razorpay(options);
+				rzp.open();
+			}
+		</script>
 
 </body>
 

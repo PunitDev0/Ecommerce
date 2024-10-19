@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<?php
+  session_start();
+  include('../Pages/config.php');
+?>
 <html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
 
 <head>
@@ -6,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Product</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./assets/css/tailwind.output.css" />
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="./assets/js/init-alpine.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
@@ -477,109 +481,57 @@
           </ul>
         </div>
       </header>
-      <main class="h-full pb-16 overflow-y-auto">
-        <div class="bg-gray-900 min-h-screen text-white">
-          <div class="container mx-auto py-12">
-            <h1 class="text-3xl font-bold mb-8">Manage Orders</h1>
-            
-            <div class="overflow-x-auto">
-              <table class="min-w-full bg-gray-800 rounded-lg overflow-hidden shadow-lg">
-                <thead>
-                  <tr class="bg-gray-700">
-                    <th class="py-3 px-6 text-left">Product Image</th>
-                    <th class="py-3 px-6 text-left">Order ID</th>
-                    <th class="py-3 px-6 text-left">Username</th>
-                    <th class="py-3 px-6 text-left">User ID</th>
-                    <th class="py-3 px-6 text-left">Status</th>
-                    <th class="py-3 px-6 text-left">Update Status</th>
-                  </tr>
-                </thead>
-                <tbody id="orderRows">
-                  <!-- Dummy Row (Static Data) -->
-                  <tr class="border-b border-gray-700">
-                    <td class="py-3 px-6">
-                      <img src="https://via.placeholder.com/64" alt="Product Image" class="w-16 h-16 rounded-lg">
-                    </td>
-                    <td class="py-3 px-6">#1001</td>
-                    <td class="py-3 px-6">john_doe</td>
-                    <td class="py-3 px-6">12345</td>
-                    <td class="py-3 px-6">Pending</td>
-                    <td class="py-3 px-6">
-                      <select class="bg-gray-700 text-white p-2 rounded-md" data-order-id="1001" onchange="updateStatus(this)">
-                        <option value="Pending" selected>Pending</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Canceled">Canceled</option>
-                      </select>
-                    </td>
-                  </tr>
+      <main class="h-full w-full p-10 overflow-y-auto">
+    <div class="bg-gray-900 px-6 container mx-auto gird text-white">
+      <div class="container mx-auto py-12">
+        <h1 class="text-3xl font-bold mb-8">Manage Orders</h1>
         
-                  <!-- Dynamic Data from the Database -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-          </div> 
-       </main>
-       <script>
-        // Fetch data from your server-side script (like PHP)
-        fetch('fetch_orders.php')  // Replace 'fetch_orders.php' with your actual backend URL
-          .then(response => response.json())
-          .then(data => {
-            const orderRows = document.getElementById('orderRows');
-            data.forEach(order => {
-              const row = `
-                <tr class="border-b border-gray-700">
-                  <td class="py-3 px-6">
-                    <img src="${order.productImage}" alt="Product Image" class="w-16 h-16 rounded-lg">
-                  </td>
-                  <td class="py-3 px-6">${order.orderId}</td>
-                  <td class="py-3 px-6">${order.username}</td>
-                  <td class="py-3 px-6">${order.userId}</td>
-                  <td class="py-3 px-6">${order.status}</td>
-                  <td class="py-3 px-6">
-                    <select class="bg-gray-700 text-white p-2 rounded-md" data-order-id="${order.orderId}" onchange="updateStatus(this)">
-                      <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                      <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
-                      <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
-                      <option value="Canceled" ${order.status === 'Canceled' ? 'selected' : ''}>Canceled</option>
-                    </select>
-                  </td>
-                </tr>
-              `;
-              orderRows.insertAdjacentHTML('beforeend', row);
-            });
-          });
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+            <thead>
+              <tr class="bg-gray-700">
+                <th class="py-3 px-6 text-left">Product Image</th>
+                <th class="py-3 px-6 text-left">Order ID</th>
+                <th class="py-3 px-6 text-left">Username</th>
+                <th class="py-3 px-6 text-left">User ID</th>
+                <th class="py-3 px-6 text-left">Status</th>
+                <th class="py-3 px-6 text-left">Update Status</th>
+              </tr>
+            </thead>
+            <tbody id="orderRows">
+              <!-- Dummy Row (Static Data) -->
+              <tr class="border-b border-gray-700">
+                <td class="py-3 px-6">
+                  <img src="https://via.placeholder.com/64" alt="Product Image" class="w-16 h-16 rounded-lg">
+                </td>
+                <td class="py-3 px-6">#1001</td>
+                <td class="py-3 px-6">john_doe</td>
+                <td class="py-3 px-6">12345</td>
+                <td class="py-3 px-6">Pending</td>
+                <td class="py-3 px-6">
+                  <select class="bg-gray-700 text-white p-2 rounded-md" data-order-id="1001" onchange="updateStatus(this)">
+                    <option value="Pending" selected>Pending</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Canceled">Canceled</option>
+                  </select>
+                </td>
+              </tr>
     
-        // Update order status
-        function updateStatus(selectElement) {
-          const orderId = selectElement.getAttribute('data-order-id');
-          const newStatus = selectElement.value;
-          
-          // Send updated status to the server
-          fetch('update_order_status.php', { // Replace with your back-end script
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ orderId, newStatus })
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              alert('Order status updated successfully');
-            } else {
-              alert('Failed to update order status');
-            }
-          });
-        }
-      </script>
-
-
-
-
-
-
+              <!-- Dynamic Data from the Database -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </div> 
+   </main>
+    </div>
+  </div>
+  <script>
+    if (window.history.replaceState) {
+      window.history.replaceState(null, null, window.location.href);
+    }
+  </script>
   <script src="../JS/Forms.js"></script>
 </body>
 </html>
