@@ -94,53 +94,6 @@ if (isset($_SESSION['user_id'])) {
         <?php include './Navbar.php' ?>
     </div>
     <div class="min-h-screen flex flex-col md:flex-row">
-        <!-- Sidebar -->
-        <div class="bg-white shadow-md w-full mt-6 md:w-64 p-6">
-            <div class="flex items-center space-x-4 shadow-xl mb-8">
-                <div class="w-14 h-14 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
-                    <?php
-                    if (isset($_SESSION['admin_image']) && !empty($_SESSION['admin_image'])) {
-                        echo '<img src="../images/user_images/' . $_SESSION['admin_image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
-                    } else if (isset($_SESSION['user_image']) && !empty($_SESSION['user_image'])) {
-                        echo '<img src="' . $_SESSION['user_image'] . '" alt="User Image" class="w-full h-full object-cover"/>';
-                    } else {
-                        echo '<img src="../images/default-user.png" alt="Default User Image" class="w-full h-full object-cover"/>';
-                    }
-                    ?>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold">Puneet Kumar</h2>
-                </div>
-            </div>
-            <nav>
-                <ul class="space-y-4">
-                    <li>
-                        <a href="./MyOrders.php" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600">
-                            <i class='bx bx-home'></i>
-                            <span>My Orders</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600">
-                            <i class='bx bx-user'></i>
-                            <span class="text-blue-600">Profile Information</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="./User_Address.php" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600">
-                            <i class='bx bx-map'></i>
-                            <span>Manage Addresses</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600">
-                            <i class='bx bx-id-card'></i>
-                            <span>PAN Card Information</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
 
         <!-- Main Content -->
         <div class="flex-1 lg:p-6 md:p-4 p-2">
