@@ -3,8 +3,8 @@ session_start();
 include './config.php'; // Replace with your database connection
 
 // Ensure the user is logged in and session contains user_id
-if (isset($_SESSION['user_id'])) {
-    $user_id = $_SESSION['user_id'];
+if (isset($_SESSION['id'])) {
+    $user_id = $_SESSION['id'];
 
     // Fetch the current profile information
     $sql = "SELECT Personal_info FROM user_info WHERE id = ?";
@@ -19,11 +19,8 @@ if (isset($_SESSION['user_id'])) {
         // Bind the result to a variable
         $stmt->bind_result($profile_info_json);
 
-        // Fetch the result
         if ($stmt->fetch()) {
-            // Decode the JSON object
             $profile_info = json_decode($profile_info_json, true);
-            // print_r($profile_info); // Use this for debugging purposes
         }
 
         // Close the statement
@@ -49,7 +46,7 @@ if (isset($_SESSION['user_id'])) {
         ]);
 
         // SQL query to update the user's profile info
-        $sql = "UPDATE user_info SET Profile_info = ? WHERE id = ?";
+        $sql = "UPDATE user_info SET Personal_info = ? WHERE id = ?";
 
         if ($stmt = $conn->prepare($sql)) {
             // Bind parameters and execute
@@ -103,39 +100,46 @@ if (isset($_SESSION['user_id'])) {
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label class="block text-gray-700">First Name</label>
-                            <input type="text" name="first_name" value="<?php echo $profile_info['first_name']?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="text" name="first_name" 
+                                   value="<?php echo !empty($profile_info['first_name']) ? $profile_info['first_name'] : ''; ?>" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-gray-700">Last Name</label>
-                            <input type="text"  value="<?php echo $profile_info['last_name']?>" name="last_name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="text" name="last_name" 
+                                   value="<?php echo !empty($profile_info['last_name']) ? $profile_info['last_name'] : ''; ?>" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-gray-700">Your Gender</label>
                             <div class="flex space-x-4">
                                 <label class="inline-flex items-center">
-                                <input type="radio" name="gender" value="male" <?= ($profile_info['gender'] == "Male") ? "checked" : ""; ?>>
+                                    <input type="radio" name="gender" value="Male" <?= (!empty($profile_info['gender']) && $profile_info['gender'] == "Male") ? "checked" : ""; ?>>
                                     <span class="ml-2">Male</span>
                                 </label>
                                 <label class="inline-flex items-center">
-                                  <input type="radio" name="gender" value="Female" <?= ($profile_info['gender'] == "Female") ? "checked" : ""; ?>>
+                                    <input type="radio" name="gender" value="Female" <?= (!empty($profile_info['gender']) && $profile_info['gender'] == "Female") ? "checked" : ""; ?>>
                                     <span class="ml-2">Female</span>
                                 </label>
                             </div>
                         </div>
                         <div>
                             <label class="block text-gray-700">Email Address</label>
-                            <input type="email"  value="<?php echo $profile_info['email' ]?>" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" >
+                            <input type="email" name="email" 
+                                   value="<?php echo !empty($profile_info['email']) ? $profile_info['email'] : ''; ?>" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                         <div>
                             <label class="block text-gray-700">Mobile Number</label>
-                            <input type="text" name="phone"  value="<?php echo $profile_info['phone']?>" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" >
+                            <input type="text" name="phone" 
+                                   value="<?php echo !empty($profile_info['phone']) ? $profile_info['phone'] : ''; ?>" 
+                                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
                     </div>
-                    <button class="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                    <button type="submit" class="mt-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                         Save Changes
                     </button>
                 </form>
-
             </div>
         </div>
     </div>

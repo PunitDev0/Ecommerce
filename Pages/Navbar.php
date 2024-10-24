@@ -90,20 +90,12 @@
                         <div class="p-4">
                             <div class="flex items-center gap-4">
                                 <div class="w-10 h-10 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center">
-                                    <?php
-                                    if (isset($_SESSION['admin_image']) && !empty($_SESSION['admin_image'])) {
-                                        echo '<img src="../images/user_images/' . $_SESSION['admin_image'] . '" alt="User Image" class="w-full h-full object-cover" />';
-                                    } else if (isset($_SESSION['user_image']) && !empty($_SESSION['user_image'])) {
-                                        echo '<img src="' . $_SESSION['user_image'] . '" alt="User Image" class="w-full h-full object-cover" />';
-                                    } else {
-                                        echo '<img src="../images/default-user.png" alt="Default User Image" class="w-full h-full object-cover" />';
-                                    }
-                                    ?>
+                                <img src="../Assests/user.png" alt="User Image" class="w-full h-full object-cover" />
                                 </div>
                                 <h1 class="text-gray-900 font-medium text-base">
                                     <?php
-                                    if (isset($_SESSION['user_id'])) {
-                                        echo $_SESSION['user_name'];
+                                    if (isset($_SESSION['id'])) {
+                                        echo $_SESSION['name'];
                                     } elseif (isset($_SESSION['admin_id'])) {
                                         echo $_SESSION['admin_name'];
                                     } else {
@@ -220,8 +212,8 @@
             </div>
             <?php
             include './config.php';
-            if (isset($_SESSION['user_id'])) {
-                $user_id = $_SESSION['user_id'];
+            if (isset($_SESSION['id'])) {
+                $user_id = $_SESSION['id'];
             } else {
                 $user_id = $_GET['userID'];
             }
@@ -283,7 +275,7 @@
                     <span class="text-gray-700">$0.00</span>
                 </div>
                 <form action="./Wishlist.php" method="GET">
-                    <input type="hidden" name="userID" value="<?php echo $_SESSION['user_id'] ?>">
+                    <input type="hidden" name="userID" value="<?php echo $_SESSION['id'] ?>">
                     <button class="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800">
                         Go to Wishlist
                     </button>

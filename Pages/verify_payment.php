@@ -10,11 +10,11 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Ensure the user is logged in
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id'])) {
     die(json_encode(['status' => 'failure', 'error' => 'User not logged in.']));
 }
 
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['id'];
 
 // Razorpay API credentials
 $keyId = 'rzp_test_kBREEooxYkKLPo'; 

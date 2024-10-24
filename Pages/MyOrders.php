@@ -3,7 +3,7 @@ session_start();
 include './config.php'; // Include your database connection file
 
 // Fetch user ID from session or other logic
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['id'];
 
 // Query to get user orders and associated product details
 ?>

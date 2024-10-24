@@ -4,7 +4,7 @@ include './config.php';
 if (isset($_POST['add_to_cart'])){
     $product_id = $_POST['product_id'];
     $quantity = $_POST['quantity'] ? $_POST['quantity'] : 0;
-    $user_id = $_SESSION['user_id'];
+    $user_id = $_SESSION['id'];
     // echo $product_id;
     // echo $quantity;
     

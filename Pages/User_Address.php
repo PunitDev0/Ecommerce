@@ -3,11 +3,12 @@ session_start();
 include './config.php'; // Assuming this contains the $conn database connection
 
 // Check if user ID is present in session
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['id'])) {
     die("Error: User ID not found in session.");
 }
 
-$user_id = $_SESSION['user_id'];
+$user_id = $_SESSION['id'];
+$sweetalert_message = "";
 
 if (isset($_POST['submit'])) {
     // Get user input and sanitize it
@@ -73,9 +74,25 @@ if (isset($_POST['submit'])) {
 
     // Execute the UPDATE query
     if ($stmt->execute()) {
-        echo "User address updated successfully.";
+        $sweetalert_message = "
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Address updated successfully.',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     } else {
-        die("Error updating record: " . $stmt->error);
+        $sweetalert_message = "
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error updating address: " . $stmt->error . "',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     }
 
     // Close the statement
@@ -118,7 +135,15 @@ if (isset($_POST['delete'])) {
     $stmt->bind_param("si", $updatedAddressesJson, $user_id);
     
     if ($stmt->execute()) {
-        echo "Address deleted successfully.";
+        $sweetalert_message = "
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Deleted',
+                text: 'Address Deleted successfully.',
+                confirmButtonText: 'OK'
+            });
+        </script>";
     } else {
         die("Error updating record: " . $stmt->error);
     }
@@ -148,6 +173,7 @@ $conn->close();
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Boxicons -->
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         #addressForm {
     max-height: 0;
@@ -167,6 +193,7 @@ $conn->close();
 <body class="bg-gray-100 font-sans antialiased">
     <?php include 'Navbar.php'; ?>
     <div class="min-h-screen flex flex-col md:flex-row">
+    <?= $sweetalert_message; ?> 
         <!-- Main Content -->
         <form class="flex-1 lg:p-6 md:p-4 p-2" method="POST">
             <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-md lg:p-6 md:p-4 p-2">

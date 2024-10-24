@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('config.php');
+include('./config.php');
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +23,7 @@ include('config.php');
 		<div>
 			<?php
 			// Fetch and store user addresses in session
-			$user_id = $_SESSION['user_id'];
+			$user_id = $_SESSION['id'];
 			$query = mysqli_query($conn, "SELECT User_Address FROM user_info WHERE id = $user_id");
 			$row = mysqli_fetch_array($query);
 			$_SESSION['address'] = $row['User_Address'];
@@ -164,11 +164,11 @@ include('config.php');
 		use Razorpay\Api\Api;
 
 		// Ensure the user is logged in
-		if (!isset($_SESSION['user_id'])) {
+		if (!isset($_SESSION['id'])) {
 			die(json_encode(['status' => 'failure', 'error' => 'User not logged in.']));
 		}
 
-		$user_id = $_SESSION['user_id'];
+		$user_id = $_SESSION['id'];
 		$_SESSION['total'] = $Total;
 		// Razorpay API credentials
 		$keyId = 'rzp_test_kBREEooxYkKLPo';

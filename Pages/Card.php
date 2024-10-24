@@ -1,5 +1,6 @@
 <?php
 include './config.php';
+echo $user_id;
 
 if (!$product_info) {
   die("Connection failed: " . mysqli_connect_error());
@@ -28,6 +29,7 @@ $max_price = isset($_GET['max_price']) ? (int)$_GET['max_price'] : 1000;
 
 $query = "SELECT * FROM product_item WHERE product_catg=$catgid AND product_price BETWEEN $min_price AND $max_price order by $order_by";
 $item = mysqli_query($product_info, $query);
+var_dump($item);
 ?>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <style>
@@ -49,7 +51,7 @@ $item = mysqli_query($product_info, $query);
       <div class="bg-white rounded-lg h-auto overflow-hidden flex flex-col relative p-2 border sm:border-none">
         <?php
         if (isset($_SESSION['user_logged_in'])) {
-          $user_id = $_SESSION['user_id'];
+          $user_id = $_SESSION['id'];
         }
         $product_id = $items['product_id'];
         ?>

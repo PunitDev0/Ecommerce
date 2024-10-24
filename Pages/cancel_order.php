@@ -8,7 +8,7 @@ include './config.php'; // Include your database connection file
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $order_id = $_POST['order_id'];
     $payment_Id = $_POST['payment_Id'];
-    $user_id = $_SESSION['user_id'];
+    $user_id = $_SESSION['id'];
 
     // Initialize Razorpay API
     $apiKey = 'rzp_test_kBREEooxYkKLPo'; // Replace with your Razorpay Key ID

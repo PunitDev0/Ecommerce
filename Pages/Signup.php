@@ -58,39 +58,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!mysqli_query($cart, $cart_table)) {
                 echo "Error creating cart table: " . mysqli_error($cart);
             }
+            header("Location: login.php");
 
-            // Generate OTP
-            $otp = rand(100000, 999999);
-            $_SESSION['otp'] = $otp;
-            $_SESSION['otp_expiration'] = time() + 300; // OTP expiration in 5 minutes
+            // // Generate OTP
+            // $otp = rand(100000, 999999);
+            // $_SESSION['otp'] = $otp;
+            // $_SESSION['otp_expiration'] = time() + 300; // OTP expiration in 5 minutes
 
-            try {
-                // SMTP configuration
-                $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = 'your-email@gmail.com'; // Your Gmail address
-                $mail->Password = 'your-email-password'; // Use an app password for Gmail
-                $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                $mail->Port = 465;
+            // try {
+            //     // SMTP configuration
+            //     $mail->isSMTP();
+            //     $mail->Host = 'smtp.gmail.com';
+            //     $mail->SMTPAuth = true;
+            //     $mail->Username = 'your-email@gmail.com'; // Your Gmail address
+            //     $mail->Password = 'your-email-password'; // Use an app password for Gmail
+            //     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            //     $mail->Port = 465;
 
-                // Recipients
-                $mail->setFrom('your-email@gmail.com', 'Your Website Name'); // Sender's email and name
-                $mail->addAddress($email); // Add a recipient
+            //     // Recipients
+            //     $mail->setFrom('your-email@gmail.com', 'Your Website Name'); // Sender's email and name
+            //     $mail->addAddress($email); // Add a recipient
 
-                // Content
-                $mail->isHTML(true);
-                $mail->Subject = 'Your OTP Code';
-                $mail->Body = "Your OTP code is $otp. It will expire in 5 minutes.";
+            //     // Content
+            //     $mail->isHTML(true);
+            //     $mail->Subject = 'Your OTP Code';
+            //     $mail->Body = "Your OTP code is $otp. It will expire in 5 minutes.";
 
-                // Send the email
-                $mail->send();
-                echo 'OTP sent to your email. Please verify to complete the registration.';
-                header("Location: VerifyOTP.php"); // Redirect to OTP verification page
-                exit;
-            } catch (Exception $e) {
-                echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            }
+            //     // Send the email
+            //     $mail->send();
+            //     echo 'OTP sent to your email. Please verify to complete the registration.';
+            //     header("Location: VerifyOTP.php"); // Redirect to OTP verification page
+            //     exit;
+            // } catch (Exception $e) {
+            //     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            // }
         } else {
             // Error while inserting into database
             echo "Error: " . mysqli_error($conn);
