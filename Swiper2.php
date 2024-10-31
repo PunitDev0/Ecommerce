@@ -23,7 +23,7 @@
   ?>
       <div class="swiper-slide flex justify-center items-center my-10 h-40 w-40">
         <div class="relative w-[7rem] h-[7rem] rounded-full bg-opacity-80 shadow-2xl">
-          <img src="../images/Product_images/<?php echo $product['product_image']?>" alt="" class="h-full w-full object-cover mix-blend-multiply rounded-full" />
+          <img src="./images/Product_images/<?php echo $product['product_image']?>" alt="" class="h-full w-full object-cover mix-blend-multiply rounded-full" />
         </div>
       </div>
   <?php

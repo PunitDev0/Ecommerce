@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+<body>
+   <div class="main block sm:hidden">
+    <div class="h-10 w-full  flex items-center gap-2 absolute  px-10">  
+        <button class=" h-fit w-fit   px-3 py-1 rounded-xl border text-[10px]">
+            Sort By
+        </button>
+        <button class=" h-fit w-fit  px-3 py-1 rounded-xl border bor text-[10px]" id="Filter_Toggle">
+            Filter
+        </button>
+    </div>
+    <div id="Filter" class="bg-gray-100 p-6 rounded-xl  -translate-x-[300px] shadow-lg w-72 text-gray-800 overflow-auto fixed top-0 left-0 h-full transition-transform duration-500 ease-in-out">
+        <!-- Filters Header -->
+        <div class="absolute right-0 top-4 " id="Hide-Filter">
+            <i class='bx bx-x'></i>
+        </div>
+        <h2 class="text-2xl font-bold mb-6 text-gray-700">Filters</h2>
+      
+        <!-- Categories Filter -->
+        <div class="mb-6 ">
+          <h3 class="font-semibold mb-2 text-gray-600">Categories</h3>
+          <div class="pl-4">
+            <label class="flex items-center space-x-2 mb-2 hover:text-blue-500">
+              <input type="checkbox" class="form-checkbox text-blue-500 rounded">
+              <span>Underwear</span>
+            </label>
+            <label class="flex items-center space-x-2 mb-2 hover:text-blue-500">
+              <input type="checkbox" class="form-checkbox text-blue-500 rounded">
+              <span>Footwear</span>
+            </label>
+            <label class="flex items-center space-x-2 mb-2 hover:text-blue-500">
+              <input type="checkbox" class="form-checkbox text-blue-500 rounded">
+              <span>Outerwear</span>
+            </label>
+            <div class="pl-4">
+              <label class="flex items-center space-x-2 mb-2 hover:text-blue-500">
+                <input type="checkbox" class="form-checkbox text-blue-500 rounded">
+                <span>Formal Shoes</span>
+              </label>
+              <label class="flex items-center space-x-2 hover:text-blue-500">
+                <input type="checkbox" class="form-checkbox text-blue-500 rounded">
+                <span>Sports Shoes</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Price Filter -->
+        <div class="mb-6">
+          <h3 class="font-semibold mb-2 text-gray-600">Price</h3>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-gray-500">$0</span>
+            <span class="text-gray-500">$1000</span>
+          </div>
+          <input type="range" min="0" max="1000" step="50" class="w-full h-2 rounded-lg bg-gray-200 accent-blue-600">
+        </div>
+      
+        <!-- Size Filter -->
+        <div class="mb-6">
+          <h3 class="font-semibold mb-2 text-gray-600">Size</h3>
+          <select class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-500">
+            <option>Select Size</option>
+            <option>Small</option>
+            <option>Medium</option>
+            <option>Large</option>
+          </select>
+        </div>
+      
+        <!-- Colors Filter -->
+       <!-- Colors Filter Section -->
+<div class="mb-6">
+    <h3 class="font-semibold mb-2 text-gray-600">Colors</h3>
+    <div class="grid grid-cols-5 gap-4 pl-2">
+      <!-- Black Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-black peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Black</span>
+      </label>
+  
+      <!-- White Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-white border border-gray-300 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">White</span>
+      </label>
+  
+      <!-- Gray Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-gray-500 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Gray</span>
+      </label>
+  
+      <!-- Red Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-red-500 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Red</span>
+      </label>
+  
+      <!-- Blue Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-blue-500 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Blue</span>
+      </label>
+  
+      <!-- Green Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-green-500 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Green</span>
+      </label>
+  
+      <!-- Yellow Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-yellow-500 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Yellow</span>
+      </label>
+  
+      <!-- Orange Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-orange-500 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Orange</span>
+      </label>
+  
+      <!-- Pink Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-pink-500 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Pink</span>
+      </label>
+  
+      <!-- Purple Color Swatch -->
+      <label class="flex flex-col items-center">
+        <input type="checkbox" class="hidden peer">
+        <div class="w-8 h-8 rounded-full bg-purple-500 peer-checked:ring-4 peer-checked:ring-blue-500 cursor-pointer hover:ring-2 hover:ring-blue-300 transition-all duration-300"></div>
+        <span class="mt-2 text-sm text-gray-500">Purple</span>
+      </label>
+    </div>
+  </div>
+  
+      
+        <!-- Customer Rating Filter -->
+        <div class="mb-6">
+          <h3 class="font-semibold mb-2 text-gray-600">Customer Rating</h3>
+          <div class="space-y-2 pl-2">
+            <label class="flex items-center space-x-2 hover:text-yellow-500">
+              <input type="radio" name="rating" class="form-radio text-yellow-500">
+              <span class="flex items-center">
+                5 stars
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-4 h-4 ml-1 text-yellow-500">
+                  <path d="M12 2l2.76 7.5h7.94L16.3 13.5l2.76 7.5L12 17.5l-7.06 3.5L7.7 13.5 2.3 9.5h7.94L12 2z"></path>
+                </svg>
+              </span>
+            </label>
+            <label class="flex items-center space-x-2 hover:text-yellow-500">
+              <input type="radio" name="rating" class="form-radio text-yellow-500">
+              <span>4 stars</span>
+            </label>
+            <label class="flex items-center space-x-2 hover:text-yellow-500">
+              <input type="radio" name="rating" class="form-radio text-yellow-500">
+              <span>3 stars</span>
+            </label>
+          </div>
+        </div>
+      
+        <!-- Discount Filter -->
+        <div class="mb-6">
+          <h3 class="font-semibold mb-2 text-gray-600">Discount</h3>
+          <div class="space-y-2 pl-2">
+            <label class="flex items-center space-x-2 hover:text-green-500">
+              <input type="checkbox" class="form-checkbox text-green-500 rounded">
+              <span>50% or more</span>
+            </label>
+            <label class="flex items-center space-x-2 hover:text-green-500">
+              <input type="checkbox" class="form-checkbox text-green-500 rounded">
+              <span>30% or more</span>
+            </label>
+          </div>
+        </div>
+      
+        <!-- Apply Filters Button -->
+        <button class="w-full bg-blue-600 sticky z-50 text-white py-3 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg transition-all duration-300 ease-in-out">
+          Apply Filter
+        </button>
+      </div>
+   </div>
+</body>
+<script>
+    // Toggle the sidebar menu
+    document.querySelector('#Filter_Toggle').addEventListener('click', () => {
+    const filter = document.querySelector('#Filter');
+    filter.classList.toggle('-translate-x-[300px]');
+});
+
+document.querySelector('#Hide-Filter').addEventListener('click', () => {
+    const filter = document.querySelector('#Filter');
+    filter.classList.toggle('-translate-x-[300px]');
+});
+
+</script>
+</html>

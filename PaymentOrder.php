@@ -76,7 +76,7 @@ include('./config.php');
 					echo $item['product_name'];
 					?>
 					<div class="flex flex-col rounded-lg bg-white sm:flex-row border ">
-						<img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="../Images/Product_images/<?php echo $item['product_image'] ?>" alt="" />
+						<img class="m-2 h-24 w-28 rounded-md border object-cover object-center" src="./Images/Product_images/<?php echo $item['product_image'] ?>" alt="" />
 						<div class="flex w-full flex-col px-4 py-4">
 							<span class="font-semibold"><?php echo $item['product_name'] ?></span>
 							<p class="text-lg font-bold">$<?php echo $item['product_price'] ?></p>
@@ -167,7 +167,7 @@ include('./config.php');
 	</div>
 	<?php
 	include('config.php'); // Ensure this contains database connection setup
-	require_once '../razorpay/Razorpay.php';
+	require_once './razorpay/Razorpay.php';
 
 	use Razorpay\Api\Api;
 
@@ -200,7 +200,7 @@ include('./config.php');
 	}
 
 	?>
-	<script src="../JS/Main.js"></script>
+	<script src="./JS/Main.js"></script>
 	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	<script>
 		// Use AJAX to get the selected address details from the database and populate the form fields
@@ -229,7 +229,7 @@ include('./config.php');
 				"currency": "INR",
 				"name": "Your Website Name",
 				"description": "Purchase Description",
-				"image": "../Assests/image/logo.png", // Company logo
+				"image": "./Assests/image/logo.png", // Company logo
 				"order_id": "<?php echo $orderId; ?>", // Razorpay Order ID
 				"handler": function(response) {
 					// Simulate successful payment in test mode

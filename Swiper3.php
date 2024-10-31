@@ -23,7 +23,7 @@
       <div class="swiper-slide flex justify-center items-center bg-white rounded-lg shadow-md ">
         <div class="product-card flex flex-col w-full h-fit">
           <div class="product-image w-full flex justify-center items-center border border-gray-300 rounded-lg ">
-            <img src="../images/Product_images/<?php echo $items['product_image']?>" alt="Product Image" class="w-full h-full object-contain rounded-lg">
+            <img src="./images/Product_images/<?php echo $items['product_image']?>" alt="Product Image" class="w-full h-full object-contain rounded-lg">
           </div>
           <div class="product-info text-center">
             <p class="product-name text-md font-bold truncate"><?php echo $items['product_name']?></p>
