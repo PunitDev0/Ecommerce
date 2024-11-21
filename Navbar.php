@@ -1,3 +1,5 @@
+<?php
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,9 +51,15 @@
         <nav id="navbar" class="flex justify-between items-center h-[65px] px-4 md:px-12 border-gray-200">
             <!-- Left section: Logo and Hamburger Menu -->
             <div class="flex items-center" id="menu">
-                <div class="">
+                <?php
+                    if(isset($_SESSION['logged_in'])){
+                ?>
+                    <div class="">
                     <i class="bx bx-menu text-3xl cursor-pointer"></i>
                 </div>
+                <?php
+                    };
+                ?>
                 <div class="ml-4">
                     <a href="./index.php"><img src="./Assests/image/logo.png" alt="Logo" class="h-12 opacity-80 transition-opacity hover:opacity-100" /></a>
                 </div>
@@ -284,12 +292,6 @@
             </div>
 
         </div>
-        <script>
-            // Optional: Close wishlist
-            document.getElementById('bx-wish').addEventListener('click', function() {
-                document.getElementById('wishlist').classList.add('translate-x-[300px]');
-            });
-        </script>
         <script src="./JS/Navbar.js"></script>
     </body>
 

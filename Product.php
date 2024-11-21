@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!$_SESSION['logged_in']) {
+  header("Location: ./Login2.php");
+  exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

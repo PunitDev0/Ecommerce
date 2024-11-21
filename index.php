@@ -1,9 +1,9 @@
 <?php
 session_start();
-// if (!$_SESSION['logged_in']) {
-//   header("Location: ./Login.php");
-//   exit();
-// }
+if (!$_SESSION['logged_in']) {
+  header("Location: ./Login2.php");
+  exit();
+}
 $_SESSION['id'];
 ?>  
 <!DOCTYPE html>
@@ -86,7 +86,7 @@ $_SESSION['id'];
 <div class="tempelate py-28 sm:px-10">
             <?php 
             $color = "#457488";
-            $image = "./Assests/Shoe.png";
+            $image = "./Assests/Shoe.jpg";
             include './Tempelate.php'?>
         </div>
 

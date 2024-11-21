@@ -25,12 +25,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             header('Location: index.php');
         } else if ($admin_data = mysqli_fetch_assoc($admin)) {
-            $_SESSION['logged_in'] = true;
+            $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_id'] = $admin_data['id'];
             $_SESSION['admin_name'] = $admin_data['name'];
             $_SESSION['admin_email'] = $admin_data['email'];
             $_SESSION['admin_image'] = $admin_data['user_img'];
             header('Location: index.php');
+            // die();
         } else {
         }
     }
@@ -48,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body class="bg-gray-100">
+   
     <!-- <img src="./Assests/image/download.jpg" class=" h-full w-full absolute z-[-10]"> -->
     <div class="min-h-screen flex items-center shadow-2xl justify-center">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden flex flex-col md:flex-row w-full max-w-4xl">
